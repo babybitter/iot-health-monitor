@@ -1,0 +1,155 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}
+
+/* 底部导航栏按钮样式 */
+page {
+  --tabbar-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --tabbar-border-radius: 25rpx;
+  --tabbar-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 尝试通过全局样式影响tabbar */
+.wx-tabbar {
+  background: var(--tabbar-background) !important;
+  border-top: none !important;
+  box-shadow: var(--tabbar-shadow) !important;
+  border-radius: var(--tabbar-border-radius) var(--tabbar-border-radius) 0 0 !important;
+  height: 100rpx !important;
+  padding: 8rpx 16rpx !important;
+}
+
+.wx-tabbar-item {
+  background: rgba(255, 255, 255, 0.15) !important;
+  margin: 4rpx 8rpx !important;
+  border-radius: 18rpx !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(10rpx) !important;
+}
+
+.wx-tabbar-item:active {
+  transform: scale(0.95) !important;
+}
+
+.wx-tabbar-item.wx-tabbar-item-active {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-6rpx) scale(1.05) !important;
+  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.25) !important;
+}
+
+.wx-tabbar-label {
+  font-size: 24rpx !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.1) !important;
+}
+
+.wx-tabbar-item.wx-tabbar-item-active .wx-tabbar-label {
+  color: #333333 !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+
+/* 自定义底部导航栏按钮样式 */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10rpx 20rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  margin: 0 8rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tabbar-item.active {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.2);
+}
+
+.tabbar-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.tabbar-item:active::before {
+  left: 100%;
+}
+
+.tabbar-text {
+  font-size: 22rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.tabbar-item.active .tabbar-text {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* 为不同的标签添加特殊效果 */
+.tabbar-item:nth-child(1) {
+  background: rgba(52, 152, 219, 0.3);
+}
+
+.tabbar-item:nth-child(2) {
+  background: rgba(46, 204, 113, 0.3);
+}
+
+.tabbar-item:nth-child(3) {
+  background: rgba(155, 89, 182, 0.3);
+}
+
+.tabbar-item:nth-child(1).active {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.tabbar-item:nth-child(2).active {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.tabbar-item:nth-child(3).active {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.tabbar-item:nth-child(1).active .tabbar-text,
+.tabbar-item:nth-child(2).active .tabbar-text,
+.tabbar-item:nth-child(3).active .tabbar-text {
+  color: #ffffff;
+}

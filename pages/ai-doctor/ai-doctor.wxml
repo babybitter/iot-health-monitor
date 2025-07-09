@@ -1,0 +1,106 @@
+<!--AI助手智能医生页面-->
+<view class="container">
+  <!-- 健康数据概览 - 移到顶部 -->
+  <view class="health-overview-top">
+    <text class="overview-title">当前健康数据</text>
+    <view class="data-cards">
+      <view class="data-card">
+        <text class="data-label">呼吸</text>
+        <text class="data-value">{{monitorData.breathing.value || '--'}}次/分</text>
+        <view class="status-dot {{monitorData.breathing.status}}"></view>
+      </view>
+      <view class="data-card">
+        <text class="data-label">心跳</text>
+        <text class="data-value">{{monitorData.heartRate.value || '--'}}次/分</text>
+        <view class="status-dot {{monitorData.heartRate.status}}"></view>
+      </view>
+      <view class="data-card">
+        <text class="data-label">血氧</text>
+        <text class="data-value">{{monitorData.bloodOxygen.value || '--'}}%</text>
+        <view class="status-dot {{monitorData.bloodOxygen.status}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 聊天区域 -->
+  <scroll-view class="chat-section" scroll-y scroll-into-view="{{scrollIntoView}}" style="height: 910rpx; display: block; box-sizing: border-box">
+
+    <!-- 聊天消息列表 -->
+    <view class="chat-messages">
+      <view class="message-item {{item.role}}" wx:for="{{messages}}" wx:key="id">
+        <view class="message-avatar">
+          <text class="avatar-text">{{item.role === 'user' ? '我' : 'AI'}}</text>
+        </view>
+        <view class="message-content {{item.isStreaming ? 'streaming' : ''}}">
+          <text class="message-text" user-select>{{item.content}}</text>
+          <text class="message-time">{{item.time}}</text>
+        </view>
+      </view>
+
+      <!-- 思考中状态 -->
+      <view class="loading-message" wx:if="{{thinkingStatus === 'thinking'}}">
+        <view class="message-avatar">
+          <text class="avatar-text">AI</text>
+        </view>
+        <view class="message-content thinking-content">
+          <text class="thinking-text">思考中</text>
+          <text class="thinking-subtitle">正在用心解析你的需求</text>
+          <view class="loading-spinner"></view>
+        </view>
+      </view>
+
+      <!-- 梳理中状态 -->
+      <view class="loading-message" wx:if="{{thinkingStatus === 'organizing'}}">
+        <view class="message-avatar">
+          <text class="avatar-text">AI</text>
+        </view>
+        <view class="message-content organizing-content">
+          <text class="thinking-text">梳理中</text>
+          <text class="thinking-subtitle">正在梳理信息，确认你的需求</text>
+          <view class="loading-spinner"></view>
+        </view>
+      </view>
+
+      <!-- 预制回答选项 -->
+      <view class="preset-suggestions" wx:if="{{messages.length <= 1}}">
+        <view class="suggestion-item" bindtap="sendPresetMessage" data-message="分析我的健康数据">
+          <text class="suggestion-text">分析我的健康数据</text>
+          <view class="suggestion-arrow">></view>
+        </view>
+        <view class="suggestion-item" bindtap="sendPresetMessage" data-message="给我一些健康建议">
+          <text class="suggestion-text">给我一些健康建议</text>
+          <view class="suggestion-arrow">></view>
+        </view>
+        <view class="suggestion-item" bindtap="sendPresetMessage" data-message="我的数据正常吗">
+          <text class="suggestion-text">我的数据正常吗？</text>
+          <view class="suggestion-arrow">></view>
+        </view>
+      </view>
+
+
+
+      <!-- 滚动锚点 -->
+      <view id="bottom"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-section-bottom">
+    <view class="input-container-coffee">
+      <view class="input-wrapper-coffee">
+        <input class="message-input-coffee"
+               placeholder="请输入您的健康问题 ..."
+               value="{{inputText}}"
+               bindinput="onInputChange"
+               bindconfirm="sendMessage"
+               confirm-type="send"
+               maxlength="500" />
+      </view>
+      <view class="send-btn-coffee {{inputText ? 'active' : ''}}"
+            bindtap="sendMessage">
+        <image class="send-icon" src="/images/发送.png" wx:if="{{inputText}}"></image>
+        <text class="send-text" wx:else>发送</text>
+      </view>
+    </view>
+  </view>
+</view>

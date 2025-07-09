@@ -1,0 +1,365 @@
+/* AI助手智能医生页面样式 */
+.container {
+  height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* 顶部健康数据概览 */
+.health-overview-top {
+  background: white;
+  border-radius: 0 0 18rpx 18rpx;
+  padding: 12rpx 20rpx 16rpx 20rpx;
+  margin-bottom: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+
+/* 聊天区域样式 */
+.chat-section {
+  flex: 1;
+  padding: 0 16rpx 16rpx 16rpx;
+  margin-bottom: 0rpx; /* 为底部输入框、功能按钮和导航栏留出足够空间 */
+  overflow-y: auto;
+}
+
+.overview-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.data-cards {
+  display: flex;
+  gap: 13rpx; /* 增加10% */
+}
+
+.data-card {
+  flex: 1;
+  background: #f8f9fa;
+  border-radius: 13rpx; /* 增加10% */
+  padding: 15rpx; /* 增加10% */
+  text-align: center;
+  position: relative;
+}
+
+.data-label {
+  font-size: 26rpx; /* 增加10% */
+  color: #666;
+  display: block;
+  margin-bottom: 9rpx; /* 增加10% */
+}
+
+.data-value {
+  font-size: 33rpx; /* 增加10% */
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+.status-dot {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
+.status-dot.normal { background-color: #3cc51f; }
+.status-dot.warning { background-color: #ff9500; }
+.status-dot.danger { background-color: #ff3333; }
+
+/* 聊天消息样式 */
+.chat-messages {
+  padding: 12rpx 0;
+}
+
+.message-item {
+  display: flex;
+  margin-bottom: 24rpx;
+  align-items: flex-start;
+}
+
+.message-item.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: #3cc51f; /* 统一绿色主题 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 16rpx;
+}
+
+.message-item.user .message-avatar {
+  background: #28a745;
+}
+
+.avatar-text {
+  color: white;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.message-content {
+  flex: 1;
+  background: white;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  max-width: 70%;
+  position: relative;
+  box-sizing: border-box; /* 确保padding计算在宽度内 */
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+.message-content.streaming {
+  border: 2rpx solid #3cc51f;
+  box-shadow: 0 2rpx 8rpx rgba(60, 197, 31, 0.2);
+}
+
+.message-item.user .message-content {
+  background: #3cc51f; /* 统一绿色主题 */
+  color: white;
+}
+
+.message-text {
+  font-size: 28rpx;
+  line-height: 1.5;
+  display: block;
+  margin-bottom: 8rpx;
+  word-wrap: break-word; /* 强制长单词换行 */
+  word-break: break-all; /* 允许在任意字符间换行 */
+  white-space: pre-wrap; /* 保留空格和换行，并自动换行 */
+  overflow-wrap: break-word; /* 现代浏览器的换行属性 */
+}
+
+.message-time {
+  font-size: 20rpx;
+  opacity: 0.7;
+  display: block;
+}
+
+
+
+/* 思考状态样式 */
+.loading-message {
+  display: flex;
+  margin-bottom: 24rpx;
+  align-items: flex-start;
+}
+
+.ai-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #f0f9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  border: 2rpx solid #e8f4fd;
+}
+
+.avatar-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.thinking-content, .organizing-content {
+  background: #f8f9fa;
+  border-radius: 20rpx;
+  padding: 24rpx 30rpx;
+  max-width: 500rpx;
+  position: relative;
+  border: 1rpx solid #e8e8e8;
+}
+
+.thinking-text {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.thinking-subtitle {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 3rpx solid #e8e8e8;
+  border-top: 3rpx solid #3cc51f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 预制建议选项 */
+.preset-suggestions {
+  padding: 30rpx 20rpx;
+  background: transparent;
+}
+
+.suggestion-item {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 40rpx 50rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.suggestion-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.02) 0%, rgba(76, 175, 80, 0.05) 100%);
+  pointer-events: none;
+}
+
+.suggestion-item:active {
+  background: #f0f9f0;
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.12);
+}
+
+.suggestion-text {
+  color: #2c2c2c;
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.suggestion-arrow {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 24rpx;
+  font-weight: bold;
+  margin-left: 20rpx;
+  transition: all 0.3s ease;
+}
+
+.suggestion-item:active .suggestion-arrow {
+  background: #4CAF50;
+  color: white;
+  transform: translateX(4rpx);
+}
+
+/* 底部输入区域 - 新设计 */
+.input-section-bottom {
+  position: fixed;
+  bottom: 0rpx; /* 更靠下，在底部导航栏上方 */
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1rpx solid #e0e0e0;
+  border-radius: 20rpx 20rpx 0 0; /* 上方两个角设为圆角 */
+  padding: 16rpx 20rpx 16rpx 20rpx;
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* 输入框样式 */
+.input-container-coffee {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #f8f9fa;
+  border-radius: 50rpx;
+  padding: 8rpx 8rpx 8rpx 30rpx;
+  border: 1rpx solid #e8e8e8;
+}
+
+.input-wrapper-coffee {
+  flex: 1;
+}
+
+.message-input-coffee {
+  width: 100%;
+  height: 80rpx;
+  border: none;
+  background: transparent;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 80rpx;
+}
+
+.message-input-coffee::placeholder {
+  color: #999;
+}
+
+.send-btn-coffee {
+  width: 80rpx;
+  height: 80rpx;
+  background: #3cc51f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.send-btn-coffee:not(.active) {
+  background: #e8e8e8;
+}
+
+.send-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.send-text {
+  font-size: 24rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+.send-btn-coffee.active .send-text {
+  color: white;
+}
+
+

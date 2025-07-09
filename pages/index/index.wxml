@@ -1,0 +1,130 @@
+<view class="container">
+  <!-- 环境模块 -->
+  <view class="section">
+    <view class="section-title">环境</view>
+    <view class="body-wrapper">
+      <view class="date" bindtap="onCardTap" data-type="light">
+        <view class="date-logo">
+          <image src="/images/光照.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">光照</view>
+          <view class="date-value">{{monitorData.light.value || '0'}}lx</view>
+        </view>
+      </view>
+      <view class="date" bindtap="onCardTap" data-type="pressure">
+        <view class="date-logo">
+          <image src="/images/气压.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">气压</view>
+          <view class="date-value">{{monitorData.pressure.value || '0'}}Pa</view>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date" bindtap="onCardTap" data-type="temperature">
+        <view class="date-logo">
+          <image src="/images/温度.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">温度</view>
+          <view class="date-value">{{monitorData.temperature.value || tempo || '0'}}℃</view>
+        </view>
+      </view>
+      <view class="date" bindtap="onCardTap" data-type="humidity">
+        <view class="date-logo">
+          <image src="/images/湿度.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">湿度</view>
+          <view class="date-value">{{monitorData.humidity.value || hum || '0'}}%</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 人体模块 -->
+  <view class="section">
+    <view class="section-title">人体</view>
+    <view class="body-wrapper">
+      <view class="date" bindtap="onCardTap" data-type="breathing">
+        <view class="date-logo">
+          <image src="/images/呼吸.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">呼吸频率</view>
+          <view class="date-value">{{monitorData.breathing.value || lx || '0'}}次/分</view>
+        </view>
+      </view>
+      <view class="date" bindtap="onCardTap" data-type="heartRate">
+        <view class="date-logo">
+          <image src="/images/心跳.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">心跳频率</view>
+          <view class="date-value">{{monitorData.heartRate.value || '0'}}次/分</view>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date" bindtap="onCardTap" data-type="bloodOxygen">
+        <view class="date-logo">
+          <image src="/images/血氧.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">血氧</view>
+          <view class="date-value">{{monitorData.bloodOxygen.value || '0'}}%</view>
+        </view>
+      </view>
+      <view class="date">
+        <!-- 空白卡片，保持布局对称 -->
+      </view>
+    </view>
+  </view>
+
+  <!-- 执行模块 -->
+  <view class="section">
+    <view class="section-title">执行</view>
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
+          <image src="/images/灯光.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">灯光</view>
+          <switch color="#3cc51f" checked="{{light}}" bindchange="onLightChange"></switch>
+        </view>
+      </view>
+      <view class="date">
+        <view class="date-logo">
+          <image src="/images/蜂鸣器.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">蜂鸣器(报警)</view>
+          <switch color="#3cc51f" checked="{{buzzer}}" bindchange="onBuzzerChange"></switch>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
+          <image src="/images/加湿器.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">加湿器</view>
+          <switch color="#3cc51f" checked="{{humidifier}}" bindchange="onHumidifierChange"></switch>
+        </view>
+      </view>
+      <view class="date">
+        <view class="date-logo">
+          <image src="/images/风扇.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">风扇</view>
+          <switch color="#3cc51f" checked="{{fan}}" bindchange="onFanChange"></switch>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

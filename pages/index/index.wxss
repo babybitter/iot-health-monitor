@@ -1,0 +1,64 @@
+.container{
+  padding: 20rpx;
+  padding-bottom: 140rpx; /* 为底部导航栏留出空间 */
+}
+
+/* 分类模块样式 */
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-left: 10rpx;
+}
+/* body */
+.body-wrapper{
+  margin-top: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  gap: 30rpx;
+}
+.date-logo image{
+  width: 80rpx;
+  height: 80rpx;
+}
+.date{
+  display: flex;
+  justify-content: space-around;
+  background-color: #fff;
+  width: 265rpx;
+  height: 140rpx;
+  border-radius:30rpx ;
+  box-shadow: #77778a 0 0 8rpx;
+  padding: 15rpx 10rpx;
+  margin-bottom: 8rpx;
+}
+.date-logo{
+  display: flex;
+  align-items: center;
+}
+.date-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.date-title{
+  font-size: 24rpx;
+  color: #666;
+}
+.date-value{
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 开关样式调整 */
+switch {
+  transform: scale(0.7);
+}
+
+

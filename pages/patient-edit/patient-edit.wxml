@@ -1,0 +1,117 @@
+<!--患者信息编辑页面-->
+<view class="top-bg" style="height: 120rpx; display: block; box-sizing: border-box"></view>
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <view class="title">编辑患者信息</view>
+    <view class="subtitle">Edit Patient Information</view>
+  </view>
+
+  <!-- 基本信息编辑卡片 -->
+  <view class="edit-card" style="height: 650rpx; display: block; box-sizing: border-box">
+    <view class="card-title">基本信息</view>
+    
+    <!-- 患者ID（不可编辑） -->
+    <view class="edit-row">
+      <view class="edit-label">患者ID</view>
+      <view class="edit-value-readonly">{{editData.id}}</view>
+    </view>
+    
+    <!-- 年龄 -->
+    <view class="edit-row">
+      <view class="edit-label">年龄</view>
+      <view class="edit-input-wrapper">
+        <input class="edit-input" type="number" placeholder="请输入年龄" 
+               value="{{editData.age}}" bindinput="onAgeInput" maxlength="3"/>
+        <text class="input-unit">岁</text>
+      </view>
+    </view>
+    
+    <!-- 身高 -->
+    <view class="edit-row">
+      <view class="edit-label">身高</view>
+      <view class="edit-input-wrapper">
+        <input class="edit-input" type="number" placeholder="请输入身高" 
+               value="{{editData.height}}" bindinput="onHeightInput" maxlength="3"/>
+        <text class="input-unit">cm</text>
+      </view>
+    </view>
+    
+    <!-- 性别 -->
+    <view class="edit-row">
+      <view class="edit-label">性别</view>
+      <view class="gender-selector">
+        <view class="gender-option {{editData.gender === '男' ? 'selected' : ''}}" 
+              bindtap="selectGender" data-gender="男">男</view>
+        <view class="gender-option {{editData.gender === '女' ? 'selected' : ''}}" 
+              bindtap="selectGender" data-gender="女">女</view>
+      </view>
+    </view>
+    
+    <!-- 体重 -->
+    <view class="edit-row">
+      <view class="edit-label">体重</view>
+      <view class="edit-input-wrapper">
+        <input class="edit-input" type="digit" placeholder="请输入体重" 
+               value="{{editData.weight}}" bindinput="onWeightInput" maxlength="5"/>
+        <text class="input-unit">kg</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 医疗信息编辑卡片 -->
+  <view class="edit-card" style="width: 581rpx; display: block; box-sizing: border-box; height: 570rpx">
+    <view class="card-title">医疗信息</view>
+    
+    <!-- 血型 -->
+    <view class="edit-row">
+      <view class="edit-label">血型</view>
+      <picker mode="selector" range="{{bloodTypes}}" value="{{bloodTypeIndex}}" 
+              bindchange="onBloodTypeChange">
+        <view class="picker-display">
+          {{editData.bloodType || '请选择血型'}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 过敏史 -->
+    <view class="edit-row">
+      <view class="edit-label">过敏史</view>
+      <input class="edit-input-full" placeholder="请输入过敏史，如无请填写'无'" 
+             value="{{editData.allergies}}" bindinput="onAllergiesInput" maxlength="100"/>
+    </view>
+    
+    <!-- 床位号 -->
+    <view class="edit-row">
+      <view class="edit-label">床位号</view>
+      <input class="edit-input-full" placeholder="请输入床位号，如：301床" 
+             value="{{editData.bedNumber}}" bindinput="onBedNumberInput" maxlength="20"/>
+    </view>
+    
+    <!-- 科室 -->
+    <view class="edit-row">
+      <view class="edit-label">科室</view>
+      <picker mode="selector" range="{{departments}}" value="{{departmentIndex}}" 
+              bindchange="onDepartmentChange">
+        <view class="picker-display">
+          {{editData.department || '请选择科室'}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="save-btn" bindtap="saveInfo">
+      保存修改
+    </button>
+    <button class="cancel-btn" bindtap="cancelEdit">取消</button>
+  </view>
+</view>
+
+<!-- 底部提示 -->
+<view class="footer">
+  <text>请仔细核对信息后保存</text>
+</view>

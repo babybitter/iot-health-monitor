@@ -1,0 +1,272 @@
+/* 患者信息编辑页面样式 */
+page {
+  background-color: #f1f1f1;
+}
+
+/* 顶部背景 - 绿色主题 */
+.top-bg {
+  height: 200rpx;
+  background-color: #3cc51f;
+}
+
+/* 主容器 */
+.container {
+  margin-top: -120rpx;
+  padding: 0 20rpx;
+  padding-bottom: 40rpx;
+}
+
+/* 页面标题 */
+.header {
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding: 20rpx 0;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 编辑卡片 */
+.edit-card {
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片标题 */
+.card-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #e8f5e8;
+}
+
+/* 编辑行 */
+.edit-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.edit-row:last-child {
+  border-bottom: none;
+}
+
+/* 编辑标签 */
+.edit-label {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+  min-width: 120rpx;
+  margin-right: 20rpx;
+}
+
+/* 只读值 */
+.edit-value-readonly {
+  font-size: 28rpx;
+  color: #999;
+  font-weight: 600;
+  flex: 1;
+}
+
+/* 输入框容器 */
+.edit-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* 输入框 */
+.edit-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  padding: 15rpx 20rpx;
+  border: 2rpx solid #e8f5e8;
+  border-radius: 10rpx;
+  background-color: #fafafa;
+}
+
+.edit-input:focus {
+  border-color: #3cc51f;
+  background-color: white;
+}
+
+/* 全宽输入框 */
+.edit-input-full {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  padding: 15rpx 20rpx;
+  border: 2rpx solid #e8f5e8;
+  border-radius: 10rpx;
+  background-color: #fafafa;
+}
+
+.edit-input-full:focus {
+  border-color: #3cc51f;
+  background-color: white;
+}
+
+/* 输入框单位 */
+.input-unit {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 10rpx;
+  min-width: 40rpx;
+}
+
+/* 性别选择器 */
+.gender-selector {
+  flex: 1;
+  display: flex;
+  gap: 20rpx;
+}
+
+.gender-option {
+  flex: 1;
+  text-align: center;
+  padding: 15rpx;
+  border: 2rpx solid #e8f5e8;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #666;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.gender-option.selected {
+  border-color: #3cc51f;
+  background-color: #3cc51f;
+  color: white;
+  font-weight: bold;
+}
+
+/* 选择器显示 */
+.picker-display {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 20rpx;
+  border: 2rpx solid #e8f5e8;
+  border-radius: 10rpx;
+  background-color: #fafafa;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 操作按钮区域 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+
+/* 保存按钮 */
+.save-btn {
+  flex: 2;
+  background-color: #3cc51f;
+  color: white;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.save-btn::after {
+  border: none;
+}
+
+/* 取消按钮 */
+.cancel-btn {
+  flex: 1;
+  background-color: white;
+  color: #666;
+  border: 2rpx solid #e8f5e8;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.cancel-btn::after {
+  border: none;
+}
+
+/* 底部提示 */
+.footer {
+  text-align: center;
+  padding: 20rpx;
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 20rpx;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .edit-label, .edit-input, .edit-input-full {
+    font-size: 26rpx;
+  }
+  
+  .title {
+    font-size: 32rpx;
+  }
+}
+
+/* 动画效果 */
+.edit-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 输入框聚焦动画 */
+.edit-input, .edit-input-full, .picker-display {
+  transition: all 0.3s ease;
+}
+
+/* 错误状态 */
+.edit-input.error, .edit-input-full.error {
+  border-color: #ff4757;
+  background-color: #fff5f5;
+}
+
+/* 成功状态 */
+.edit-input.success, .edit-input-full.success {
+  border-color: #3cc51f;
+  background-color: #f8fff8;
+}

@@ -1,0 +1,84 @@
+<!--患者基本信息页面-->
+<view class="top-bg" style="height: 120rpx; display: block; box-sizing: border-box"></view>
+<view class="container" style="height: 1320rpx; display: flex; box-sizing: border-box">
+  <!-- 页面标题 -->
+  <view class="header">
+    <view class="title">患者基本信息</view>
+    <view class="subtitle">Patient Information</view>
+  </view>
+
+  <!-- 患者信息卡片 -->
+  <view class="info-card" style="width: 550rpx; display: block; box-sizing: border-box">
+    <!-- 患者ID -->
+    <view class="info-row">
+      <view class="info-label">患者ID</view>
+      <view class="info-value">{{patientData.id}}</view>
+    </view>
+    
+    <!-- 年龄 -->
+    <view class="info-row">
+      <view class="info-label">年龄</view>
+      <view class="info-value">{{patientData.age}}岁</view>
+    </view>
+    
+    <!-- 身高 -->
+    <view class="info-row">
+      <view class="info-label">身高</view>
+      <view class="info-value">{{patientData.height}}cm</view>
+    </view>
+    
+    <!-- 性别 -->
+    <view class="info-row">
+      <view class="info-label">性别</view>
+      <view class="info-value">{{patientData.gender}}</view>
+    </view>
+    
+    <!-- 体重 -->
+    <view class="info-row">
+      <view class="info-label">体重</view>
+      <view class="info-value">{{patientData.weight}}kg</view>
+    </view>
+  </view>
+
+  <!-- 其他信息卡片 -->
+  <view class="info-card" style="width: 550rpx; display: block; box-sizing: border-box">
+    <view class="card-title">医疗信息</view>
+    
+    <!-- 血型 -->
+    <view class="info-row">
+      <view class="info-label">血型</view>
+      <view class="info-value">{{patientData.bloodType}}</view>
+    </view>
+    
+    <!-- 过敏史 -->
+    <view class="info-row">
+      <view class="info-label">过敏史</view>
+      <view class="info-value">{{patientData.allergies}}</view>
+    </view>
+    
+    <!-- 床位号 -->
+    <view class="info-row">
+      <view class="info-label">床位号</view>
+      <view class="info-value">{{patientData.bedNumber}}</view>
+    </view>
+
+    <!-- 科室 -->
+    <view class="info-row">
+      <view class="info-label">科室</view>
+      <view class="info-value">{{patientData.department}}</view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="edit-btn" bindtap="editInfo">
+      编辑信息
+    </button>
+    <button class="back-btn" bindtap="goBack">返回</button>
+  </view>
+</view>
+
+<!-- 底部信息 -->
+<view class="footer">
+  <text>最后更新：{{updateTime}}</text>
+</view>

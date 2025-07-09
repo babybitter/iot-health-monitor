@@ -1,0 +1,117 @@
+<!--家属联系方式页面-->
+<view class="top-bg" style="height: 120rpx; display: block; box-sizing: border-box"></view>
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <view class="title">家属联系方式</view>
+    <view class="subtitle">Family Contact Information</view>
+  </view>
+
+  <!-- 家属列表 -->
+  <view class="family-list" wx:if="{{familyList.length > 0}}">
+    <view class="info-card" wx:for="{{familyList}}" wx:key="id" style="width: 620rpx; display: block; box-sizing: border-box">
+      <!-- 家属信息 -->
+      <view class="family-content">
+        <!-- 左侧信息 -->
+        <view class="family-info">
+          <view class="family-name">{{item.name}}</view>
+          <view class="family-details">
+            <text class="family-relation">{{item.relation}}</text>
+            <view class="emergency-tag" wx:if="{{item.isEmergency}}">紧急联系人</view>
+          </view>
+          <view class="contact-phone">
+            <image class="phone-icon" src="/images/联系电话.png" mode="aspectFit"></image>
+            <text class="phone-number" bindtap="makeCall" data-phone="{{item.phone}}">{{item.phone}}</text>
+          </view>
+        </view>
+
+        <!-- 右侧操作按钮 -->
+        <view class="family-actions">
+          <button class="action-btn edit-btn" bindtap="editFamily" data-id="{{item.id}}" style="width: 152rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">编辑</button>
+          <button class="action-btn delete-btn" bindtap="deleteFamily" data-id="{{item.id}}" style="width: 152rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{familyList.length === 0}}">
+    <image class="empty-icon" src="/images/紧急联系人.png" mode="aspectFit"></image>
+    <view class="empty-text">暂无家属联系方式</view>
+    <view class="empty-desc">点击下方按钮添加家属信息</view>
+  </view>
+
+  <!-- 操作按钮区域 -->
+  <view class="action-buttons">
+    <button class="add-family-btn" bindtap="addFamily">
+      <image class="add-icon" src="/images/添加家属.png" mode="aspectFit"></image>
+      <text class="add-text">添加家属</text>
+    </button>
+    <button class="back-btn" bindtap="goBack">返回</button>
+  </view>
+</view>
+
+<!-- 添加/编辑家属弹窗 - 从下而上弹出 -->
+<view class="bottom-modal-overlay" wx:if="{{showModal}}" bindtap="closeModal">
+  <view class="bottom-modal-content {{showModal ? 'show' : ''}}" catchtap="stopPropagation">
+    <!-- 顶部拖拽指示器 - 点击可关闭弹窗 -->
+    <view class="modal-indicator" bindtap="closeModal"></view>
+
+    <!-- 标题区域 -->
+    <view class="modal-header">
+      <view class="modal-title">{{modalTitle}}</view>
+    </view>
+
+    <!-- 表单内容 -->
+    <view class="modal-body">
+      <!-- 姓名 -->
+      <view class="form-item">
+        <view class="form-label">姓名</view>
+        <input class="form-input" 
+               placeholder="请输入姓名" 
+               value="{{formData.name}}" 
+               bindinput="onNameInput" />
+      </view>
+      
+      <!-- 关系 -->
+      <view class="form-item">
+        <view class="form-label">关系</view>
+        <picker class="form-picker" 
+                range="{{relationOptions}}" 
+                value="{{formData.relationIndex}}" 
+                bindchange="onRelationChange">
+          <view class="picker-text">{{formData.relation || '请选择关系'}}</view>
+        </picker>
+      </view>
+      
+      <!-- 电话 -->
+      <view class="form-item">
+        <view class="form-label">电话</view>
+        <input class="form-input" 
+               placeholder="请输入电话号码" 
+               value="{{formData.phone}}" 
+               bindinput="onPhoneInput" 
+               type="number" />
+      </view>
+      
+      <!-- 紧急联系人 -->
+      <view class="form-item">
+        <view class="form-label">紧急联系人</view>
+        <switch class="form-switch" 
+                checked="{{formData.isEmergency}}" 
+                bindchange="onEmergencyChange" />
+      </view>
+    </view>
+    
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="modal-btn cancel-btn" bindtap="closeModal">取消</button>
+      <button class="modal-btn confirm-btn" bindtap="saveFamily">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 底部信息 -->
+<view class="footer">
+  <text>最后更新：{{updateTime}}</text>
+</view>

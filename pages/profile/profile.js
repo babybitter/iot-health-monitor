@@ -6,7 +6,7 @@ Page({
     login: {
       show: false,
       line: false,
-      avatar: "/images/未登录默认头像.png",
+      avatar: "/images/default-avatar.png",
     },
     patientInfo: {
       id: "MED000156",
@@ -103,7 +103,7 @@ Page({
             login: {
               show: false,
               line: false,
-              avatar: "/images/未登录默认头像.png",
+              avatar: "/images/default-avatar.png",
             },
             "patientInfo.lastLoginTime": "暂无记录",
           });

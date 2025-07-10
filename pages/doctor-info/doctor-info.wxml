@@ -11,7 +11,7 @@
   <view class="info-card" style="height: 299rpx; display: block; box-sizing: border-box; width: 510rpx">
     <!-- 医生头像和基本信息 -->
     <view class="doctor-header">
-      <image class="doctor-avatar" src="/images/主治医生头像.png" mode="aspectFit"></image>
+      <image class="doctor-avatar" src="/images/doctor-avatar.png" mode="aspectFit"></image>
       <view class="doctor-basic">
         <view class="doctor-name">{{doctorData.name}}</view>
         <view class="doctor-title">{{doctorData.department}} - {{doctorData.position}}</view>
@@ -27,7 +27,7 @@
     <!-- 就诊医院 -->
     <view class="info-row">
       <view class="info-left">
-        <image class="info-icon" src="/images/就诊医院.png" mode="aspectFit"></image>
+        <image class="info-icon" src="/images/hospital.png" mode="aspectFit"></image>
         <view class="info-label">就诊医院</view>
       </view>
       <view class="info-value">{{doctorData.hospital}}</view>
@@ -36,7 +36,7 @@
     <!-- 出诊时间 -->
     <view class="info-row">
       <view class="info-left">
-        <image class="info-icon" src="/images/出诊时间.png" mode="aspectFit"></image>
+        <image class="info-icon" src="/images/schedule.png" mode="aspectFit"></image>
         <view class="info-label">出诊时间</view>
       </view>
       <view class="info-value">{{doctorData.schedule}}</view>
@@ -45,7 +45,7 @@
     <!-- 邮箱 -->
     <view class="info-row">
       <view class="info-left">
-        <image class="info-icon" src="/images/邮箱.png" mode="aspectFit"></image>
+        <image class="info-icon" src="/images/email.png" mode="aspectFit"></image>
         <view class="info-label">邮箱</view>
       </view>
       <view class="info-value">{{doctorData.email}}</view>
@@ -54,7 +54,7 @@
     <!-- 联系电话 -->
     <view class="info-row">
       <view class="info-left">
-        <image class="info-icon" src="/images/联系电话.png" mode="aspectFit"></image>
+        <image class="info-icon" src="/images/phone.png" mode="aspectFit"></image>
         <view class="info-label">联系电话</view>
       </view>
       <view class="info-value">{{doctorData.phone}}</view>

@@ -98,7 +98,7 @@
       </view>
       <view class="send-btn-coffee {{inputText ? 'active' : ''}}"
             bindtap="sendMessage">
-        <image class="send-icon" src="/images/发送.png" wx:if="{{inputText}}"></image>
+        <image class="send-icon" src="/images/send.png" wx:if="{{inputText}}"></image>
         <text class="send-text" wx:else>发送</text>
       </view>
     </view>

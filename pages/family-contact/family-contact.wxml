@@ -20,7 +20,7 @@
             <view class="emergency-tag" wx:if="{{item.isEmergency}}">紧急联系人</view>
           </view>
           <view class="contact-phone">
-            <image class="phone-icon" src="/images/联系电话.png" mode="aspectFit"></image>
+            <image class="phone-icon" src="/images/phone.png" mode="aspectFit"></image>
             <text class="phone-number" bindtap="makeCall" data-phone="{{item.phone}}">{{item.phone}}</text>
           </view>
         </view>
@@ -36,7 +36,7 @@
 
   <!-- 空状态 -->
   <view class="empty-state" wx:if="{{familyList.length === 0}}">
-    <image class="empty-icon" src="/images/紧急联系人.png" mode="aspectFit"></image>
+    <image class="empty-icon" src="/images/emergency-contact.png" mode="aspectFit"></image>
     <view class="empty-text">暂无家属联系方式</view>
     <view class="empty-desc">点击下方按钮添加家属信息</view>
   </view>

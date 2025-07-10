@@ -5,7 +5,7 @@
     <view class="body-wrapper">
       <view class="date" bindtap="onCardTap" data-type="light">
         <view class="date-logo">
-          <image src="/images/光照.png"></image>
+          <image src="/images/light.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">光照</view>
@@ -14,7 +14,7 @@
       </view>
       <view class="date" bindtap="onCardTap" data-type="pressure">
         <view class="date-logo">
-          <image src="/images/气压.png"></image>
+          <image src="/images/pressure.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">气压</view>
@@ -25,7 +25,7 @@
     <view class="body-wrapper">
       <view class="date" bindtap="onCardTap" data-type="temperature">
         <view class="date-logo">
-          <image src="/images/温度.png"></image>
+          <image src="/images/temperature.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">温度</view>
@@ -34,7 +34,7 @@
       </view>
       <view class="date" bindtap="onCardTap" data-type="humidity">
         <view class="date-logo">
-          <image src="/images/湿度.png"></image>
+          <image src="/images/humidity.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">湿度</view>
@@ -50,7 +50,7 @@
     <view class="body-wrapper">
       <view class="date" bindtap="onCardTap" data-type="breathing">
         <view class="date-logo">
-          <image src="/images/呼吸.png"></image>
+          <image src="/images/breathing.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">呼吸频率</view>
@@ -59,7 +59,7 @@
       </view>
       <view class="date" bindtap="onCardTap" data-type="heartRate">
         <view class="date-logo">
-          <image src="/images/心跳.png"></image>
+          <image src="/images/heartbeat.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">心跳频率</view>
@@ -70,7 +70,7 @@
     <view class="body-wrapper">
       <view class="date" bindtap="onCardTap" data-type="bloodOxygen">
         <view class="date-logo">
-          <image src="/images/血氧.png"></image>
+          <image src="/images/blood-oxygen.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">血氧</view>
@@ -89,7 +89,7 @@
     <view class="body-wrapper">
       <view class="date">
         <view class="date-logo">
-          <image src="/images/灯光.png"></image>
+          <image src="/images/light-bulb.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">灯光</view>
@@ -98,7 +98,7 @@
       </view>
       <view class="date">
         <view class="date-logo">
-          <image src="/images/蜂鸣器.png"></image>
+          <image src="/images/buzzer.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">蜂鸣器(报警)</view>
@@ -109,7 +109,7 @@
     <view class="body-wrapper">
       <view class="date">
         <view class="date-logo">
-          <image src="/images/加湿器.png"></image>
+          <image src="/images/humidifier.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">加湿器</view>
@@ -118,7 +118,7 @@
       </view>
       <view class="date">
         <view class="date-logo">
-          <image src="/images/风扇.png"></image>
+          <image src="/images/fan.png"></image>
         </view>
         <view class="date-text">
           <view class="date-title">风扇</view>

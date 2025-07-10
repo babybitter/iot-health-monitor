@@ -17,21 +17,21 @@
   <view>
     <button class="row" style="width: 100%;" bindtap="basicClick">
       <view class="left">
-        <image class="icon-image" src="/images/患者信息.png" mode="aspectFit"></image>
+        <image class="icon-image" src="/images/patient-info.png" mode="aspectFit"></image>
         <text class="text">患者基本信息</text>
       </view>
       <view class="right">></view>
     </button>
     <button class="row" style="width: 100%;" bindtap="goToHistory">
       <view class="left">
-        <image class="icon-image" src="/images/医生信息.png" mode="aspectFit"></image>
+        <image class="icon-image" src="/images/doctor-info.png" mode="aspectFit"></image>
         <text class="text">主治医生信息</text>
       </view>
       <view class="right">></view>
     </button>
     <button class="row" style="width: 100%;border-bottom: none;" bindtap="aboutClick">
       <view class="left">
-        <image class="icon-image" src="/images/图表.png" mode="aspectFit"></image>
+        <image class="icon-image" src="/images/chart.png" mode="aspectFit"></image>
         <text class="text">监测历史记录</text>
       </view>
       <view class="right">></view>
@@ -42,21 +42,21 @@
 <view class="end">
   <button class="row" style="width: 100%;border-bottom: none;" bindtap="goToFamilyContact">
     <view class="left">
-      <image class="icon-image" src="/images/紧急联系人.png" mode="aspectFit"></image>
+      <image class="icon-image" src="/images/emergency-contact.png" mode="aspectFit"></image>
       <text class="text">家属联系方式</text>
     </view>
     <view class="right">></view>
   </button>
   <button open-type="share" class="row" style="width: 100%;">
     <view class="left">
-      <image class="icon-image" src="/images/分享.png" mode="aspectFit"></image>
+      <image class="icon-image" src="/images/share.png" mode="aspectFit"></image>
       <text class="text">分享好友</text>
     </view>
     <view class="right">></view>
   </button>
   <button open-type="contact" class="row" style="width: 100%;border-bottom: none;">
     <view class="left">
-      <image class="icon-image" src="/images/客服.png" mode="aspectFit"></image>
+      <image class="icon-image" src="/images/customer-service.png" mode="aspectFit"></image>
       <text class="text">在线客服</text>
     </view>
     <view class="right">></view>
@@ -67,13 +67,13 @@
 <view class="end">
   <button wx:if="{{login.line}}" bindtap="exitClick" class="row" style="width: 100%;border-bottom: none;">
     <view class="left">
-      <image class="icon-image" src="/images/退出登录.png" mode="aspectFit"></image>
+      <image class="icon-image" src="/images/logout.png" mode="aspectFit"></image>
       <text class="text">退出登录</text>
     </view>
   </button>
   <button class="row" open-type="chooseAvatar" bindchooseavatar="chooseAvatar" style="width: 100%;border-bottom: none;" wx:else>
     <view class="left">
-      <image class="icon-image" src="/images/立即登录.png" mode="aspectFit"></image>
+      <image class="icon-image" src="/images/login.png" mode="aspectFit"></image>
       <text class="text">立即登录</text>
     </view>
   </button>

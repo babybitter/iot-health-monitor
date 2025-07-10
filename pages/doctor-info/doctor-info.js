@@ -120,7 +120,7 @@ Page({
     return {
       title: "主治医生信息 - 患者健康监测",
       path: "/pages/doctor-info/doctor-info",
-      imageUrl: "/images/主治医生头像.png",
+      imageUrl: "/images/doctor-avatar.png",
     };
   },
 
@@ -128,7 +128,7 @@ Page({
   onShareTimeline() {
     return {
       title: "主治医生信息 - 患者健康监测",
-      imageUrl: "/images/主治医生头像.png",
+      imageUrl: "/images/doctor-avatar.png",
     };
   },
 });

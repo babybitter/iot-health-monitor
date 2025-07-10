@@ -1,5 +1,86 @@
 <!--AI助手智能医生页面-->
-<view class="container">
+<nav-sidder visible="{{sidderVisible}}" bind:onClose="handleSidderToggle" bind:onMaskClick="handleSidderToggle">
+  <!-- 侧边栏内容 -->
+  <view slot="sidderContent" class="sidder__content">
+    <!-- 历史对话列表 -->
+    <view class="session-history">
+      <view class="session-history__title">
+        <view class="tabs">
+          <text class="title active">对话</text>
+        </view>
+      </view>
+
+      <!-- 对话列表内容 -->
+      <view class="tabs-content">
+        <scroll-view
+          class="session-history__content"
+          scroll-y="{{true}}"
+          wx:if="{{conversations.length > 0}}">
+          <view class="session-history__list" wx:for="{{conversations}}" wx:for-item="historyPeriodItem" wx:key="index">
+            <text class="period">{{historyPeriodItem.period}}</text>
+            <view
+              class="session-history__item {{currentConvId === historyItem.id ? 'selected' : ''}}"
+              wx:for="{{historyPeriodItem.list}}"
+              wx:for-item="historyItem"
+              wx:key="id"
+              bindtap="loadConversation"
+              data-id="{{historyItem.id}}">
+              <view class="item-info">
+                <view class="item-info__name">
+                  <view class="item-info__text">{{historyItem.title}}</view>
+                </view>
+                <view class="item-info__msg">
+                  <view class="item-info__text">{{historyItem.lastMessage}}</view>
+                  <text class="item-label">{{historyItem.lastUpdateTime}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+
+        <!-- 空状态 -->
+        <view class="session-history__empty" wx:else>
+          <view class="session-history__empty__icon">
+            <text class="empty-icon">💬</text>
+          </view>
+          <view class="session-history__empty__text">快去开启对话吧~</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主内容区域 -->
+  <view slot="mainContent" class="container" style="padding-top: {{navHeight}}px;">
+  <!-- 下拉框遮罩 -->
+  <view class="dropdown-mask" wx:if="{{showNewConvDropdown}}" bindtap="closeNewConvDropdown"></view>
+
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar" style="height: {{navHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <!-- 左侧历史按钮 -->
+    <view class="nav-left-btn {{sidderVisible ? 'nav-left-btn--close' : ''}}" bindtap="handleSidderToggle">
+      <image wx:if="{{!sidderVisible}}" class="nav-icon-img" src="../../images/history.png" mode="aspectFit"></image>
+      <image wx:else class="nav-icon-img" src="../../images/cancel.png" mode="aspectFit"></image>
+    </view>
+
+    <!-- 中间标题和新建对话折叠框 -->
+    <view class="nav-center">
+      <view class="nav-title-wrapper" bindtap="toggleNewConvDropdown">
+        <text class="nav-title">AI智能医生</text>
+        <text class="nav-dropdown-icon {{showNewConvDropdown ? 'nav-dropdown-icon--up' : ''}}">▼</text>
+      </view>
+
+      <!-- 新建对话折叠框 -->
+      <view class="new-conv-dropdown {{showNewConvDropdown ? 'new-conv-dropdown--show' : ''}}" wx:if="{{showNewConvDropdown}}">
+        <view class="dropdown-item" bindtap="startNewConv">
+          <text class="dropdown-text">开始新对话</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 右侧占位，保持布局平衡 -->
+    <view class="nav-right-placeholder"></view>
+  </view>
+
   <!-- 健康数据概览 - 移到顶部 -->
   <view class="health-overview-top">
     <text class="overview-title">当前健康数据</text>
@@ -103,4 +184,5 @@
       </view>
     </view>
   </view>
-</view>
+  </view>
+</nav-sidder>

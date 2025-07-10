@@ -1,5 +1,6 @@
 // AI助手智能医生页面
 const aiAssistant = require("../../utils/ai.js");
+const config = require("../../config/config.js");
 
 Page({
   data: {
@@ -11,11 +12,19 @@ Page({
     streamingMessageId: null, // 当前流式输出的消息ID
     thinkingStatus: "", // 思考状态: 'thinking', 'organizing', ''
     thinkingTimer: null, // 思考状态循环定时器
+    sidderVisible: false, // 侧边栏是否显示
+    conversations: [], // 历史对话列表
+    currentConvId: "", // 当前对话ID
+    navHeight: 0, // 导航栏高度
+    statusBarHeight: 0, // 状态栏高度
+    showNewConvDropdown: false, // 新建对话下拉框是否显示
   },
 
   onLoad() {
+    this.initCustomNavbar(); // 初始化自定义导航栏
     this.loadMonitorData();
     this.addWelcomeMessage();
+    this.loadConversations(); // 加载历史对话
   },
 
   onShow() {
@@ -23,16 +32,22 @@ Page({
   },
 
   onHide() {
-    // 页面隐藏时清理定时器
+    // 页面隐藏时清理定时器和保存对话
     this.stopThinkingLoop();
+    // 自动保存当前对话
+    if (this.data.messages.length > 1) {
+      this.saveCurrentConversation();
+    }
   },
 
   onUnload() {
-    // 页面卸载时清理定时器
+    // 页面卸载时清理定时器和保存对话
     this.stopThinkingLoop();
+    // 自动保存当前对话
+    if (this.data.messages.length > 1) {
+      this.saveCurrentConversation();
+    }
   },
-
-
 
   // 加载监测数据
   loadMonitorData() {
@@ -68,8 +83,6 @@ Page({
       messages: [welcomeMsg],
     });
   },
-
-
 
   // 输入框变化
   onInputChange(e) {
@@ -147,6 +160,9 @@ Page({
           streamingMessageId: null,
         });
         this.scrollToBottom();
+
+        // 自动保存当前对话
+        this.saveCurrentConversation();
       })
       .catch((error) => {
         // 停止思考循环
@@ -277,6 +293,9 @@ Page({
           isLoading: false,
         });
         this.scrollToBottom();
+
+        // 自动保存当前对话
+        this.saveCurrentConversation();
       })
       .catch((error) => {
         this.updateStreamingMessage(
@@ -460,6 +479,374 @@ Page({
           }
         });
       }
+    }
+  },
+
+  // 侧边栏切换
+  handleSidderToggle() {
+    this.setData({
+      sidderVisible: !this.data.sidderVisible,
+    });
+  },
+
+  // 关闭侧边栏
+  handleSidderClose() {
+    this.setData({
+      sidderVisible: false,
+    });
+  },
+
+  // 加载历史对话列表
+  loadConversations() {
+    try {
+      const conversations =
+        wx.getStorageSync(config.historyConversation.storageKey) || [];
+      this.setData({
+        conversations: this.groupConversationsByDate(conversations),
+      });
+    } catch (error) {
+      console.error("加载历史对话失败:", error);
+      this.setData({
+        conversations: [],
+      });
+    }
+  },
+
+  // 保存当前对话
+  saveCurrentConversation() {
+    if (!config.historyConversation.autoSaveEnabled) return;
+    if (this.data.messages.length <= 1) return; // 只有欢迎消息时不保存
+
+    try {
+      const conversations =
+        wx.getStorageSync(config.historyConversation.storageKey) || [];
+      const currentTime = Date.now();
+
+      // 查找是否已存在当前对话
+      const existingIndex = this.data.currentConvId
+        ? conversations.findIndex((conv) => conv.id === this.data.currentConvId)
+        : -1;
+
+      // 生成对话标题
+      const title = this.generateConversationTitle();
+
+      // 限制消息数量
+      const messages = this.data.messages.slice(
+        -config.historyConversation.maxMessagesPerConv
+      );
+
+      // 创建对话对象
+      const conversation = {
+        id: this.data.currentConvId || "conv_" + currentTime,
+        title: title,
+        lastMessage: this.getLastUserMessage(),
+        createTime: this.data.currentConvId
+          ? conversations[existingIndex]?.createTime || currentTime
+          : currentTime,
+        lastUpdateTime: currentTime,
+        messages: messages,
+      };
+
+      // 更新或添加对话
+      if (existingIndex >= 0) {
+        conversations[existingIndex] = conversation;
+      } else {
+        // 限制对话数量
+        if (conversations.length >= config.historyConversation.maxCount) {
+          conversations.pop(); // 删除最旧的对话
+        }
+        conversations.unshift(conversation); // 添加到开头
+
+        // 更新当前对话ID
+        this.setData({
+          currentConvId: conversation.id,
+        });
+      }
+
+      // 保存到本地存储
+      wx.setStorageSync(config.historyConversation.storageKey, conversations);
+
+      // 更新页面数据
+      this.setData({
+        conversations: this.groupConversationsByDate(conversations),
+      });
+    } catch (error) {
+      console.error("保存对话失败:", error);
+    }
+  },
+
+  // 按日期分组对话
+  groupConversationsByDate(conversations) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const groups = [
+      { period: "今天", list: [] },
+      { period: "昨天", list: [] },
+      { period: "更早", list: [] },
+    ];
+
+    conversations.forEach((conv) => {
+      const convDate = new Date(conv.lastUpdateTime);
+      convDate.setHours(0, 0, 0, 0);
+
+      // 添加格式化的时间显示
+      const formattedConv = {
+        ...conv,
+        lastUpdateTime: this.formatTime(conv.lastUpdateTime),
+      };
+
+      if (convDate.getTime() === today.getTime()) {
+        groups[0].list.push(formattedConv);
+      } else if (convDate.getTime() === yesterday.getTime()) {
+        groups[1].list.push(formattedConv);
+      } else {
+        groups[2].list.push(formattedConv);
+      }
+    });
+
+    // 过滤掉空组
+    return groups.filter((group) => group.list.length > 0);
+  },
+
+  // 生成对话标题
+  generateConversationTitle() {
+    // 从第一条用户消息提取标题
+    const firstUserMsg = this.data.messages.find((msg) => msg.role === "user");
+    if (firstUserMsg && firstUserMsg.content) {
+      const content = firstUserMsg.content.trim();
+      if (content.length > config.historyConversation.titleMaxLength) {
+        return (
+          content.substring(0, config.historyConversation.titleMaxLength) +
+          "..."
+        );
+      }
+      return content;
+    }
+    return "新对话";
+  },
+
+  // 获取最后一条用户消息
+  getLastUserMessage() {
+    const userMessages = this.data.messages.filter(
+      (msg) => msg.role === "user"
+    );
+    if (userMessages.length > 0) {
+      const lastMsg = userMessages[userMessages.length - 1];
+      const content = lastMsg.content.trim();
+      return content.length > 30 ? content.substring(0, 30) + "..." : content;
+    }
+    return "";
+  },
+
+  // 格式化时间显示
+  formatTime(timestamp) {
+    const date = new Date(timestamp);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const targetDate = new Date(timestamp);
+    targetDate.setHours(0, 0, 0, 0);
+
+    if (targetDate.getTime() === today.getTime()) {
+      // 今天显示时间
+      return (
+        date.getHours().toString().padStart(2, "0") +
+        ":" +
+        date.getMinutes().toString().padStart(2, "0")
+      );
+    } else if (targetDate.getTime() === yesterday.getTime()) {
+      // 昨天显示"昨天"
+      return "昨天";
+    } else {
+      // 更早显示月日
+      return date.getMonth() + 1 + "/" + date.getDate();
+    }
+  },
+
+  // 加载指定对话
+  loadConversation(e) {
+    const convId = e.currentTarget.dataset.id;
+    if (!convId) return;
+
+    try {
+      const conversations =
+        wx.getStorageSync(config.historyConversation.storageKey) || [];
+      const conversation = conversations.find((conv) => conv.id === convId);
+
+      if (conversation) {
+        // 保存当前对话（如果有内容）
+        if (this.data.messages.length > 1) {
+          this.saveCurrentConversation();
+        }
+
+        // 加载选中的对话
+        this.setData({
+          messages: conversation.messages,
+          currentConvId: conversation.id,
+          sidderVisible: false, // 关闭侧边栏
+        });
+
+        // 滚动到底部
+        this.scrollToBottom();
+
+        wx.showToast({
+          title: "对话已加载",
+          icon: "success",
+          duration: 1500,
+        });
+      }
+    } catch (error) {
+      console.error("加载对话失败:", error);
+      wx.showToast({
+        title: "加载失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 新建对话
+  startNewConv() {
+    // 检查当前对话是否有内容（除了欢迎消息）
+    const hasContent = this.data.messages.length > 1;
+
+    if (hasContent) {
+      // 如果有内容，显示确认对话框
+      wx.showModal({
+        title: "新建对话",
+        content: "当前对话将被保存，确定要开始新对话吗？",
+        confirmText: "确定",
+        cancelText: "取消",
+        success: (res) => {
+          if (res.confirm) {
+            this.createNewConversation();
+          }
+        },
+      });
+    } else {
+      // 如果没有内容，直接创建新对话
+      this.createNewConversation();
+    }
+  },
+
+  // 创建新对话的具体实现
+  createNewConversation() {
+    try {
+      // 保存当前对话（如果有内容）
+      if (this.data.messages.length > 1) {
+        this.saveCurrentConversation();
+      }
+
+      // 清空当前对话状态
+      this.setData({
+        messages: [],
+        currentConvId: "",
+        sidderVisible: false, // 关闭侧边栏
+        inputText: "", // 清空输入框
+        isLoading: false, // 重置加载状态
+        streamingMessageId: null, // 重置流式输出状态
+        thinkingStatus: "", // 重置思考状态
+      });
+
+      // 停止任何正在进行的思考循环
+      this.stopThinkingLoop();
+
+      // 添加欢迎消息
+      this.addWelcomeMessage();
+
+      // 滚动到底部
+      this.scrollToBottom();
+
+      // 显示成功提示
+      wx.showToast({
+        title: "新对话已创建",
+        icon: "success",
+        duration: 1500,
+      });
+    } catch (error) {
+      console.error("创建新对话失败:", error);
+      wx.showToast({
+        title: "创建失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 初始化自定义导航栏
+  initCustomNavbar() {
+    try {
+      const systemInfo = wx.getSystemInfoSync();
+      const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+
+      // 计算状态栏高度
+      const statusBarHeight = systemInfo.statusBarHeight;
+
+      // 计算导航栏高度：状态栏高度 + 胶囊按钮高度 + 胶囊按钮上下边距
+      const navHeight =
+        statusBarHeight +
+        menuButtonInfo.height +
+        (menuButtonInfo.top - statusBarHeight) * 2;
+
+      this.setData({
+        statusBarHeight: statusBarHeight,
+        navHeight: navHeight,
+      });
+    } catch (error) {
+      console.error("初始化自定义导航栏失败:", error);
+      // 设置默认值
+      this.setData({
+        statusBarHeight: 44,
+        navHeight: 88,
+      });
+    }
+  },
+
+  // 切换新建对话下拉框
+  toggleNewConvDropdown() {
+    this.setData({
+      showNewConvDropdown: !this.data.showNewConvDropdown,
+    });
+  },
+
+  // 关闭新建对话下拉框
+  closeNewConvDropdown() {
+    this.setData({
+      showNewConvDropdown: false,
+    });
+  },
+
+  // 重写startNewConv方法，添加关闭下拉框逻辑
+  startNewConv() {
+    // 关闭下拉框
+    this.setData({
+      showNewConvDropdown: false,
+    });
+
+    // 检查当前对话是否有内容（除了欢迎消息）
+    const hasContent = this.data.messages.length > 1;
+
+    if (hasContent) {
+      // 如果有内容，显示确认对话框
+      wx.showModal({
+        title: "新建对话",
+        content: "当前对话将被保存，确定要开始新对话吗？",
+        confirmText: "确定",
+        cancelText: "取消",
+        success: (res) => {
+          if (res.confirm) {
+            this.createNewConversation();
+          }
+        },
+      });
+    } else {
+      // 如果没有内容，直接创建新对话
+      this.createNewConversation();
     }
   },
 });

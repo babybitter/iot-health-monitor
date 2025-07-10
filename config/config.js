@@ -94,6 +94,15 @@ const config = {
     showToast: true, // 是否显示Toast提醒
     vibrate: true, // 是否震动提醒
     sound: false // 是否声音提醒(小程序限制)
+  },
+
+  // 历史对话配置
+  historyConversation: {
+    maxCount: 50, // 最大保存对话数量
+    maxMessagesPerConv: 100, // 每个对话最大消息数量
+    storageKey: 'ai_doctor_conversations', // 本地存储键名
+    autoSaveEnabled: true, // 是否启用自动保存
+    titleMaxLength: 20 // 对话标题最大长度
   }
 };
 

@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText": "AI智能医生",
-  "enablePullDownRefresh": false
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "nav-sidder": "../../components/nav-sidder/index"
+  }
 }

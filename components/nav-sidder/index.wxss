@@ -1,0 +1,120 @@
+/* nav-sidder组件样式 */
+
+/* 侧边栏容器 */
+.nav-sidder {
+  background: #fff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  left: 0;
+  opacity: 1;
+  padding-top: 180rpx;
+  position: fixed;
+  top: 0;
+  transition: all 0.3s ease;
+  visibility: visible;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* 隐藏状态 */
+.nav-sidder--hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 禁用动画 */
+.nav-sidder--disable-transition {
+  transition: none;
+}
+
+/* 关闭按钮 */
+.nav-sidder-close {
+  left: 40rpx;
+  position: absolute;
+  top: 100rpx;
+  z-index: 2;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+.close-icon {
+  font-size: 40rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 侧边栏内容 */
+.nav-sidder-content {
+  position: relative;
+  width: 648rpx;
+  flex: 1;
+}
+
+.nav-sidder-content__custom {
+  position: relative;
+  height: 100%;
+}
+
+/* 主内容区域 */
+.nav-main {
+  overflow: hidden;
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.4s ease;
+}
+
+/* 禁用动画 */
+.nav-main--disable-transition {
+  transition: none;
+}
+
+/* 遮罩层 */
+.nav-main__mask {
+  height: 100%;
+  left: 0;
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 主内容移动状态 - 腾讯元宝风格的景深动画效果 */
+.nav-main--move {
+  border-radius: 48rpx;
+  box-shadow: -30rpx 0 120rpx 0 rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  transform: translate(660rpx, 180rpx) scale(0.768);
+  transition: transform 0.4s ease;
+}
+
+/* 侧边栏滚动条样式 */
+.nav-sidder ::-webkit-scrollbar {
+  -webkit-appearance: auto !important;
+  background: none !important;
+  color: inherit !important;
+  display: block !important;
+  height: 8rpx !important;
+  opacity: 1 !important;
+  overflow: auto !important;
+  position: static !important;
+  visibility: visible !important;
+  width: 8rpx !important;
+}
+
+.nav-sidder ::-webkit-scrollbar-thumb {
+  background: #e3e3e3 !important;
+  border-radius: 8rpx !important;
+}
+
+.nav-sidder ::-webkit-scrollbar-track {
+  background: none !important;
+}

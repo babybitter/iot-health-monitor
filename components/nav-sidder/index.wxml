@@ -1,0 +1,23 @@
+<!-- nav-sidder组件模板 -->
+<view class="nav-sidder {{visible ? '' : 'nav-sidder--hide'}} {{disableTransition ? 'nav-sidder--disable-transition' : ''}}">
+  <!-- 关闭按钮 -->
+  <view bind:tap="handleClose" class="nav-sidder-close" style="top: {{menuButtonRect.top + 4}}px">
+    <text class="close-icon">×</text>
+  </view>
+  
+  <!-- 侧边栏内容 -->
+  <view class="nav-sidder-content">
+    <view class="nav-sidder-content__custom">
+      <slot name="sidderContent"></slot>
+    </view>
+  </view>
+</view>
+
+<!-- 主内容区域 -->
+<view class="nav-main {{visible ? 'nav-main--move' : ''}} {{disableTransition ? 'nav-main--disable-transition' : ''}}">
+  <!-- 遮罩层 -->
+  <view class="nav-main__mask" wx:if="{{visible}}" bind:tap="handleMaskClick"></view>
+  
+  <!-- 主内容插槽 -->
+  <slot name="mainContent"></slot>
+</view>

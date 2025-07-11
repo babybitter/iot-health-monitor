@@ -1,3 +1,24 @@
+/* 自定义导航栏样式 */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 32rpx 16rpx 32rpx;
+  box-sizing: border-box;
+}
+
+.nav-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
 .container{
   padding: 20rpx;
   padding-bottom: 140rpx; /* 为底部导航栏留出空间 */

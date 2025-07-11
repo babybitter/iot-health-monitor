@@ -1,5 +1,10 @@
 <!--个人中心页面-->
-<view class="top-bg"></view>
+<!-- 自定义导航栏 -->
+<view class="custom-navbar" style="height: {{navHeight}}px; padding-top: {{statusBarHeight}}px;">
+  <view class="nav-title">个人中心</view>
+</view>
+
+<view class="top-bg" style="padding-top: {{navHeight}}px;"></view>
 <view class="box">
   <!-- 头像 -->
   <view class="head-box" style="height: 180rpx; display: flex; box-sizing: border-box">

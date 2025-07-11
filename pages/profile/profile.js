@@ -3,6 +3,10 @@ const app = getApp();
 
 Page({
   data: {
+    // 导航栏相关
+    statusBarHeight: 0, // 状态栏高度
+    navHeight: 0, // 导航栏总高度
+
     login: {
       show: false,
       line: false,
@@ -120,6 +124,8 @@ Page({
   },
 
   onLoad(options) {
+    this.initNavBar(); // 初始化导航栏
+
     // 页面加载时检查登录状态
     const userInfo = wx.getStorageSync("userInfo");
     const lastLoginTime = wx.getStorageSync("lastLoginTime");
@@ -162,6 +168,18 @@ Page({
 
   // 头像加载错误处理
   onImageError(e) {
-  // 头像加载失败处理
+    // 头像加载失败处理
+  },
+
+  // 初始化导航栏
+  initNavBar() {
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight;
+    const navHeight = statusBarHeight + 44; // 状态栏高度 + 导航栏内容高度
+
+    this.setData({
+      statusBarHeight,
+      navHeight,
+    });
   },
 });

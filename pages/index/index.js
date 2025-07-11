@@ -4,6 +4,10 @@ const mqttClient = require("../../utils/mqtt.js");
 
 Page({
   data: {
+    // 导航栏相关
+    statusBarHeight: 0, // 状态栏高度
+    navHeight: 0, // 导航栏总高度
+
     patientName: "患者", // 患者姓名
     mqttConnected: false, // MQTT连接状态
     monitorData: config.monitorData, // 监测数据
@@ -21,6 +25,7 @@ Page({
   },
 
   onLoad() {
+    this.initNavBar(); // 初始化导航栏
     this.initPage();
     this.initMQTT(); // 初始化MQTT连接
   },
@@ -454,5 +459,17 @@ Page({
     } else {
       return "danger";
     }
+  },
+
+  // 初始化导航栏
+  initNavBar() {
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight;
+    const navHeight = statusBarHeight + 44; // 状态栏高度 + 导航栏内容高度
+
+    this.setData({
+      statusBarHeight,
+      navHeight,
+    });
   },
 });

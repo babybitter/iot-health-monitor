@@ -250,7 +250,7 @@ Page({
       updateTime: new Date().toISOString(),
     };
 
-    let newFamilyList = [...this.data.familyList];
+    let newFamilyList = this.data.familyList.slice();
 
     if (this.data.editingId) {
       // 编辑模式
@@ -258,7 +258,7 @@ Page({
         (item) => item.id === this.data.editingId
       );
       if (index >= 0) {
-        newFamilyList[index] = { ...newFamilyList[index], ...familyData };
+        newFamilyList[index] = Object.assign({}, newFamilyList[index], familyData);
       }
     } else {
       // 添加模式

@@ -15,7 +15,7 @@
     "packNpmRelationList": [],
     "babelSetting": {
       "ignore": [],
-      "disablePlugins": [],
+      "disablePlugins": ["transform-spread"],
       "outputPath": ""
     },
     "compileWorklet": false,

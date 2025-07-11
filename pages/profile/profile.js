@@ -68,6 +68,16 @@ Page({
 
   // 基本信息
   basicClick() {
+    // 检查登录状态
+    if (!this.data.login.show) {
+      wx.showToast({
+        title: "请先登录",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: "/pages/patient-info/patient-info",
     });
@@ -83,6 +93,16 @@ Page({
 
   // 跳转到主治医生信息页面
   goToHistory() {
+    // 检查登录状态
+    if (!this.data.login.show) {
+      wx.showToast({
+        title: "请先登录",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: "/pages/doctor-info/doctor-info", // 跳转到主治医生信息页面
     });
@@ -90,6 +110,16 @@ Page({
 
   // 跳转到家属联系方式页面
   goToFamilyContact() {
+    // 检查登录状态
+    if (!this.data.login.show) {
+      wx.showToast({
+        title: "请先登录",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
+
     wx.navigateTo({
       url: "/pages/family-contact/family-contact", // 跳转到家属联系方式页面
     });

@@ -18,6 +18,16 @@ Page({
     navHeight: 0, // 导航栏高度
     statusBarHeight: 0, // 状态栏高度
     showNewConvDropdown: false, // 新建对话下拉框是否显示
+    // 编辑模式相关
+    isEditMode: false, // 是否处于编辑模式
+    showClearAllDialog: false, // 显示清空全部对话确认框
+    showDeleteDialog: false, // 显示删除单个对话确认框
+    showRenameDialog: false, // 显示重命名对话框
+    selectedConvId: "", // 选中的对话ID
+    selectedConvTitle: "", // 选中的对话标题
+    renameValue: "", // 重命名输入值
+    showSuccessToast: false, // 显示成功提示
+    successMessage: "", // 成功提示消息
   },
 
   onLoad() {
@@ -583,6 +593,7 @@ Page({
     yesterday.setDate(yesterday.getDate() - 1);
 
     const groups = [
+      { period: "置顶", list: [] },
       { period: "今天", list: [] },
       { period: "昨天", list: [] },
       { period: "更早", list: [] },
@@ -598,12 +609,15 @@ Page({
         lastUpdateTime: this.formatTime(conv.lastUpdateTime),
       };
 
-      if (convDate.getTime() === today.getTime()) {
+      // 如果是置顶对话，放在置顶分组
+      if (conv.isPinned) {
         groups[0].list.push(formattedConv);
-      } else if (convDate.getTime() === yesterday.getTime()) {
+      } else if (convDate.getTime() === today.getTime()) {
         groups[1].list.push(formattedConv);
-      } else {
+      } else if (convDate.getTime() === yesterday.getTime()) {
         groups[2].list.push(formattedConv);
+      } else {
+        groups[3].list.push(formattedConv);
       }
     });
 
@@ -848,5 +862,253 @@ Page({
       // 如果没有内容，直接创建新对话
       this.createNewConversation();
     }
+  },
+
+  // ==================== 编辑模式相关方法 ====================
+
+  // 切换编辑模式
+  toggleEditMode() {
+    this.setData({
+      isEditMode: !this.data.isEditMode,
+      showClearAllDialog: false,
+      showDeleteDialog: false,
+      showRenameDialog: false,
+    });
+  },
+
+  // 显示清空全部对话确认框
+  showClearAllDialog() {
+    this.setData({
+      showClearAllDialog: true,
+    });
+  },
+
+  // 隐藏清空全部对话确认框
+  hideClearAllDialog() {
+    this.setData({
+      showClearAllDialog: false,
+    });
+  },
+
+  // 清空全部对话
+  clearAllConversations() {
+    try {
+      // 清空本地存储
+      wx.removeStorageSync(config.historyConversation.storageKey);
+
+      // 更新页面数据
+      this.setData({
+        conversations: [],
+        showClearAllDialog: false,
+        isEditMode: false,
+      });
+
+      // 如果当前有对话，也清空当前对话
+      if (this.data.currentConvId) {
+        this.setData({
+          messages: [],
+          currentConvId: "",
+        });
+        this.addWelcomeMessage();
+      }
+
+      this.showSuccessMessage("清空成功");
+    } catch (error) {
+      console.error("清空对话失败:", error);
+      wx.showToast({
+        title: "清空失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 显示删除单个对话确认框
+  showDeleteDialog(e) {
+    const { id, title } = e.currentTarget.dataset;
+    this.setData({
+      showDeleteDialog: true,
+      selectedConvId: id,
+      selectedConvTitle: title,
+    });
+  },
+
+  // 隐藏删除单个对话确认框
+  hideDeleteDialog() {
+    this.setData({
+      showDeleteDialog: false,
+      selectedConvId: "",
+      selectedConvTitle: "",
+    });
+  },
+
+  // 删除单个对话
+  deleteConversation() {
+    try {
+      const conversations = wx.getStorageSync(config.historyConversation.storageKey) || [];
+      const filteredConversations = conversations.filter(conv => conv.id !== this.data.selectedConvId);
+
+      // 保存更新后的对话列表
+      wx.setStorageSync(config.historyConversation.storageKey, filteredConversations);
+
+      // 更新页面数据
+      this.setData({
+        conversations: this.groupConversationsByDate(filteredConversations),
+        showDeleteDialog: false,
+        selectedConvId: "",
+        selectedConvTitle: "",
+      });
+
+      // 如果删除的是当前对话，清空当前对话
+      if (this.data.currentConvId === this.data.selectedConvId) {
+        this.setData({
+          messages: [],
+          currentConvId: "",
+        });
+        this.addWelcomeMessage();
+      }
+
+      this.showSuccessMessage("删除成功");
+    } catch (error) {
+      console.error("删除对话失败:", error);
+      wx.showToast({
+        title: "删除失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 显示重命名对话框
+  showRenameDialog(e) {
+    const { id, title } = e.currentTarget.dataset;
+    this.setData({
+      showRenameDialog: true,
+      selectedConvId: id,
+      selectedConvTitle: title,
+      renameValue: title,
+    });
+  },
+
+  // 隐藏重命名对话框
+  hideRenameDialog() {
+    this.setData({
+      showRenameDialog: false,
+      selectedConvId: "",
+      selectedConvTitle: "",
+      renameValue: "",
+    });
+  },
+
+  // 重命名输入事件
+  onRenameInput(e) {
+    this.setData({
+      renameValue: e.detail.value,
+    });
+  },
+
+  // 清空重命名输入
+  clearRenameInput() {
+    this.setData({
+      renameValue: "",
+    });
+  },
+
+  // 确认重命名
+  confirmRename() {
+    const newTitle = this.data.renameValue.trim();
+    console.log('重命名操作:', { newTitle, selectedConvId: this.data.selectedConvId });
+
+    if (!newTitle) {
+      wx.showToast({
+        title: "请输入对话名称",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
+
+    try {
+      const conversations = wx.getStorageSync(config.historyConversation.storageKey) || [];
+      console.log('当前对话列表:', conversations);
+
+      const updatedConversations = conversations.map(conv => {
+        if (conv.id === this.data.selectedConvId) {
+          console.log('找到要重命名的对话:', conv);
+          return { ...conv, title: newTitle };
+        }
+        return conv;
+      });
+
+      console.log('更新后的对话列表:', updatedConversations);
+
+      // 保存更新后的对话列表
+      wx.setStorageSync(config.historyConversation.storageKey, updatedConversations);
+
+      // 更新页面数据
+      this.setData({
+        conversations: this.groupConversationsByDate(updatedConversations),
+        showRenameDialog: false,
+        selectedConvId: "",
+        selectedConvTitle: "",
+        renameValue: "",
+      });
+
+      this.showSuccessMessage("重命名成功");
+    } catch (error) {
+      console.error("重命名对话失败:", error);
+      wx.showToast({
+        title: "重命名失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 置顶对话
+  pinConversation(e) {
+    const convId = e.currentTarget.dataset.id;
+    try {
+      const conversations = wx.getStorageSync(config.historyConversation.storageKey) || [];
+      const updatedConversations = conversations.map(conv => {
+        if (conv.id === convId) {
+          return { ...conv, isPinned: !conv.isPinned };
+        }
+        return conv;
+      });
+
+      // 保存更新后的对话列表
+      wx.setStorageSync(config.historyConversation.storageKey, updatedConversations);
+
+      // 更新页面数据
+      this.setData({
+        conversations: this.groupConversationsByDate(updatedConversations),
+      });
+
+      const targetConv = updatedConversations.find(conv => conv.id === convId);
+      this.showSuccessMessage(targetConv.isPinned ? "置顶成功" : "取消置顶");
+    } catch (error) {
+      console.error("置顶对话失败:", error);
+      wx.showToast({
+        title: "置顶失败",
+        icon: "error",
+        duration: 2000,
+      });
+    }
+  },
+
+  // 显示成功消息
+  showSuccessMessage(message) {
+    this.setData({
+      showSuccessToast: true,
+      successMessage: message,
+    });
+
+    setTimeout(() => {
+      this.setData({
+        showSuccessToast: false,
+        successMessage: "",
+      });
+    }, 2000);
   },
 });

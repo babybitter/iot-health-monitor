@@ -7,6 +7,20 @@
       <view class="session-history__title">
         <view class="tabs">
           <text class="title active">对话</text>
+          <!-- 编辑按钮 -->
+          <view class="edit-controls">
+            <view wx:if="{{!isEditMode}}" class="edit-btn {{conversations.length === 0 ? 'edit-btn--disabled' : ''}}" bindtap="{{conversations.length > 0 ? 'toggleEditMode' : ''}}">
+              <text class="edit-text">编辑</text>
+            </view>
+            <view wx:else class="edit-actions">
+              <view class="edit-action-btn clear-btn" bindtap="showClearAllDialog">
+                <text class="action-text">清空</text>
+              </view>
+              <view class="edit-action-btn done-btn" bindtap="toggleEditMode">
+                <text class="action-text">完成</text>
+              </view>
+            </view>
+          </view>
         </view>
       </view>
 
@@ -19,11 +33,11 @@
           <view class="session-history__list" wx:for="{{conversations}}" wx:for-item="historyPeriodItem" wx:key="index">
             <text class="period">{{historyPeriodItem.period}}</text>
             <view
-              class="session-history__item {{currentConvId === historyItem.id ? 'selected' : ''}}"
+              class="session-history__item {{currentConvId === historyItem.id ? 'selected' : ''}} {{isEditMode ? 'edit-mode' : ''}} {{historyItem.isPinned ? 'pinned' : ''}}"
               wx:for="{{historyPeriodItem.list}}"
               wx:for-item="historyItem"
               wx:key="id"
-              bindtap="loadConversation"
+              bindtap="{{isEditMode ? '' : 'loadConversation'}}"
               data-id="{{historyItem.id}}">
               <view class="item-info">
                 <view class="item-info__name">
@@ -34,6 +48,18 @@
                   <text class="item-label">{{historyItem.lastUpdateTime}}</text>
                 </view>
               </view>
+              <!-- 编辑模式下的操作按钮 -->
+              <view wx:if="{{isEditMode}}" class="item-actions">
+                <view class="action-icon edit-icon" bindtap="showRenameDialog" data-id="{{historyItem.id}}" data-title="{{historyItem.title}}">
+                  <image class="action-icon-img" src="/images/edit.png" mode="aspectFit"></image>
+                </view>
+                <view class="action-icon pin-icon" bindtap="pinConversation" data-id="{{historyItem.id}}">
+                  <image class="action-icon-img" src="/images/arrows.png" mode="aspectFit"></image>
+                </view>
+                <view class="action-icon delete-icon" bindtap="showDeleteDialog" data-id="{{historyItem.id}}" data-title="{{historyItem.title}}">
+                  <image class="action-icon-img" src="/images/delete.png" mode="aspectFit"></image>
+                </view>
+              </view>
             </view>
           </view>
         </scroll-view>
@@ -41,7 +67,7 @@
         <!-- 空状态 -->
         <view class="session-history__empty" wx:else>
           <view class="session-history__empty__icon">
-            <text class="empty-icon">💬</text>
+            <image class="empty-icon-img" src="/images/note.png" mode="aspectFit"></image>
           </view>
           <view class="session-history__empty__text">快去开启对话吧~</view>
         </view>
@@ -50,7 +76,7 @@
   </view>
 
   <!-- 主内容区域 -->
-  <view slot="mainContent" class="container" style="padding-top: {{navHeight}}px;">
+  <view slot="mainContent" class="container {{sidderVisible ? 'sidder-open' : ''}}" style="padding-top: {{navHeight}}px;">
   <!-- 下拉框遮罩 -->
   <view class="dropdown-mask" wx:if="{{showNewConvDropdown}}" bindtap="closeNewConvDropdown"></view>
 
@@ -186,3 +212,57 @@
   </view>
   </view>
 </nav-sidder>
+
+<!-- 编辑对话框 -->
+<!-- 清空全部对话确认框 -->
+<view class="dialog-mask" wx:if="{{showClearAllDialog}}" bindtap="hideClearAllDialog">
+  <view class="dialog-container" catchtap="">
+    <view class="dialog-title">清空全部对话历史?</view>
+    <view class="dialog-content">对话历史清空后不可恢复，确认清空</view>
+    <view class="dialog-actions">
+      <view class="dialog-btn cancel-btn" bindtap="hideClearAllDialog">取消</view>
+      <view class="dialog-btn confirm-btn" bindtap="clearAllConversations">删除</view>
+    </view>
+  </view>
+</view>
+
+<!-- 删除单个对话确认框 -->
+<view class="dialog-mask" wx:if="{{showDeleteDialog}}" bindtap="hideDeleteDialog">
+  <view class="dialog-container" catchtap="">
+    <view class="dialog-title">确认删除</view>
+    <view class="dialog-content">该对话内容将被删除无法恢复</view>
+    <view class="dialog-actions">
+      <view class="dialog-btn cancel-btn" bindtap="hideDeleteDialog">取消</view>
+      <view class="dialog-btn confirm-btn" bindtap="deleteConversation">删除</view>
+    </view>
+  </view>
+</view>
+
+<!-- 重命名对话框 -->
+<view class="dialog-mask" wx:if="{{showRenameDialog}}" bindtap="hideRenameDialog">
+  <view class="dialog-container rename-dialog" catchtap="">
+    <view class="dialog-title">编辑名称</view>
+    <view class="dialog-content">
+      <input class="rename-input"
+             value="{{renameValue}}"
+             bindinput="onRenameInput"
+             placeholder="请输入对话名称"
+             maxlength="20"
+             focus="{{showRenameDialog}}"
+             confirm-type="done"
+             bindconfirm="confirmRename" />
+      <view class="input-clear" wx:if="{{renameValue}}" bindtap="clearRenameInput" catchtap="">
+        <text class="clear-icon">✕</text>
+      </view>
+    </view>
+    <view class="dialog-actions">
+      <view class="dialog-btn cancel-btn" bindtap="hideRenameDialog">取消</view>
+      <view class="dialog-btn confirm-btn" bindtap="confirmRename">完成</view>
+    </view>
+  </view>
+</view>
+
+<!-- 操作成功提示 -->
+<view class="success-toast" wx:if="{{showSuccessToast}}">
+  <text class="toast-text">{{successMessage}}</text>
+</view>

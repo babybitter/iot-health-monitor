@@ -14,7 +14,7 @@
   top: 0;
   transition: all 0.3s ease;
   visibility: visible;
-  width: 100%;
+  width: 600rpx;
   z-index: 1000;
 }
 
@@ -52,22 +52,22 @@
 
 /* 侧边栏内容 */
 .nav-sidder-content {
-  position: relative;
-  width: 648rpx;
   flex: 1;
+  overflow: hidden;
+  position: relative;
 }
 
 .nav-sidder-content__custom {
-  position: relative;
   height: 100%;
+  overflow: hidden;
 }
 
 /* 主内容区域 */
 .nav-main {
-  overflow: hidden;
+  height: 100vh;
   position: relative;
-  transform-origin: 0 0;
-  transition: transform 0.4s ease;
+  transition: all 0.3s ease;
+  z-index: 1;
 }
 
 /* 禁用动画 */
@@ -84,29 +84,19 @@
   top: 0;
   width: 100%;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.3);
+  background: transparent;
 }
 
-/* 主内容移动状态 - 腾讯元宝风格的景深动画效果 */
+/* 主内容移动状态 */
 .nav-main--move {
-  border-radius: 48rpx;
-  box-shadow: -30rpx 0 120rpx 0 rgba(0, 0, 0, 0.2);
   pointer-events: none;
-  transform: translate(660rpx, 180rpx) scale(0.768);
-  transition: transform 0.4s ease;
 }
 
 /* 侧边栏滚动条样式 */
 .nav-sidder ::-webkit-scrollbar {
   -webkit-appearance: auto !important;
   background: none !important;
-  color: inherit !important;
-  display: block !important;
   height: 8rpx !important;
-  opacity: 1 !important;
-  overflow: auto !important;
-  position: static !important;
-  visibility: visible !important;
   width: 8rpx !important;
 }
 

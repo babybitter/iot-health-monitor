@@ -110,21 +110,21 @@
   <!-- 健康数据概览 - 移到顶部 -->
   <view class="health-overview-top">
     <text class="overview-title">当前健康数据</text>
-    <view class="data-cards">
-      <view class="data-card">
-        <text class="data-label">呼吸</text>
-        <text class="data-value">{{monitorData.breathing.value || '--'}}次/分</text>
-        <view class="status-dot {{monitorData.breathing.status}}"></view>
-      </view>
-      <view class="data-card">
-        <text class="data-label">心跳</text>
-        <text class="data-value">{{monitorData.heartRate.value || '--'}}次/分</text>
-        <view class="status-dot {{monitorData.heartRate.status}}"></view>
-      </view>
-      <view class="data-card">
-        <text class="data-label">血氧</text>
-        <text class="data-value">{{monitorData.bloodOxygen.value || '--'}}%</text>
-        <view class="status-dot {{monitorData.bloodOxygen.status}}"></view>
+      <view class="data-cards">
+        <view class="data-card">
+          <text class="data-label">呼吸</text>
+          <text class="data-value">{{monitorData.breathing.value || '--'}}次/分</text>
+          <view class="status-dot {{monitorData.breathing.status}}"></view>
+        </view>
+        <view class="data-card">
+          <text class="data-label">心跳</text>
+          <text class="data-value">{{monitorData.heartRate.value || '--'}}次/分</text>
+          <view class="status-dot {{monitorData.heartRate.status}}"></view>
+        </view>
+        <view class="data-card">
+          <text class="data-label">血氧</text>
+          <text class="data-value">{{monitorData.bloodOxygen.value || '--'}}%</text>
+          <view class="status-dot {{monitorData.bloodOxygen.status}}"></view>
       </view>
     </view>
   </view>
@@ -171,7 +171,7 @@
       <!-- 预制回答选项 -->
       <view class="preset-suggestions" wx:if="{{messages.length <= 1}}">
         <view class="suggestion-item" bindtap="sendPresetMessage" data-message="分析我的健康数据">
-          <text class="suggestion-text">分析我的健康数据</text>
+          <text class="suggestion-text">分析我的健康和环境数据</text>
           <view class="suggestion-arrow">></view>
         </view>
         <view class="suggestion-item" bindtap="sendPresetMessage" data-message="给我一些健康建议">

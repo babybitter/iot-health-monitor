@@ -33,6 +33,24 @@ class AIAssistant {
     return conversationId;
   }
 
+  // 系统提示词
+  buildSystemPrompt() {
+    return `你是一位专业的AI智能医生，具备医学常识、诊断能力和数据分析能力。用户会提供以下信息：
+
+- 人体健康数据（如呼吸，心跳，血氧等）
+- 环境数据（如光照，气压，温度，湿度等）
+- 用户主诉（如不适症状、饮食作息、精神状态等）
+
+你的任务是根据以上信息，判断可能的健康风险、给出初步分析和建议。输出格式如下：
+
+1. **初步诊断：** 对当前健康状态的简要评估
+2. **关联分析：** 人体数据和环境因素之间的关系分析
+3. **健康建议：** 生活方式调整建议，或是否需要就医
+4. **风险预警：** 如有潜在健康问题，请突出提示
+
+请严格按照以上格式回复，确保专业性和准确性。`;
+  }
+
   // 发送消息到AI（修复版）
   async sendMessageStream(message, monitorData = null, onProgress = null) {
     const apiKey = this.getApiKey();
@@ -40,22 +58,24 @@ class AIAssistant {
       throw new Error("请先配置Coze API Key");
     }
 
-    // 构建完整的用户消息，包含监测数据
-    let fullMessage = message;
+    // 构建完整的用户消息，包含系统提示词和监测数据
+    let fullMessage = this.buildSystemPrompt() + "\n\n" + message;
 
     // 如果有监测数据，添加到消息中
     if (monitorData) {
       const monitorInfo = `\n\n当前患者监测数据：
-- 体温: ${monitorData.temperature?.value || "--"} ${
-        monitorData.temperature?.unit || ""
-      }
-- 湿度: ${monitorData.humidity?.value || "--"} ${
-        monitorData.humidity?.unit || ""
-      }
-- 呼吸频率: ${monitorData.breathing?.value || "--"} ${
-        monitorData.breathing?.unit || ""
-      }
-- 血氧饱和度: ${monitorData.spo2?.value || "--"} ${monitorData.spo2?.unit || ""}
+【人体健康数据】
+- 呼吸频率: ${monitorData.breathing?.value || "--"}次/分 (状态: ${monitorData.breathing?.status || "未知"})
+- 心率: ${monitorData.heartRate?.value || "--"}次/分 (状态: ${monitorData.heartRate?.status || "未知"})
+- 血氧饱和度: ${monitorData.bloodOxygen?.value || "--"}% (状态: ${monitorData.bloodOxygen?.status || "未知"})
+
+【环境监测数据】
+- 环境温度: ${monitorData.temperature?.value || "--"}°C (状态: ${monitorData.temperature?.status || "未知"})
+- 环境湿度: ${monitorData.humidity?.value || "--"}% (状态: ${monitorData.humidity?.status || "未知"})
+- 光照强度: ${monitorData.light?.value || "--"}lux (状态: ${monitorData.light?.status || "未知"})
+- 气压: ${monitorData.pressure?.value || "--"}hPa (状态: ${monitorData.pressure?.status || "未知"})
+
+【设备状态】
 - LED状态: ${monitorData.led?.status || "--"}
 - 蜂鸣器状态: ${monitorData.buzzer?.status || "--"}`;
 
@@ -222,7 +242,7 @@ class AIAssistant {
 
   // 分析监测数据
   async analyzeMonitorData(monitorData) {
-    const message = `请分析我当前的健康监测数据，给出专业的健康评估和建议。`;
+    const message = `请分析我当前的健康监测数据和环境数据，评估环境因素对我健康的影响，给出专业的健康评估和环境调节建议。`;
     return await this.sendMessage(message, monitorData);
   }
 

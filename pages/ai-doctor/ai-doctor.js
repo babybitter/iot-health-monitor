@@ -85,7 +85,7 @@ Page({
     const welcomeMsg = {
       role: "assistant",
       content:
-        "您好！我是您的AI健康助手。我可以帮您分析健康监测数据，回答健康相关问题，并提供专业建议。请问有什么可以帮助您的吗？",
+        "您好！我是您的AI智能医生。我可以帮您分析健康监测数据和环境因素，提供专业的医学建议，请问有什么可以帮助您的吗？",
       time: this.getCurrentTime(),
     };
 
@@ -239,12 +239,12 @@ Page({
     // 根据预制消息设置对应的实际问题
     let actualMessage = "";
     if (message.includes("分析我的健康数据")) {
-      actualMessage = "请分析我当前的健康监测数据，给出专业的健康评估和建议。";
+      actualMessage = "请分析我当前的健康监测数据和环境数据，评估环境因素对我健康的影响，给出专业的健康评估和环境调节建议。";
     } else if (message.includes("给我一些健康建议")) {
-      actualMessage = "根据我的监测数据，请给我一些日常健康建议和注意事项。";
+      actualMessage = "根据我的健康监测数据和环境数据，请给我一些日常健康建议、环境调节建议和注意事项。";
     } else if (message.includes("我的数据正常吗")) {
       actualMessage =
-        "我的各项健康监测数据是否在正常范围内？有什么需要注意的吗？";
+        "我的各项健康监测数据和环境数据是否在正常范围内？环境对我的健康有什么影响？有什么需要注意的吗？";
     } else {
       actualMessage = message;
     }
@@ -348,7 +348,7 @@ Page({
     this.scrollToBottom();
 
     const analysisPrompt =
-      "请分析我当前的健康监测数据，给出专业的健康评估和建议。";
+      "请分析我当前的健康监测数据和环境数据，评估环境因素对我健康的影响，给出专业的健康评估和环境调节建议。";
 
     aiAssistant
       .sendMessageStream(
@@ -380,7 +380,7 @@ Page({
 
   // 健康建议
   healthAdvice() {
-    const question = "根据我的健康监测数据，请给我一些日常健康建议。";
+    const question = "根据我的健康监测数据和环境数据，请给我一些日常健康建议、环境调节建议和注意事项。";
 
     const userMessage = {
       role: "user",

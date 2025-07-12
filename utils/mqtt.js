@@ -438,6 +438,12 @@ class MQTTClient {
   dispatchMessage(topic, payload) {
     console.log(`分发消息 - 主题: ${topic}, 数据:`, payload);
 
+    // 硬件端主题适配 (home/devices/onoff/ 前缀)
+    if (topic.startsWith("home/devices/onoff/")) {
+      this.handleHardwareDeviceTopic(topic, payload);
+      return;
+    }
+
     // 环境数据
     if (topic.includes("light")) {
       this.triggerCallback("light", payload);
@@ -465,6 +471,62 @@ class MQTTClient {
       this.triggerCallback("co2", payload);
     } else if (topic.includes("other")) {
       this.triggerCallback("other", payload);
+    }
+  }
+
+  // 处理硬件设备主题 (home/devices/onoff/ 前缀)
+  handleHardwareDeviceTopic(topic, payload) {
+    console.log(`处理硬件设备主题: ${topic}`, payload);
+
+    // 解析主题路径: home/devices/onoff/[device_type]/[sensor_type]
+    const topicParts = topic.split('/');
+    if (topicParts.length >= 5) {
+      const deviceType = topicParts[3]; // 设备类型
+      const sensorType = topicParts[4]; // 传感器类型
+
+      console.log(`设备类型: ${deviceType}, 传感器类型: ${sensorType}`);
+
+      // 根据传感器类型映射到对应的回调
+      switch (sensorType.toLowerCase()) {
+        case 'temperature':
+        case 'temp':
+          this.triggerCallback("temperature", payload);
+          break;
+        case 'humidity':
+        case 'hum':
+          this.triggerCallback("humidity", payload);
+          break;
+        case 'light':
+        case 'lux':
+          this.triggerCallback("light", payload);
+          break;
+        case 'pressure':
+        case 'press':
+          this.triggerCallback("pressure", payload);
+          break;
+        case 'breathing':
+        case 'breath':
+          this.triggerCallback("breathing", payload);
+          break;
+        case 'heartrate':
+        case 'heart':
+          this.triggerCallback("heartRate", payload);
+          break;
+        case 'oxygen':
+        case 'spo2':
+          this.triggerCallback("bloodOxygen", payload);
+          break;
+        default:
+          console.warn(`未知的传感器类型: ${sensorType}`);
+          // 可以触发一个通用的设备数据回调
+          this.triggerCallback("deviceData", {
+            deviceType: deviceType,
+            sensorType: sensorType,
+            data: payload
+          });
+      }
+    } else {
+      console.warn(`硬件设备主题格式错误: ${topic}`);
     }
   }
 

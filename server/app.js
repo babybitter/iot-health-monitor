@@ -51,6 +51,8 @@ function initMQTT() {
       "patient/monitor/humidity",
       "patient/monitor/breathing",
       "patient/monitor/spo2",
+      // 硬件端兼容主题
+      "home/devices/onoff/+/+", // 订阅硬件端所有设备的所有传感器数据
     ];
 
     topics.forEach((topic) => {

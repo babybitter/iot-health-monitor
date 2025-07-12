@@ -11,8 +11,8 @@ const config = {
     // 当前使用的连接
     host: 'ws://47.122.130.135:8083/mqtt', // 生产环境WS连接（稳定版本）
     clientId: 'patient_monitor_' + Date.now(), // 动态客户端ID，避免冲突
-    username: 'test', // 测试用户名
-    password: 'test123', // 测试密码
+    username: 'test', // MQTT服务器用户名
+    password: 'test123', // MQTT服务器密码
     keepalive: 60,
     clean: true,
     reconnectPeriod: 3000, // 重连间隔
@@ -28,7 +28,9 @@ const config = {
       heartRate: 'patient/monitor/heart_rate', // 心跳频率数据
       bloodOxygen: 'patient/monitor/blood_oxygen', // 血氧数据
       // 设备状态
-      deviceStatus: 'patient/status/device' // 设备状态反馈主题
+      deviceStatus: 'patient/status/device', // 设备状态反馈主题
+      // 硬件端兼容主题
+      hardwareDevices: 'home/devices/onoff/#' // 订阅硬件端所有子主题
     },
     publishTopic: 'patient/control/device' // 设备控制发布主题
   },

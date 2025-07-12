@@ -250,20 +250,34 @@ Page({
     // 根据阈值设置状态
     const value = parseFloat(data.value);
     const thresholds = config.thresholds[type];
+    let status = "normal";
     if (thresholds) {
       if (value >= thresholds.normal[0] && value <= thresholds.normal[1]) {
-        updateData[`monitorData.${type}.status`] = "normal";
+        status = "normal";
       } else if (
         value >= thresholds.warning[0] &&
         value <= thresholds.warning[1]
       ) {
-        updateData[`monitorData.${type}.status`] = "warning";
+        status = "warning";
       } else {
-        updateData[`monitorData.${type}.status`] = "danger";
+        status = "danger";
       }
     }
+    updateData[`monitorData.${type}.status`] = status;
 
+    // 更新页面数据
     this.setData(updateData);
+
+    //同步更新全局数据，供AI助手页面使用
+    const app = getApp();
+    if (app && app.globalData && app.globalData.monitorData) {
+      app.globalData.monitorData[type] = {
+        ...app.globalData.monitorData[type],
+        value: data.value,
+        lastUpdate: timeStr,
+        status: status
+      };
+    }
   },
 
   // 更新设备状态

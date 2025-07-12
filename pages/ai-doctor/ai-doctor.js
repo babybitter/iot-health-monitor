@@ -39,11 +39,14 @@ Page({
 
   onShow() {
     this.loadMonitorData();
+    // 🔥 启动数据刷新定时器
+    this.startDataRefresh();
   },
 
   onHide() {
     // 页面隐藏时清理定时器和保存对话
     this.stopThinkingLoop();
+    this.stopDataRefresh(); // 🔥 停止数据刷新
     // 自动保存当前对话
     if (this.data.messages.length > 1) {
       this.saveCurrentConversation();
@@ -53,6 +56,7 @@ Page({
   onUnload() {
     // 页面卸载时清理定时器和保存对话
     this.stopThinkingLoop();
+    this.stopDataRefresh(); // 🔥 停止数据刷新
     // 自动保存当前对话
     if (this.data.messages.length > 1) {
       this.saveCurrentConversation();
@@ -62,21 +66,49 @@ Page({
   // 加载监测数据
   loadMonitorData() {
     const app = getApp();
+
+    // 🔥 优先从全局数据获取最新数据
     if (app.globalData && app.globalData.monitorData) {
+      console.log("AI助手页面加载全局数据:", app.globalData.monitorData);
       this.setData({
         monitorData: app.globalData.monitorData,
       });
     } else {
-      // 从其他页面获取数据
+      // 备用方案：从主页获取数据
       const pages = getCurrentPages();
       const indexPage = pages.find(
         (page) => page.route === "pages/index/index"
       );
       if (indexPage && indexPage.data.monitorData) {
+        console.log("AI助手页面从主页获取数据:", indexPage.data.monitorData);
         this.setData({
           monitorData: indexPage.data.monitorData,
         });
+
+        // 同时更新全局数据
+        if (app.globalData) {
+          app.globalData.monitorData = indexPage.data.monitorData;
+        }
       }
+    }
+
+    // 🔥 添加调试信息
+    console.log("AI助手页面当前数据:", this.data.monitorData);
+  },
+
+  // 🔥 启动数据刷新定时器
+  startDataRefresh() {
+    // 每5秒刷新一次数据
+    this.dataRefreshTimer = setInterval(() => {
+      this.loadMonitorData();
+    }, 5000);
+  },
+
+  // 🔥 停止数据刷新定时器
+  stopDataRefresh() {
+    if (this.dataRefreshTimer) {
+      clearInterval(this.dataRefreshTimer);
+      this.dataRefreshTimer = null;
     }
   },
 

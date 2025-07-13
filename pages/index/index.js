@@ -22,6 +22,11 @@ Page({
     buzzer: false, // 蜂鸣器状态
     humidifier: false, // 加湿器状态
     fan: false, // 风扇状态
+
+    // 重量监测相关变量
+    weightBegin: 0, // 初始重量(克)
+    weightWarningThreshold: 0, // 警告阈值(克)
+    weightRemaining: 0 // 剩余重量(克)
   },
 
   onLoad() {
@@ -130,6 +135,7 @@ Page({
       breathing: "次/分",
       heartRate: "次/分",
       bloodOxygen: "%",
+      weight: "g",
     };
     return units[type] || "";
   },
@@ -163,6 +169,7 @@ Page({
       breathing: "呼吸频率",
       heartRate: "心跳频率",
       bloodOxygen: "血氧",
+      weight: "重量",
     };
     return titles[type] || type;
   },
@@ -205,6 +212,15 @@ Page({
 
       mqttClient.onMessage("bloodOxygen", (data) => {
         this.updateMonitorData("bloodOxygen", data);
+      });
+
+      // 注册重量数据回调
+      mqttClient.onMessage("weightBegin", (data) => {
+        this.handleWeightBegin(data);
+      });
+
+      mqttClient.onMessage("weight", (data) => {
+        this.handleWeight(data);
       });
 
       // 注册设备状态回调
@@ -305,6 +321,54 @@ Page({
       if (Object.keys(updateData).length > 0) {
         this.setData(updateData);
       }
+    }
+  },
+
+  // 处理硬件端发送的初始重量数据
+  handleWeightBegin(data) {
+    // 兼容不同数据格式：对象{value: 8}或直接数字8
+    const weight = parseFloat(data.value !== undefined ? data.value : data);
+    if (weight && weight > 0) {
+      this.setData({
+        weightBegin: weight,
+        weightWarningThreshold: parseFloat((weight * 0.05).toFixed(2)) // 设置警告阈值为初始重量的5%，保留两位小数
+      });
+      wx.showToast({
+        title: `接收到初始重量: ${weight}g`,
+        icon: 'success'
+      });
+    }
+  },
+
+  // 处理硬件端发送的实时重量数据
+  handleWeight(data) {
+    // 兼容不同数据格式：对象{value: 10}或直接数字10
+    const remaining = parseFloat(data.value !== undefined ? data.value : data);
+    if (remaining !== undefined && remaining >= 0) {
+      // 构造标准格式用于updateMonitorData
+      const standardData = { value: remaining };
+      this.updateMonitorData('weight', standardData);
+
+      // 更新剩余重量
+      this.setData({
+        weightRemaining: remaining
+      });
+
+      // 检查是否需要触发警告（暂时注释掉自动发送）
+      // if (remaining <= this.data.weightWarningThreshold) {
+      //   this.triggerLowLiquidWarning();
+      // }
+    }
+  },
+
+  // 发送蜂鸣器警告
+  sendWeightDrive() {
+    const payload = { action: 'start', type: 'low_liquid' };
+    if (mqttClient.publish('patient/monitor/weight-drive', payload)) {
+      wx.showToast({
+        title: '蜂鸣器警告已触发',
+        icon: 'success'
+      });
     }
   },
 

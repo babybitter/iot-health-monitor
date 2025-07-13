@@ -27,6 +27,8 @@ const config = {
       breathing: 'patient/monitor/breathing', // 呼吸频率数据
       heartRate: 'patient/monitor/heart_rate', // 心跳频率数据
       bloodOxygen: 'patient/monitor/blood_oxygen', // 血氧数据
+      weight: 'patient/monitor/weight', // 重量数据
+      weightBegin: 'patient/monitor/weight-begin', // 初始重量数据
       // 设备状态
       deviceStatus: 'patient/status/device', // 设备状态反馈主题
       // 硬件端兼容主题
@@ -58,7 +60,8 @@ const config = {
     // 人体数据
     breathing: { value: '--', status: 'normal', lastUpdate: '--' },
     heartRate: { value: '--', status: 'normal', lastUpdate: '--' },
-    bloodOxygen: { value: '--', status: 'normal', lastUpdate: '--' }
+    bloodOxygen: { value: '--', status: 'normal', lastUpdate: '--' },
+    weight: { value: '--', status: 'normal', lastUpdate: '--' }
   },
   
   // 状态阈值配置

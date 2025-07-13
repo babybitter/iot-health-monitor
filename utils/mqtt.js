@@ -461,6 +461,10 @@ class MQTTClient {
       this.triggerCallback("heartRate", payload);
     } else if (topic.includes("blood_oxygen")) {
       this.triggerCallback("bloodOxygen", payload);
+    } else if (topic.includes("weight-begin")) {
+      this.triggerCallback("weightBegin", payload);
+    } else if (topic.includes("weight")) {
+      this.triggerCallback("weight", payload);
     }
     // 设备状态
     else if (topic.includes("status/device")) {

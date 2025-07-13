@@ -82,8 +82,14 @@
           <view class="date-value">{{monitorData.bloodOxygen.value || '0'}}%</view>
         </view>
       </view>
-      <view class="date">
-        <!-- 空白卡片，保持布局对称 -->
+      <view class="date" bindtap="onCardTap" data-type="weight">
+        <view class="date-logo">
+          <image src="/images/weight.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">重量</view>
+          <view class="date-value">{{monitorData.weight.value || '--'}}g</view>
+        </view>
       </view>
     </view>
   </view>
@@ -129,6 +135,37 @@
           <view class="date-title">风扇</view>
           <switch color="#3cc51f" checked="{{fan}}" bindchange="onFanChange"></switch>
         </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 吊瓶重量监测模块 -->
+  <view class="section">
+    <view class="section-title">吊瓶重量监测</view>
+
+    <!-- 初始重量显示 -->
+    <view class="weight-section">
+      <view class="weight-title">吊瓶初始重量</view>
+      <view class="weight-value">{{weightBegin || '--'}}g</view>
+      <view class="weight-desc">硬件端发送的初始重量</view>
+      <view class="weight-info">警告阈值: {{weightWarningThreshold || 0}}g</view>
+    </view>
+
+    <!-- 实时重量显示 -->
+    <view class="weight-section">
+      <view class="weight-title">吊瓶实时重量</view>
+      <view class="weight-value">{{weightRemaining || '--'}}g</view>
+      <view class="weight-desc">硬件端每秒发送的实时重量</view>
+      <view class="weight-info">剩余液体: {{weightRemaining || 0}}g</view>
+    </view>
+
+    <!-- 蜂鸣器控制 -->
+    <view class="weight-section">
+      <view class="weight-title">蜂鸣器控制</view>
+      <button class="weight-control-btn" bindtap="sendWeightDrive">手动触发蜂鸣器</button>
+      <view class="weight-info">
+        液体剩余: {{weightRemaining || 0}}g<br/>
+        警告阈值: {{weightWarningThreshold || 0}}g
       </view>
     </view>
   </view>

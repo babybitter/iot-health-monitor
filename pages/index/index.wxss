@@ -82,4 +82,51 @@ switch {
   transform: scale(0.7);
 }
 
+/* 吊瓶重量监测样式 */
+.weight-section {
+  background-color: #fff;
+  border-radius: 30rpx;
+  box-shadow: #77778a 0 0 8rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
 
+.weight-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.weight-value {
+  font-size: 80rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.weight-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 15rpx;
+}
+
+.weight-info {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.weight-control-btn {
+  background-color: #ff5757;
+  color: white;
+  border-radius: 50rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  margin: 20rpx 0;
+  border: none;
+}
+
+.weight-control-btn:active {
+  background-color: #e04848;
+}

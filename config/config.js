@@ -29,6 +29,7 @@ const config = {
       bloodOxygen: 'patient/monitor/blood_oxygen', // 血氧数据
       weight: 'patient/monitor/weight', // 重量数据
       weightBegin: 'patient/monitor/weight-begin', // 初始重量数据
+      infusionSpeed: 'patient/monitor/infusion-speed', // 输液速度数据
       // 设备状态
       deviceStatus: 'patient/status/device', // 设备状态反馈主题
       // 硬件端兼容主题

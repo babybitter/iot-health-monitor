@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/smart-monitor/smart-monitor",
     "pages/ai-doctor/ai-doctor",
     "pages/profile/profile",
     "pages/patient-info/patient-info",
@@ -24,6 +25,12 @@
         "text": "主页",
         "iconPath": "images/home.png",
         "selectedIconPath": "images/home.png"
+      },
+      {
+        "pagePath": "pages/smart-monitor/smart-monitor",
+        "text": "智能监控",
+        "iconPath": "images/infusion.png",
+        "selectedIconPath": "images/infusion.png"
       },
       {
         "pagePath": "pages/ai-doctor/ai-doctor",

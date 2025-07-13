@@ -12,22 +12,29 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center" width="33%">
-        <img src="images/index-display-image.png" width="250" alt="主页界面"/>
+      <td align="center" width="25%">
+        <img src="images/index-display-image.png" width="200" alt="主页界面"/>
         <br/>
         <b>🏠 主页监测界面</b>
         <br/>
         <sub>实时生理指标监测</sub>
       </td>
-      <td align="center" width="33%">
-        <img src="images/ai-doctor-display-image.png" width="250" alt="AI助手界面"/>
+      <td align="center" width="25%">
+        <img src="images/infusion.png" width="200" alt="智能监控界面"/>
+        <br/>
+        <b>💧 智能输液监控</b>
+        <br/>
+        <sub>输液瓶实时动画监控</sub>
+      </td>
+      <td align="center" width="25%">
+        <img src="images/ai-doctor-display-image.png" width="200" alt="AI助手界面"/>
         <br/>
         <b>🤖 AI智能助手</b>
         <br/>
         <sub>智能健康分析对话</sub>
       </td>
-      <td align="center" width="33%">
-        <img src="images/profile-display-image.png" width="250" alt="个人中心界面"/>
+      <td align="center" width="25%">
+        <img src="images/profile-display-image.png" width="200" alt="个人中心界面"/>
         <br/>
         <b>👤 个人中心</b>
         <br/>
@@ -54,6 +61,30 @@
 
 **设备控制：**
 - 💡 **设备控制** - LED 灯光和蜂鸣器控制
+
+### 💧 智能输液监控
+
+专业的输液监测功能：
+
+**实时动画监控：**
+- 🧪 **输液瓶3D动画** - 高精度24帧液体动画，实时反映液体变化
+- 🌊 **波浪效果** - 液体表面自然波浪动画，增强视觉真实感
+- ✨ **高光反射** - 瓶身玻璃高光和液体表面反射效果
+- 🎭 **阴影渲染** - 立体阴影效果，提升视觉层次感
+- 💧 **输液管动画** - 液滴下落动画，模拟真实输液过程
+
+**数据监测：**
+- ⚖️ **重量监测** - 实时显示初始重量、当前重量和剩余百分比
+- 📊 **智能计算** - 自动计算剩余液体百分比和警告阈值
+- 🚨 **低液体警告** - 液体不足时自动触发蜂鸣器警告
+- 💉 **输液速度** - 实时监测输液滴速（滴/分钟）
+- 📈 **状态判断** - 智能判断输液速度状态（正常/偏慢/过快）
+
+**MQTT数据支持：**
+- 📡 **patient/monitor/weight-begin** - 接收初始重量数据
+- 📡 **patient/monitor/weight** - 接收实时重量数据
+- 📡 **patient/monitor/infusion-speed** - 接收输液速度数据
+- 🔄 **数据格式兼容** - 支持字符串和数值格式的数据解析
 
 ### 🤖 AI 智能助手
 

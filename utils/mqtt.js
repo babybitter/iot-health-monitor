@@ -465,6 +465,8 @@ class MQTTClient {
       this.triggerCallback("weightBegin", payload);
     } else if (topic.includes("weight")) {
       this.triggerCallback("weight", payload);
+    } else if (topic.includes("infusion-speed")) {
+      this.triggerCallback("infusionSpeed", payload);
     }
     // 设备状态
     else if (topic.includes("status/device")) {

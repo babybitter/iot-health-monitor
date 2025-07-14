@@ -24,6 +24,13 @@ const mqttConfig = {
 
 let mqttClient = null;
 
+// 数据缓存对象，用于合并同一时间窗口的数据
+const dataBuffer = {
+  data: {},
+  timeout: null,
+  BUFFER_TIME: 2000 // 2秒缓存时间
+};
+
 // 初始化MQTT连接
 function initMQTT() {
   // 如果没有配置MQTT主机，跳过MQTT连接
@@ -51,6 +58,9 @@ function initMQTT() {
       "patient/monitor/humidity",
       "patient/monitor/breathing",
       "patient/monitor/spo2",
+      "patient/monitor/light", // 光照数据主题
+      "patient/monitor/pressure", // 气压数据主题
+      "patient/monitor/heart_rate", // 心跳频率主题
       // 新增主题
       "patient/upload/data", // 数据上传主题（用于设备主动上报业务数据）
       "patient/advice/device", // 建议主题（用于向设备下发建议）
@@ -72,7 +82,14 @@ function initMQTT() {
 
   mqttClient.on("message", async (topic, message) => {
     try {
-      const data = JSON.parse(message.toString());
+      let data;
+      try {
+        data = JSON.parse(message.toString());
+      } catch (parseError) {
+        // 如果不是JSON格式，尝试作为数字处理
+        data = parseFloat(message.toString()) || message.toString();
+      }
+
       console.log(`📨 收到MQTT消息 [${topic}]:`, data);
 
       // 处理新增主题
@@ -100,32 +117,51 @@ function initMQTT() {
       // 解析主题类型
       const topicType = topic.split("/").pop();
 
-      // 构建传感器数据对象
-      const sensorData = {
-        device_id: data.device_id || "default_device",
-        [topicType]: data.value || data[topicType],
-      };
+      // 获取设备ID
+      const deviceId = (typeof data === 'object' && data !== null) ?
+        (data.device_id || "default_device") : "default_device";
 
-      // 如果是完整数据包，直接使用
-      if (data.temperature !== undefined || data.humidity !== undefined) {
-        Object.assign(sensorData, {
-          temperature: data.temperature,
-          humidity: data.humidity,
-          co2: data.co2,
-          breathing_rate: data.breathing || data.breathing_rate,
-          spo2: data.spo2,
-          light_intensity: data.light || data.light_intensity,
-        });
+      // 处理不同数据格式，提取数值
+      let value;
+      if (typeof data === 'object' && data !== null) {
+        // 如果是完整数据包，直接存储
+        if (data.temperature !== undefined || data.humidity !== undefined) {
+          const completeData = {
+            device_id: deviceId,
+            temperature: data.temperature,
+            humidity: data.humidity,
+            breathing_rate: data.breathing || data.breathing_rate,
+            spo2: data.spo2,
+            light_intensity: data.light || data.light_intensity,
+            pressure: data.pressure,
+            heart_rate: data.heart_rate,
+          };
+
+          console.log("💾 存储完整数据包:", completeData);
+          await Database.insertSensorData(completeData);
+          console.log("✅ 完整数据存储成功");
+
+          // 更新设备状态和检查告警
+          await Database.updateDeviceStatus(deviceId, "online");
+          await checkAlerts(completeData);
+          return;
+        }
+        value = data.value || data[topicType] || data;
+      } else {
+        value = data;
       }
 
-      // 存储到数据库
-      await Database.insertSensorData(sensorData);
+      // 特殊处理气压数据格式 "data: 855" -> 855
+      if (topicType === 'pressure' && typeof value === 'string' && value.includes('data:')) {
+        const match = value.match(/data:\s*(\d+)/);
+        if (match) {
+          value = parseFloat(match[1]);
+          console.log(`🔧 气压数据格式转换: "${message.toString()}" -> ${value}`);
+        }
+      }
 
-      // 更新设备状态
-      await Database.updateDeviceStatus(sensorData.device_id, "online");
-
-      // 检查告警条件
-      await checkAlerts(sensorData);
+      // 使用缓存机制合并单个传感器数据
+      await bufferSensorData(deviceId, topicType, value);
     } catch (error) {
       console.error("❌ 处理MQTT消息失败:", error);
     }
@@ -189,6 +225,43 @@ async function checkAlerts(data) {
       sensor_value: data.spo2,
       threshold_value: 95,
     });
+  }
+
+  // 心跳频率告警
+  if (data.heart_rate !== undefined) {
+    if (data.heart_rate > 100) {
+      alerts.push({
+        device_id: data.device_id,
+        alert_type: "heart_rate",
+        alert_level: "warning",
+        alert_message: `心跳过快: ${data.heart_rate}bpm`,
+        sensor_value: data.heart_rate,
+        threshold_value: 100,
+      });
+    } else if (data.heart_rate < 60) {
+      alerts.push({
+        device_id: data.device_id,
+        alert_type: "heart_rate",
+        alert_level: "warning",
+        alert_message: `心跳过慢: ${data.heart_rate}bpm`,
+        sensor_value: data.heart_rate,
+        threshold_value: 60,
+      });
+    }
+  }
+
+  // 气压告警（异常气压变化）
+  if (data.pressure !== undefined) {
+    if (data.pressure < 950 || data.pressure > 1050) {
+      alerts.push({
+        device_id: data.device_id,
+        alert_type: "pressure",
+        alert_level: "info",
+        alert_message: `气压异常: ${data.pressure}hPa`,
+        sensor_value: data.pressure,
+        threshold_value: data.pressure < 950 ? 950 : 1050,
+      });
+    }
   }
 
   // 保存告警记录
@@ -287,25 +360,90 @@ app.post("/api/sensor-data", async (req, res) => {
   }
 });
 
+// 缓存传感器数据，合并同一时间窗口的数据
+async function bufferSensorData(deviceId, sensorType, value) {
+  try {
+    // 初始化设备数据缓存
+    if (!dataBuffer.data[deviceId]) {
+      dataBuffer.data[deviceId] = {};
+    }
+
+    // 更新传感器数据
+    dataBuffer.data[deviceId][sensorType] = value;
+    dataBuffer.data[deviceId].device_id = deviceId;
+    dataBuffer.data[deviceId].lastUpdate = Date.now();
+
+    console.log(`📝 缓存数据 [${deviceId}] ${sensorType}: ${value}`);
+
+    // 清除之前的定时器
+    if (dataBuffer.timeout) {
+      clearTimeout(dataBuffer.timeout);
+    }
+
+    // 设置新的定时器，延迟存储以合并数据
+    dataBuffer.timeout = setTimeout(async () => {
+      await flushBufferedData();
+    }, dataBuffer.BUFFER_TIME);
+
+  } catch (error) {
+    console.error("❌ 缓存数据失败:", error);
+  }
+}
+
+// 将缓存的数据批量存储到数据库
+async function flushBufferedData() {
+  try {
+    const devices = Object.keys(dataBuffer.data);
+
+    for (const deviceId of devices) {
+      const deviceData = dataBuffer.data[deviceId];
+
+      // 构建完整的传感器数据对象
+      const sensorData = {
+        device_id: deviceId,
+        temperature: deviceData.temperature || null,
+        humidity: deviceData.humidity || null,
+        breathing_rate: deviceData.breathing || null,
+        spo2: deviceData.spo2 || null,
+        light_intensity: deviceData.light || deviceData.light_intensity || null,
+        pressure: deviceData.pressure || null,
+        heart_rate: deviceData.heart_rate || null,
+      };
+
+      // 只有当至少有一个传感器数据时才存储
+      const hasData = Object.values(sensorData).some(val => val !== null && val !== deviceId);
+
+      if (hasData) {
+        console.log("💾 批量存储合并数据:", sensorData);
+        await Database.insertSensorData(sensorData);
+        console.log("✅ 合并数据存储成功");
+
+        // 更新设备状态
+        await Database.updateDeviceStatus(deviceId, "online");
+
+        // 检查告警条件
+        await checkAlerts(sensorData);
+      }
+    }
+
+    // 清空缓存
+    dataBuffer.data = {};
+    dataBuffer.timeout = null;
+
+  } catch (error) {
+    console.error("❌ 批量存储数据失败:", error);
+  }
+}
+
 // 新增主题处理函数
 async function handleDeviceDataUpload(data) {
   try {
     // 处理设备主动上报的业务数据
     console.log("处理设备上报数据:", data);
 
-    // 保存到数据库
-    const query = `
-      INSERT INTO sensor_data (device_id, data_type, value, raw_data, created_at)
-      VALUES (?, 'device_upload', ?, ?, NOW())
-    `;
-
-    await Database.query(query, [
-      data.device_id || 'unknown_device',
-      JSON.stringify(data.value || data),
-      JSON.stringify(data)
-    ]);
-
-    console.log("✅ 设备上报数据已保存");
+    // 暂时跳过数据库存储，因为表结构不匹配
+    // TODO: 如果需要存储这类数据，需要创建专门的表或修改现有表结构
+    console.log("📝 设备上报数据已记录（暂不存储到数据库）");
   } catch (error) {
     console.error("❌ 处理设备上报数据失败:", error);
   }

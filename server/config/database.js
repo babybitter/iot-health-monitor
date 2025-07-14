@@ -50,8 +50,9 @@ class Database {
   static async insertSensorData(data) {
     const sql = `
       INSERT INTO sensor_data (
-        device_id, temperature, humidity, breathing_rate, spo2
-      ) VALUES (?, ?, ?, ?, ?)
+        device_id, temperature, humidity, breathing_rate, spo2,
+        light_intensity, pressure, heart_rate
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const params = [
       data.device_id || "default_device",
@@ -59,6 +60,9 @@ class Database {
       data.humi || data.humidity || null,
       data.breathing || data.breathing_rate || null,
       data.spo2 || null,
+      data.light || data.light_intensity || null,
+      data.pressure || null,
+      data.heart_rate || null,
     ];
     return await this.query(sql, params);
   }
@@ -72,6 +76,9 @@ class Database {
         CAST(humidity AS DECIMAL(5,2)) as humi,
         CAST(breathing_rate AS DECIMAL(5,2)) as breathing,
         CAST(spo2 AS DECIMAL(5,2)) as spo2,
+        CAST(light_intensity AS DECIMAL(8,2)) as light,
+        CAST(pressure AS DECIMAL(8,2)) as pressure,
+        CAST(heart_rate AS DECIMAL(5,2)) as heart_rate,
         created_at, updated_at
       FROM sensor_data
       WHERE device_id = ?
@@ -97,6 +104,9 @@ class Database {
         CAST(humidity AS DECIMAL(5,2)) as humi,
         CAST(breathing_rate AS DECIMAL(5,2)) as breathing,
         CAST(spo2 AS DECIMAL(5,2)) as spo2,
+        CAST(light_intensity AS DECIMAL(8,2)) as light,
+        CAST(pressure AS DECIMAL(8,2)) as pressure,
+        CAST(heart_rate AS DECIMAL(5,2)) as heart_rate,
         created_at, updated_at
       FROM sensor_data
       WHERE device_id = ?
@@ -129,6 +139,9 @@ class Database {
         AVG(humidity) as avg_humidity,
         AVG(breathing_rate) as avg_breathing,
         AVG(spo2) as avg_spo2,
+        AVG(light_intensity) as avg_light,
+        AVG(pressure) as avg_pressure,
+        AVG(heart_rate) as avg_heart_rate,
         COUNT(*) as data_count
       FROM sensor_data
       WHERE device_id = ?

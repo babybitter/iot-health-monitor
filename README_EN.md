@@ -12,24 +12,31 @@ An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mi
 <div align="center">
   <table>
     <tr>
-      <td align="center" width="33%">
-        <img src="images/index-display-image.png" width="250" alt="Home Interface"/>
+      <td align="center" width="25%">
+        <img src="images/index-display-image.png" width="200" alt="Home Interface"/>
         <br/>
-        <b>🏠 Home Monitoring</b>
+        <b>Home Monitoring</b>
         <br/>
         <sub>Real-time Physiological Monitoring</sub>
       </td>
-      <td align="center" width="33%">
-        <img src="images/ai-doctor-display-image.png" width="250" alt="AI Assistant Interface"/>
+      <td align="center" width="25%">
+        <img src="images/smart-monitor-display-image.png" width="200" alt="Smart Infusion Monitoring Interface"/>
         <br/>
-        <b>🤖 AI Assistant</b>
+        <b>Smart Infusion Monitoring</b>
+        <br/>
+        <sub>Real-time Infusion Monitoring</sub>
+      </td>
+      <td align="center" width="25%">
+        <img src="images/ai-doctor-display-image.png" width="200" alt="AI Assistant Interface"/>
+        <br/>
+        <b>AI Assistant</b>
         <br/>
         <sub>Intelligent Health Analysis</sub>
       </td>
-      <td align="center" width="33%">
-        <img src="images/profile-display-image.png" width="250" alt="Profile Interface"/>
+      <td align="center" width="25%">
+        <img src="images/profile-display-image.png" width="200" alt="Profile Interface"/>
         <br/>
-        <b>👤 User Profile</b>
+        <b>User Profile</b>
         <br/>
         <sub>User Information Management</sub>
       </td>
@@ -37,7 +44,7 @@ An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mi
   </table>
 </div>
 
-### 🏠 Home Monitoring Interface
+### Home Monitoring Interface
 
 Real-time display of patient's key physiological indicators:
 
@@ -47,7 +54,18 @@ Real-time display of patient's key physiological indicators:
 - 🩸 **Blood Oxygen Saturation** - Real-time SpO2 monitoring
 - 💡 **Device Control** - LED lighting and buzzer control
 
-### 🤖 AI Intelligent Assistant
+### Smart Infusion Monitoring
+
+Intelligent infusion management system:
+
+- 💧 **Real-time Liquid Level** - Visual liquid bottle animation with real-time level display
+- ⚖️ **Weight Monitoring** - Initial weight, current weight, and remaining percentage tracking
+- 🚨 **Smart Alerts** - Automatic buzzer warnings when liquid level is low
+- 📊 **Infusion Rate Monitoring** - Real-time drip rate measurement (drops/minute)
+- 🎯 **Status Tracking** - Normal, warning, and danger status indicators
+- 🔧 **Threshold Settings** - Customizable warning thresholds for different scenarios
+
+### AI Intelligent Assistant
 
 Smart health analysis features:
 
@@ -56,7 +74,7 @@ Smart health analysis features:
 - 💡 **Health Recommendations** - Personalized health guidance
 - 🚨 **Abnormal Alerts** - Intelligent health risk identification
 
-### 👤 User Profile
+### User Profile
 
 User management features:
 
@@ -141,6 +159,7 @@ LoTProject/
 ├── 📱 Frontend Mini Program
 │   ├── pages/                 # Page files
 │   │   ├── index/            # Home monitoring interface
+│   │   ├── smart-monitor/    # Smart infusion monitoring
 │   │   ├── ai-doctor/        # AI assistant page
 │   │   ├── profile/          # User profile
 │   │   ├── patient-info/     # Patient information
@@ -278,6 +297,7 @@ GET /api/device-status/:deviceId
 
 The system is fully compatible with ESP32-S3 hardware data format:
 
+### Physiological Monitoring Data
 ```json
 {
   "device_id": "data_send_test_01",
@@ -286,6 +306,21 @@ The system is fully compatible with ESP32-S3 hardware data format:
   "breathing": 18, // Breathing rate (breaths/min)
   "spo2": 97, // Blood oxygen saturation (%)
   "heart": 72 // Heart rate (bpm, reserved)
+}
+```
+
+### Smart Infusion Monitoring Data
+```json
+{
+  "device_id": "infusion_monitor_01",
+  "weight": {
+    "initial": 500, // Initial weight (g)
+    "current": 350, // Current weight (g)
+    "remaining_percentage": 70 // Remaining percentage (%)
+  },
+  "infusion_rate": 25, // Drip rate (drops/minute)
+  "status": "normal", // Status: normal/warning/danger
+  "alert_threshold": 50 // Warning threshold (g)
 }
 ```
 

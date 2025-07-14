@@ -15,28 +15,28 @@
       <td align="center" width="25%">
         <img src="images/index-display-image.png" width="200" alt="主页界面"/>
         <br/>
-        <b>🏠 主页监测界面</b>
+        <b>主页监测界面</b>
         <br/>
         <sub>实时生理指标监测</sub>
       </td>
       <td align="center" width="25%">
-        <img src="images/infusion.png" width="200" alt="智能监控界面"/>
+        <img src="images/smart-monitor-display-image.png" width="200" alt="智能监控界面"/>
         <br/>
-        <b>💧 智能输液监控</b>
+        <b>智能输液监控</b>
         <br/>
         <sub>输液瓶实时动画监控</sub>
       </td>
       <td align="center" width="25%">
         <img src="images/ai-doctor-display-image.png" width="200" alt="AI助手界面"/>
         <br/>
-        <b>🤖 AI智能助手</b>
+        <b>AI智能助手</b>
         <br/>
         <sub>智能健康分析对话</sub>
       </td>
       <td align="center" width="25%">
         <img src="images/profile-display-image.png" width="200" alt="个人中心界面"/>
         <br/>
-        <b>👤 个人中心</b>
+        <b>个人中心</b>
         <br/>
         <sub>用户信息管理</sub>
       </td>

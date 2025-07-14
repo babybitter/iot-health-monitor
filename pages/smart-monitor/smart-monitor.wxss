@@ -15,6 +15,13 @@
   box-sizing: border-box;
 }
 
+.section-title {
+  text-align: center;  /* 水平居中 */
+  font-size: 18px;     /* 可选：调整字体大小 */
+  font-weight: bold;    /* 可选：加粗 */
+  padding: 10px 0;      /* 可选：调整内边距 */
+}
+
 .nav-title {
   font-size: 32rpx;
   font-weight: bold;
@@ -39,21 +46,41 @@
   padding-left: 10rpx;
 }
 
-/* 输液瓶动画区域 */
-.infusion-animation-section {
-  margin-bottom: 40rpx;
+/* 左右布局容器 */
+.infusion-monitor-container {
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+  min-height: 500rpx;
+}
+
+/* 左侧输液瓶区域 */
+.infusion-bottle-section {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
 }
 
 .infusion-bottle-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 400rpx;
+  height: 500rpx;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 30rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border-radius: 25rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
+}
+
+/* 右侧监测数据区域 */
+.monitor-data-section {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* 输液瓶主体 */
@@ -851,21 +878,30 @@
   background-color: #fff;
   border-radius: 30rpx;
   box-shadow: #77778a 0 0 8rpx;
-  padding: 40rpx 30rpx;
-  margin-bottom: 30rpx;
+  padding: 35rpx 25rpx;
+  height: 500rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
+
+
 
 .data-left {
   display: flex;
   flex-direction: column;
-  gap: 25rpx;
+  gap: 30rpx;
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .data-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15rpx 0;
+  padding: 20rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
 }
 
@@ -887,22 +923,26 @@
 /* 警告按钮 */
 .warning-button-container {
   text-align: center;
-  margin-bottom: 30rpx;
+  margin: 20rpx 0;
 }
 
 .warning-button {
-  background-color: #ff5757;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
   color: white;
-  border-radius: 50rpx;
-  padding: 25rpx 60rpx;
-  font-size: 28rpx;
+  border-radius: 25rpx;
+  padding: 20rpx 50rpx;
+  font-size: 26rpx;
+  font-weight: 600;
   border: none;
-  box-shadow: 0 4rpx 16rpx rgba(255, 87, 87, 0.3);
+  box-shadow: 0 8rpx 25rpx rgba(255, 107, 107, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 1rpx;
 }
 
 .warning-button:active {
-  background-color: #e04848;
-  transform: scale(0.98);
+  background: linear-gradient(135deg, #e55a5a 0%, #d44848 100%);
+  transform: scale(0.95) translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(255, 107, 107, 0.4);
 }
 
 /* 输液速度监测卡片 */
@@ -910,66 +950,79 @@
   background-color: #fff;
   border-radius: 30rpx;
   box-shadow: #77778a 0 0 8rpx;
-  padding: 40rpx 30rpx;
+  padding: 35rpx 25rpx;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
+
+
 
 .speed-display {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15rpx;
-  margin-bottom: 30rpx;
+  gap: 12rpx;
+  margin-bottom: 25rpx;
 }
 
 .speed-icon {
-  font-size: 40rpx;
+  font-size: 36rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.1));
 }
 
 .speed-value {
-  font-size: 60rpx;
-  font-weight: bold;
-  color: #333;
+  font-size: 50rpx;
+  font-weight: 700;
+  color: #2c3e50;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
 }
 
 .speed-unit {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #666;
+  font-weight: 500;
 }
 
 .speed-status {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10rpx;
-  margin-bottom: 20rpx;
+  gap: 8rpx;
+  margin-bottom: 18rpx;
 }
 
 .status-label {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #666;
+  font-weight: 500;
 }
 
 .status-value {
-  font-size: 26rpx;
-  font-weight: bold;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 6rpx 14rpx;
+  border-radius: 15rpx;
+  backdrop-filter: blur(10rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
 }
 
 .status-value.normal {
-  background-color: #e8f5e8;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
   color: #4caf50;
+  border-color: rgba(76, 175, 80, 0.2);
 }
 
 .status-value.warning {
-  background-color: #fff3e0;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
   color: #ff9800;
+  border-color: rgba(255, 152, 0, 0.2);
 }
 
 .status-value.danger {
-  background-color: #ffebee;
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(244, 67, 54, 0.05) 100%);
   color: #f44336;
+  border-color: rgba(244, 67, 54, 0.2);
 }
 
 .speed-desc {

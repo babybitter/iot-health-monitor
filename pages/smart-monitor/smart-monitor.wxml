@@ -5,101 +5,102 @@
 </view>
 
 <view class="container" style="padding-top: {{navHeight}}px;">
-  <!-- 输液瓶实时动画区域 -->
-  <view class="infusion-animation-section">
-    <view class="section-title">输液瓶实时监控</view>
-    
-    <!-- 输液瓶容器 -->
-    <view class="infusion-bottle-container">
-      <!-- 输液瓶主体 -->
-      <view class="infusion-bottle">
-        <!-- 瓶口 -->
-        <view class="bottle-neck"></view>
-        
-        <!-- 瓶身 -->
-        <view class="bottle-body">
-          <!-- 液体容器 -->
-          <view class="liquid-container" style="height: {{liquidHeight}}%;">
-            <!-- 液体主体 -->
-            <view class="liquid-body"></view>
-            
-            <!-- 液体表面波浪 -->
-            <view class="liquid-surface">
-              <view class="wave wave1"></view>
-              <view class="wave wave2"></view>
-              <view class="wave wave3"></view>
-              <!-- 额外的波浪效果 -->
-              <view class="wave-ripple wave-ripple1"></view>
-              <view class="wave-ripple wave-ripple2"></view>
-              <!-- 明显的波浪线条 -->
-              <view class="wave-line wave-line1"></view>
-              <view class="wave-line wave-line2"></view>
-              <view class="wave-line wave-line3"></view>
-              <!-- 超明显的波浪条纹 -->
-              <view class="mega-wave mega-wave1"></view>
-              <view class="mega-wave mega-wave2"></view>
-              <view class="mega-wave mega-wave3"></view>
-              <!-- 闪烁波浪指示器 -->
-              <view class="wave-indicator"></view>
-            </view>
-            
-            <!-- 液体高光效果 -->
-            <view class="liquid-highlight"></view>
-          </view>
-          
-          <!-- 瓶身高光反射 -->
-          <view class="bottle-highlight"></view>
-          
-          <!-- 瓶身阴影 -->
-          <view class="bottle-shadow"></view>
-        </view>
-        
-        <!-- 瓶底 -->
-        <view class="bottle-bottom"></view>
-      </view>
-      
-      <!-- 输液管 -->
-      <view class="infusion-tube">
-        <view class="tube-line"></view>
-        <view class="tube-drip">
-          <view class="drip drip1"></view>
-          <view class="drip drip2"></view>
-          <view class="drip drip3"></view>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 输液瓶重量监测模块 -->
+  <!-- 输液瓶实时监控模块 -->
   <view class="section">
-    <view class="section-title">输液瓶实时监控</view>
-    
-    <!-- 数据显示区域 -->
-    <view class="monitor-data-container">
-      <!-- 左侧数据区 -->
-      <view class="data-left">
-        <view class="data-item">
-          <view class="data-label">初始重量</view>
-          <view class="data-value">{{weightBegin || '--'}}g</view>
+    <view class="section-title">实时监控</view>
+
+    <!-- 左右布局容器 -->
+    <view class="infusion-monitor-container">
+      <!-- 左侧：输液瓶动画区域 -->
+      <view class="infusion-bottle-section">
+        <view class="infusion-bottle-container" style="width: 239rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+          <!-- 输液瓶主体 -->
+          <view class="infusion-bottle">
+            <!-- 瓶口 -->
+            <view class="bottle-neck"></view>
+
+            <!-- 瓶身 -->
+            <view class="bottle-body">
+              <!-- 液体容器 -->
+              <view class="liquid-container" style="height: {{liquidHeight}}%;">
+                <!-- 液体主体 -->
+                <view class="liquid-body"></view>
+
+                <!-- 液体表面波浪 -->
+                <view class="liquid-surface">
+                  <view class="wave wave1"></view>
+                  <view class="wave wave2"></view>
+                  <view class="wave wave3"></view>
+                  <!-- 额外的波浪效果 -->
+                  <view class="wave-ripple wave-ripple1"></view>
+                  <view class="wave-ripple wave-ripple2"></view>
+                  <!-- 明显的波浪线条 -->
+                  <view class="wave-line wave-line1"></view>
+                  <view class="wave-line wave-line2"></view>
+                  <view class="wave-line wave-line3"></view>
+                  <!-- 超明显的波浪条纹 -->
+                  <view class="mega-wave mega-wave1"></view>
+                  <view class="mega-wave mega-wave2"></view>
+                  <view class="mega-wave mega-wave3"></view>
+                  <!-- 闪烁波浪指示器 -->
+                  <view class="wave-indicator"></view>
+                </view>
+
+                <!-- 液体高光效果 -->
+                <view class="liquid-highlight"></view>
+              </view>
+
+              <!-- 瓶身高光反射 -->
+              <view class="bottle-highlight"></view>
+
+              <!-- 瓶身阴影 -->
+              <view class="bottle-shadow"></view>
+            </view>
+
+            <!-- 瓶底 -->
+            <view class="bottle-bottom"></view>
+          </view>
+
+          <!-- 输液管 -->
+          <view class="infusion-tube">
+            <view class="tube-line"></view>
+            <view class="tube-drip">
+              <view class="drip drip1"></view>
+              <view class="drip drip2"></view>
+              <view class="drip drip3"></view>
+            </view>
+          </view>
         </view>
-        
-        <view class="data-item">
-          <view class="data-label">当前重量</view>
-          <view class="data-value">{{weightRemaining || '--'}}g</view>
-        </view>
-        
-        <view class="data-item">
-          <view class="data-label">剩余百分比</view>
-          <view class="data-value">{{remainingPercentage || '0'}}%</view>
-        </view>
-        
-        <view class="data-item">
-          <view class="data-label">警告阈值</view>
-          <view class="data-value">{{weightWarningThreshold || '0'}}g</view>
+      </view>
+
+      <!-- 右侧：监测数据区域 -->
+      <view class="monitor-data-section">
+        <view class="monitor-data-container" style="width: 315rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+          <view class="data-left">
+            <view class="data-item">
+              <view class="data-label">初始重量</view>
+              <view class="data-value">{{weightBegin || '--'}}g</view>
+            </view>
+
+            <view class="data-item">
+              <view class="data-label">当前重量</view>
+              <view class="data-value">{{weightRemaining || '--'}}g</view>
+            </view>
+
+            <view class="data-item">
+              <view class="data-label">剩余百分比</view>
+              <view class="data-value">{{remainingPercentage || '0'}}%</view>
+            </view>
+
+            <view class="data-item">
+              <view class="data-label">警告阈值</view>
+              <view class="data-value">{{weightWarningThreshold || '0'}}g</view>
+            </view>
+          </view>
         </view>
       </view>
     </view>
-    
+
     <!-- 蜂鸣器警告按钮 -->
     <view class="warning-button-container">
       <button class="warning-button" bindtap="sendWeightDrive">触发蜂鸣器警告</button>
@@ -111,7 +112,7 @@
     <view class="section-title">输液速度监测</view>
     
     <!-- 速度显示卡片 -->
-    <view class="speed-monitor-card">
+    <view class="speed-monitor-card" style="width: 291rpx; height: 299rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <view class="speed-display">
         <view class="speed-icon">💧</view>
         <view class="speed-value">{{infusionSpeed || '--'}}</view>

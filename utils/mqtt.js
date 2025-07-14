@@ -449,6 +449,9 @@ class MQTTClient {
       this.triggerCallback("light", payload);
     } else if (topic.includes("pressure")) {
       this.triggerCallback("pressure", payload);
+    } else if (topic.includes("body-temperature")) {
+      // 体温数据 - 需要在temperature之前检查，避免被匹配
+      this.triggerCallback("bodyTemperature", payload);
     } else if (topic.includes("temperature")) {
       this.triggerCallback("temperature", payload);
     } else if (topic.includes("humidity")) {

@@ -132,6 +132,7 @@ Page({
       breathing: "次/分",
       heartRate: "次/分",
       bloodOxygen: "%",
+      bodyTemperature: "°C",
       weight: "g",
     };
     return units[type] || "";
@@ -166,6 +167,7 @@ Page({
       breathing: "呼吸频率",
       heartRate: "心跳频率",
       bloodOxygen: "血氧",
+      bodyTemperature: "体温",
       weight: "重量",
     };
     return titles[type] || type;
@@ -211,7 +213,9 @@ Page({
         this.updateMonitorData("bloodOxygen", data);
       });
 
-
+      mqttClient.onMessage("bodyTemperature", (data) => {
+        this.updateMonitorData("bodyTemperature", data);
+      });
 
       // 注册设备状态回调
       mqttClient.onMessage("deviceStatus", (data) => {
@@ -241,23 +245,55 @@ Page({
     const timeStr = this.formatDateTime(new Date());
     const updateData = {};
 
-    updateData[`monitorData.${type}.value`] = data.value;
+    // 处理不同格式的数据
+    let value;
+    if (typeof data === 'object' && data.value !== undefined) {
+      // 标准格式: {value: xxx}
+      value = data.value;
+    } else {
+      // 直接数值格式: 26.98
+      value = data;
+    }
+
+    // 如果是字符串格式，根据类型处理
+    if (typeof value === 'string') {
+      if (type === 'pressure') {
+        // 气压测试数据保持原始格式显示 "data: 196"
+        // 不做任何处理，直接使用
+      } else {
+        // 其他数据转换为数值
+        value = parseFloat(value);
+        // 确保value是有效数值
+        if (isNaN(value)) {
+          console.warn(`${type} 数据格式错误:`, data);
+          return;
+        }
+      }
+    } else {
+      // 数值类型，确保是有效数值
+      if (isNaN(value)) {
+        console.warn(`${type} 数据格式错误:`, data);
+        return;
+      }
+    }
+
+    updateData[`monitorData.${type}.value`] = value;
     updateData[`monitorData.${type}.lastUpdate`] = timeStr;
 
     // 同步更新兼容变量
     if (type === "temperature") {
-      updateData["tempo"] = data.value;
+      updateData["tempo"] = value;
     } else if (type === "humidity") {
-      updateData["hum"] = data.value; // 兼容原湿度变量
+      updateData["hum"] = value; // 兼容原湿度变量
     } else if (type === "light") {
-      updateData["lx"] = data.value; // 兼容原光照变量
+      updateData["lx"] = value; // 兼容原光照变量
     }
 
     // 根据阈值设置状态
-    const value = parseFloat(data.value);
     const thresholds = config.thresholds[type];
     let status = "normal";
-    if (thresholds) {
+    if (thresholds && typeof value === 'number') {
+      // 只对数值类型的数据进行阈值判断
       if (value >= thresholds.normal[0] && value <= thresholds.normal[1]) {
         status = "normal";
       } else if (
@@ -268,6 +304,9 @@ Page({
       } else {
         status = "danger";
       }
+    } else if (typeof value === 'string') {
+      // 字符串类型数据（如测试数据）默认为正常状态
+      status = "normal";
     }
     updateData[`monitorData.${type}.status`] = status;
 
@@ -279,7 +318,7 @@ Page({
     if (app && app.globalData && app.globalData.monitorData) {
       app.globalData.monitorData[type] = {
         ...app.globalData.monitorData[type],
-        value: data.value,
+        value: value,
         lastUpdate: timeStr,
         status: status
       };

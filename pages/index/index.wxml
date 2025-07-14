@@ -82,13 +82,13 @@
           <view class="date-value">{{monitorData.bloodOxygen.value || '0'}}%</view>
         </view>
       </view>
-      <view class="date" bindtap="onCardTap" data-type="weight">
+      <view class="date" bindtap="onCardTap" data-type="bodyTemperature">
         <view class="date-logo">
-          <image src="/images/weight.png"></image>
+          <image src="/images/body-temperature.png"></image>
         </view>
         <view class="date-text">
-          <view class="date-title">重量</view>
-          <view class="date-value">{{monitorData.weight.value || '--'}}g</view>
+          <view class="date-title">体温</view>
+          <view class="date-value">{{monitorData.bodyTemperature.value || '--'}}°C</view>
         </view>
       </view>
     </view>

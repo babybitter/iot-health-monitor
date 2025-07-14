@@ -27,6 +27,7 @@ const config = {
       breathing: 'patient/monitor/breathing', // 呼吸频率数据
       heartRate: 'patient/monitor/heart_rate', // 心跳频率数据
       bloodOxygen: 'patient/monitor/blood_oxygen', // 血氧数据
+      bodyTemperature: 'patient/monitor/body-temperature', // 体温数据
       weight: 'patient/monitor/weight', // 重量数据
       weightBegin: 'patient/monitor/weight-begin', // 初始重量数据
       infusionSpeed: 'patient/monitor/infusion-speed', // 输液速度数据
@@ -62,6 +63,7 @@ const config = {
     breathing: { value: '--', status: 'normal', lastUpdate: '--' },
     heartRate: { value: '--', status: 'normal', lastUpdate: '--' },
     bloodOxygen: { value: '--', status: 'normal', lastUpdate: '--' },
+    bodyTemperature: { value: '--', status: 'normal', lastUpdate: '--' },
     weight: { value: '--', status: 'normal', lastUpdate: '--' }
   },
   
@@ -75,7 +77,8 @@ const config = {
     // 人体数据阈值
     breathing: { normal: [12, 20], warning: [20, 30], danger: [30, 60] },
     heartRate: { normal: [60, 100], warning: [100, 120], danger: [120, 200] },
-    bloodOxygen: { normal: [95, 100], warning: [90, 95], danger: [0, 90] }
+    bloodOxygen: { normal: [95, 100], warning: [90, 95], danger: [0, 90] },
+    bodyTemperature: { normal: [36.0, 37.5], warning: [37.5, 38.5], danger: [38.5, 42.0] }
   },
   
   // UI配置

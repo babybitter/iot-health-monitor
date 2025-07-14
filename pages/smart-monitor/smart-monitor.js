@@ -21,7 +21,12 @@ Page({
     speedStatusText: '正常', // 状态文本
 
     // MQTT连接状态
-    mqttConnected: false
+    mqttConnected: false,
+
+    // 警告控制
+    hasShownWarning: false, // 是否已经显示过警告
+    isInDangerZone: false, // 当前是否处于危险区域
+    lastSafeWeight: 0 // 上次安全重量值
   },
 
   onLoad() {
@@ -140,10 +145,8 @@ Page({
         liquidHeight: liquidHeight
       });
 
-      // 检查是否需要触发警告
-      if (remaining <= this.data.weightWarningThreshold && remaining > 0) {
-        this.showLowLiquidWarning();
-      }
+      // 检查警告逻辑
+      this.checkWarningLogic(remaining);
     }
   },
 
@@ -178,15 +181,68 @@ Page({
     }
   },
 
+  // 检查警告逻辑（新的触发机制）
+  checkWarningLogic(currentWeight) {
+    const threshold = this.data.weightWarningThreshold;
+    const isCurrentlyInDanger = currentWeight <= threshold && currentWeight > 0;
+    const wasInDanger = this.data.isInDangerZone;
+
+    if (isCurrentlyInDanger && !wasInDanger) {
+      // 刚刚进入危险区域，显示警告
+      console.log(`液体重量从安全区域(${this.data.lastSafeWeight}g)进入危险区域(${currentWeight}g)`);
+      this.showLowLiquidWarning();
+      this.setData({
+        hasShownWarning: true,
+        isInDangerZone: true
+      });
+    } else if (!isCurrentlyInDanger && wasInDanger) {
+      // 从危险区域恢复到安全区域
+      console.log(`液体重量从危险区域恢复到安全区域(${currentWeight}g)`);
+      this.setData({
+        hasShownWarning: false,
+        isInDangerZone: false,
+        lastSafeWeight: currentWeight
+      });
+    } else if (isCurrentlyInDanger && wasInDanger) {
+      // 持续在危险区域，不弹窗，只记录日志
+      console.log(`液体重量持续在危险区域: ${currentWeight}g (阈值: ${threshold}g)`);
+    } else {
+      // 持续在安全区域，更新安全重量记录
+      this.setData({
+        lastSafeWeight: currentWeight
+      });
+    }
+  },
+
   // 显示低液体警告
   showLowLiquidWarning() {
+    const remainingPercentage = this.data.remainingPercentage || 0;
+
     wx.showModal({
       title: '液体不足警告',
-      content: `当前液体剩余: ${this.data.weightRemaining}g\n警告阈值: ${this.data.weightWarningThreshold}g\n\n请及时更换输液瓶！`,
+      content: `当前液体剩余: ${this.data.weightRemaining}g\n警告阈值: ${this.data.weightWarningThreshold}g\n剩余百分比: ${remainingPercentage}%\n\n请及时更换输液瓶！`,
       showCancel: false,
       confirmText: '知道了',
-      confirmColor: '#ff5757'
+      confirmColor: '#ff5757',
+      success: (res) => {
+        if (res.confirm) {
+          console.log('用户确认了液体不足警告，在液体恢复到安全值之前不会再次弹出');
+          // 用户确认后，标记已显示警告，直到恢复安全值才会重新弹出
+          this.setData({
+            hasShownWarning: true
+          });
+        }
+      }
     });
+  },
+
+  // 重置警告状态（当液体恢复安全或手动处理时）
+  resetWarningState() {
+    this.setData({
+      hasShownWarning: false,
+      isInDangerZone: false
+    });
+    console.log('警告状态已重置，可以重新监控液体不足情况');
   },
 
   // 发送蜂鸣器警告
@@ -197,12 +253,27 @@ Page({
         title: '蜂鸣器警告已触发',
         icon: 'success'
       });
+
+      // 手动触发蜂鸣器时，重置警告状态
+      // 表示用户已经知道并处理了液体不足问题
+      this.resetWarningState();
     } else {
       wx.showToast({
         title: '发送失败，请检查连接',
         icon: 'error'
       });
     }
+  },
+
+  // 获取当前警告状态（用于调试）
+  getWarningStatus() {
+    return {
+      hasShownWarning: this.data.hasShownWarning,
+      isInDangerZone: this.data.isInDangerZone,
+      lastSafeWeight: this.data.lastSafeWeight,
+      currentWeight: this.data.weightRemaining,
+      threshold: this.data.weightWarningThreshold
+    };
   },
 
   // 刷新数据

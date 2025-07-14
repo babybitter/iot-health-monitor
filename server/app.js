@@ -51,6 +51,10 @@ function initMQTT() {
       "patient/monitor/humidity",
       "patient/monitor/breathing",
       "patient/monitor/spo2",
+      // 新增主题
+      "patient/upload/data", // 数据上传主题（用于设备主动上报业务数据）
+      "patient/advice/device", // 建议主题（用于向设备下发建议）
+      "patient/upload/data/temperature", // 体温数据专用上报通道
       // 硬件端兼容主题
       "home/devices/onoff/+/+", // 订阅硬件端所有设备的所有传感器数据
     ];
@@ -70,6 +74,28 @@ function initMQTT() {
     try {
       const data = JSON.parse(message.toString());
       console.log(`📨 收到MQTT消息 [${topic}]:`, data);
+
+      // 处理新增主题
+      if (topic === "patient/upload/data") {
+        // 数据上传主题 - 设备主动上报业务数据
+        console.log("📤 收到设备上报数据:", data);
+        await handleDeviceDataUpload(data);
+        return;
+      }
+
+      if (topic === "patient/advice/device") {
+        // 建议主题 - 向设备下发建议
+        console.log("💡 收到设备建议:", data);
+        await handleDeviceAdvice(data);
+        return;
+      }
+
+      if (topic === "patient/upload/data/temperature") {
+        // 体温数据专用上报通道
+        console.log("🌡️ 收到体温专用数据:", data);
+        await handleVitalTemperature(data);
+        return;
+      }
 
       // 解析主题类型
       const topicType = topic.split("/").pop();
@@ -257,6 +283,155 @@ app.post("/api/sensor-data", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// 新增主题处理函数
+async function handleDeviceDataUpload(data) {
+  try {
+    // 处理设备主动上报的业务数据
+    console.log("处理设备上报数据:", data);
+
+    // 保存到数据库
+    const query = `
+      INSERT INTO sensor_data (device_id, data_type, value, raw_data, created_at)
+      VALUES (?, 'device_upload', ?, ?, NOW())
+    `;
+
+    await Database.query(query, [
+      data.device_id || 'unknown_device',
+      JSON.stringify(data.value || data),
+      JSON.stringify(data)
+    ]);
+
+    console.log("✅ 设备上报数据已保存");
+  } catch (error) {
+    console.error("❌ 处理设备上报数据失败:", error);
+  }
+}
+
+async function handleDeviceAdvice(data) {
+  try {
+    // 处理向设备下发的建议
+    console.log("处理设备建议:", data);
+
+    // 记录建议日志
+    const query = `
+      INSERT INTO device_advice_log (device_id, advice_type, advice_content, created_at)
+      VALUES (?, ?, ?, NOW())
+    `;
+
+    await Database.query(query, [
+      data.device_id || 'unknown_device',
+      data.advice_type || 'general',
+      JSON.stringify(data.advice || data)
+    ]);
+
+    console.log("✅ 设备建议已记录");
+  } catch (error) {
+    console.error("❌ 处理设备建议失败:", error);
+  }
+}
+
+async function handleVitalTemperature(data) {
+  try {
+    // 处理体温专用数据
+    console.log("处理体温专用数据:", data);
+
+    // 保存体温数据到专用表
+    const query = `
+      INSERT INTO vital_temperature (device_id, temperature, measurement_time, data_source, created_at)
+      VALUES (?, ?, ?, 'vital_channel', NOW())
+    `;
+
+    await Database.query(query, [
+      data.device_id || 'unknown_device',
+      data.temperature || data.value,
+      data.timestamp || new Date().toISOString()
+    ]);
+
+    console.log("✅ 体温专用数据已保存");
+  } catch (error) {
+    console.error("❌ 处理体温专用数据失败:", error);
+  }
+}
+
+// 新增主题数据查询接口
+app.get("/api/device-upload/:deviceId", async (req, res) => {
+  try {
+    const { deviceId } = req.params;
+    const { limit = 50, page = 1 } = req.query;
+
+    const offset = (page - 1) * limit;
+    const query = `
+      SELECT * FROM sensor_data
+      WHERE device_id = ? AND data_type = 'device_upload'
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    const results = await Database.query(query, [deviceId, parseInt(limit), offset]);
+
+    res.json({
+      success: true,
+      data: results,
+      pagination: { page: parseInt(page), limit: parseInt(limit) }
+    });
+  } catch (error) {
+    console.error("查询设备上报数据失败:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get("/api/device-advice/:deviceId", async (req, res) => {
+  try {
+    const { deviceId } = req.params;
+    const { limit = 50, page = 1 } = req.query;
+
+    const offset = (page - 1) * limit;
+    const query = `
+      SELECT * FROM device_advice_log
+      WHERE device_id = ?
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    const results = await Database.query(query, [deviceId, parseInt(limit), offset]);
+
+    res.json({
+      success: true,
+      data: results,
+      pagination: { page: parseInt(page), limit: parseInt(limit) }
+    });
+  } catch (error) {
+    console.error("查询设备建议失败:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get("/api/vital-temperature/:deviceId", async (req, res) => {
+  try {
+    const { deviceId } = req.params;
+    const { limit = 50, page = 1 } = req.query;
+
+    const offset = (page - 1) * limit;
+    const query = `
+      SELECT * FROM vital_temperature
+      WHERE device_id = ?
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    const results = await Database.query(query, [deviceId, parseInt(limit), offset]);
+
+    res.json({
+      success: true,
+      data: results,
+      pagination: { page: parseInt(page), limit: parseInt(limit) }
+    });
+  } catch (error) {
+    console.error("查询体温专用数据失败:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

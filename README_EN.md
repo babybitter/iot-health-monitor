@@ -293,6 +293,19 @@ GET /api/health
 GET /api/device-status/:deviceId
 ```
 
+### New Topic Data Interfaces
+
+```javascript
+// Get device upload data
+GET /api/device-upload/:deviceId?limit=50&page=1
+
+// Get device advice records
+GET /api/device-advice/:deviceId?limit=50&page=1
+
+// Get vital temperature data
+GET /api/vital-temperature/:deviceId?limit=50&page=1
+```
+
 ## 🔧 Hardware Data Format
 
 The system is fully compatible with ESP32-S3 hardware data format:
@@ -321,6 +334,52 @@ The system is fully compatible with ESP32-S3 hardware data format:
   "infusion_rate": 25, // Drip rate (drops/minute)
   "status": "normal", // Status: normal/warning/danger
   "alert_threshold": 50 // Warning threshold (g)
+}
+```
+
+### New MQTT Topics Data Format
+
+#### Data Upload Topic (`patient/upload/data`)
+For device proactive business data reporting:
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data": {
+    "sensor_type": "multi_sensor",
+    "values": {
+      "temperature": 36.8,
+      "humidity": 62.3,
+      "pressure": 1013.25
+    }
+  }
+}
+```
+
+#### Device Advice Topic (`patient/advice/device`)
+For sending advice to devices:
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "advice_type": "health_recommendation",
+  "advice": {
+    "message": "Recommend increasing indoor ventilation",
+    "priority": "medium",
+    "action": "ventilation_control"
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+#### Vital Temperature Channel (`patient/upload/data/temperature`)
+Dedicated high-priority channel for temperature data:
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "temperature": 37.5,
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data_source": "vital_channel",
+  "measurement_location": "forehead"
 }
 ```
 

@@ -444,6 +444,21 @@ class MQTTClient {
       return;
     }
 
+    // 新增主题处理
+    if (topic === "patient/upload/data") {
+      // 数据上传主题
+      this.triggerCallback("dataUpload", payload);
+      return;
+    } else if (topic === "patient/advice/device") {
+      // 设备建议主题
+      this.triggerCallback("deviceAdvice", payload);
+      return;
+    } else if (topic === "patient/upload/data/temperature") {
+      // 体温专用上报通道
+      this.triggerCallback("vitalTemperature", payload);
+      return;
+    }
+
     // 环境数据
     if (topic.includes("light")) {
       this.triggerCallback("light", payload);
@@ -657,6 +672,38 @@ class MQTTClient {
       this.showAlert("控制命令发送失败", "error");
       return false;
     }
+  }
+
+  // 发布设备数据上报
+  publishDeviceData(deviceId, data) {
+    const payload = {
+      device_id: deviceId,
+      timestamp: new Date().toISOString(),
+      data: data
+    };
+    return this.publish(config.mqtt.topics.dataUpload, payload);
+  }
+
+  // 发布设备建议
+  publishDeviceAdvice(deviceId, adviceType, advice) {
+    const payload = {
+      device_id: deviceId,
+      advice_type: adviceType,
+      advice: advice,
+      timestamp: new Date().toISOString()
+    };
+    return this.publish(config.mqtt.topics.deviceAdvice, payload);
+  }
+
+  // 发布体温专用数据
+  publishVitalTemperature(deviceId, temperature) {
+    const payload = {
+      device_id: deviceId,
+      temperature: temperature,
+      timestamp: new Date().toISOString(),
+      data_source: 'vital_channel'
+    };
+    return this.publish(config.mqtt.topics.vitalTemperature, payload);
   }
 
   // 获取连接状态

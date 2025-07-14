@@ -33,6 +33,10 @@ const config = {
       infusionSpeed: 'patient/monitor/infusion-speed', // 输液速度数据
       // 设备状态
       deviceStatus: 'patient/status/device', // 设备状态反馈主题
+      // 新增主题
+      dataUpload: 'patient/upload/data', // 数据上传主题（用于设备主动上报业务数据）
+      deviceAdvice: 'patient/advice/device', // 建议主题（用于向设备下发建议）
+      vitalTemperature: 'patient/upload/data/temperature', // 体温数据专用上报通道
       // 硬件端兼容主题
       hardwareDevices: 'home/devices/onoff/#' // 订阅硬件端所有子主题
     },

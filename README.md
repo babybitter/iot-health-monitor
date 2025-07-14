@@ -328,10 +328,24 @@ GET /api/health
 GET /api/device-status/:deviceId
 ```
 
+### 新增主题数据接口
+
+```javascript
+// 获取设备上报数据
+GET /api/device-upload/:deviceId?limit=50&page=1
+
+// 获取设备建议记录
+GET /api/device-advice/:deviceId?limit=50&page=1
+
+// 获取体温专用数据
+GET /api/vital-temperature/:deviceId?limit=50&page=1
+```
+
 ## 🔧 硬件端数据格式
 
 系统完全兼容 ESP32-S3 硬件端的数据格式：
 
+### 生理监测数据
 ```json
 {
   "device_id": "data_send_test_01",
@@ -340,6 +354,52 @@ GET /api/device-status/:deviceId
   "breathing": 18, // 呼吸频率 (次/分)
   "spo2": 97, // 血氧饱和度 (%)
   "heart": 72 // 心率 (次/分，预留)
+}
+```
+
+### 新增MQTT主题数据格式
+
+#### 数据上传主题 (`patient/upload/data`)
+用于设备主动上报业务数据：
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data": {
+    "sensor_type": "multi_sensor",
+    "values": {
+      "temperature": 36.8,
+      "humidity": 62.3,
+      "pressure": 1013.25
+    }
+  }
+}
+```
+
+#### 设备建议主题 (`patient/advice/device`)
+用于向设备下发建议：
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "advice_type": "health_recommendation",
+  "advice": {
+    "message": "建议增加室内通风",
+    "priority": "medium",
+    "action": "ventilation_control"
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+#### 体温专用上报通道 (`patient/upload/data/temperature`)
+专用于体温数据的高优先级通道：
+```json
+{
+  "device_id": "esp32_monitor_01",
+  "temperature": 37.5,
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data_source": "vital_channel",
+  "measurement_location": "forehead"
 }
 ```
 

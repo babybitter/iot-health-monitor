@@ -519,27 +519,48 @@ Page({
           }
         },
         formatter: function (params) {
-          let result = params[0].name + '<br/>';
+          let result = params[0].name + '\n';
           params.forEach(function (item) {
             if (item.value !== null && item.value !== undefined) {
-              result += item.marker + ' ' + item.seriesName + ': ' + item.value + '<br/>';
+              result += item.marker + ' ' + item.seriesName + ': ' + item.value + '\n';
             }
           });
           return result;
         }
       },
-      legend: {
-        data: ['温度(°C)', '湿度(%)', '光照(lux)', '气压(hPa)', '呼吸(次/分)', '心率(次/分)', '血氧(%)'],
-        top: 30,
-        textStyle: {
-          fontSize: 12
+      legend: [
+        {
+          // 第一行图例
+          data: ['温度(°C)', '湿度(%)', '光照(lux)', '气压(hPa)'],
+          top: 35,
+          left: 'center',
+          orient: 'horizontal',
+          textStyle: {
+            fontSize: 11
+          },
+          itemGap: 15,
+          itemWidth: 12,
+          itemHeight: 8
+        },
+        {
+          // 第二行图例
+          data: ['呼吸(次/分)', '心率(次/分)', '血氧(%)'],
+          top: 55,
+          left: 'center',
+          orient: 'horizontal',
+          textStyle: {
+            fontSize: 11
+          },
+          itemGap: 15,
+          itemWidth: 12,
+          itemHeight: 8
         }
-      },
+      ],
       grid: {
         left: '3%',
         right: '4%',
         bottom: '8%',
-        top: 80,
+        top: 110, // 为两行图例留出足够空间
         containLabel: true
       },
       xAxis: {
@@ -766,27 +787,48 @@ Page({
           }
         },
         formatter: function (params) {
-          let result = params[0].name + '<br/>';
+          let result = params[0].name + '\n';
           params.forEach(function (item) {
             if (item.value !== null && item.value !== undefined) {
-              result += item.marker + ' ' + item.seriesName + ': ' + item.value + '<br/>';
+              result += item.marker + ' ' + item.seriesName + ': ' + item.value + '\n';
             }
           });
           return result;
         }
       },
-      legend: {
-        data: ['温度(°C)', '湿度(%)', '光照(lux)', '气压(hPa)', '呼吸(次/分)', '心率(次/分)', '血氧(%)'],
-        top: 30,
-        textStyle: {
-          fontSize: 12
+      legend: [
+        {
+          // 第一行图例
+          data: ['温度(°C)', '湿度(%)', '光照(lux)', '气压(hPa)'],
+          top: 35,
+          left: 'center',
+          orient: 'horizontal',
+          textStyle: {
+            fontSize: 11
+          },
+          itemGap: 15,
+          itemWidth: 12,
+          itemHeight: 8
+        },
+        {
+          // 第二行图例
+          data: ['呼吸(次/分)', '心率(次/分)', '血氧(%)'],
+          top: 55,
+          left: 'center',
+          orient: 'horizontal',
+          textStyle: {
+            fontSize: 11
+          },
+          itemGap: 15,
+          itemWidth: 12,
+          itemHeight: 8
         }
-      },
+      ],
       grid: {
         left: '3%',
         right: '4%',
         bottom: '8%',
-        top: 80,
+        top: 110, // 为两行图例留出足够空间
         containLabel: true
       },
       xAxis: {

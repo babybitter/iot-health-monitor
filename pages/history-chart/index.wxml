@@ -2,7 +2,7 @@
 <!-- 自定义导航栏 -->
 <view class="custom-navbar" style="height: {{navHeight}}px; padding-top: {{statusBarHeight}}px;">
   <view class="nav-back" bindtap="goBack">
-    <text class="back-text">‹ 返回</text>
+    <image class="back-icon" src="/images/back.png" mode="aspectFit"></image>
   </view>
   <view class="nav-title">监测历史记录</view>
   <view class="nav-placeholder"></view>
@@ -20,7 +20,7 @@
     <view wx:if="{{loading}}" class="loading-container">
       <view class="loading-text">正在加载数据...</view>
     </view>
-    
+
     <view wx:elif="{{error}}" class="error-container">
       <view class="error-text">{{error}}</view>
       <view class="retry-buttons">
@@ -29,50 +29,58 @@
         <button class="retry-btn secondary" bindtap="retryChart">重置图表</button>
       </view>
     </view>
-    
+
     <view wx:elif="{{!hasData}}" class="empty-container">
       <view class="empty-text">暂无历史数据</view>
     </view>
-    
-    <ec-canvas wx:else
-      id="history-chart"
-      canvas-id="history-chart-canvas"
-      ec="{{ ec }}"
-      class="chart-canvas">
-    </ec-canvas>
-  </view>
-  
-  <!-- 数据说明 -->
-  <view class="data-legend">
-    <view class="legend-title">数据说明</view>
-    <view class="legend-items">
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #e74c3c;"></view>
-        <text class="legend-text">温度 (°C)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #3498db;"></view>
-        <text class="legend-text">湿度 (%)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #f39c12;"></view>
-        <text class="legend-text">光照 (lux)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #9b59b6;"></view>
-        <text class="legend-text">气压 (hPa)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #2ecc71;"></view>
-        <text class="legend-text">呼吸频率 (次/分)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #e67e22;"></view>
-        <text class="legend-text">心率 (次/分)</text>
-      </view>
-      <view class="legend-item">
-        <view class="legend-color" style="background-color: #1abc9c;"></view>
-        <text class="legend-text">血氧饱和度 (%)</text>
+
+    <view wx:else class="chart-content">
+      <ec-canvas
+        id="history-chart"
+        canvas-id="history-chart-canvas"
+        ec="{{ ec }}"
+        class="chart-canvas">
+      </ec-canvas>
+
+      <!-- 数据说明 - 移到图表下方 -->
+      <view class="data-legend-inline">
+        <view class="legend-title-inline">数据说明</view>
+        <view class="legend-items-inline">
+          <!-- 第一行：环境数据 -->
+          <view class="legend-row-inline">
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #e74c3c;"></view>
+              <text class="legend-text-inline">温度</text>
+            </view>
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #3498db;"></view>
+              <text class="legend-text-inline">湿度</text>
+            </view>
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #f39c12;"></view>
+              <text class="legend-text-inline">光照</text>
+            </view>
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #9b59b6;"></view>
+              <text class="legend-text-inline">气压</text>
+            </view>
+          </view>
+          <!-- 第二行：人体数据 -->
+          <view class="legend-row-inline">
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #2ecc71;"></view>
+              <text class="legend-text-inline">呼吸</text>
+            </view>
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #e67e22;"></view>
+              <text class="legend-text-inline">心率</text>
+            </view>
+            <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #1abc9c;"></view>
+              <text class="legend-text-inline">血氧</text>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </view>

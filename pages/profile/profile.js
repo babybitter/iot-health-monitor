@@ -83,11 +83,21 @@ Page({
     });
   },
 
-  // 关于我们
+  // 监测历史记录
   aboutClick() {
-    wx.showToast({
-      title: "功能开发中",
-      icon: "none",
+    // 检查登录状态
+    if (!this.data.login.show) {
+      wx.showToast({
+        title: "请先登录",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
+
+    // 跳转到历史图表页面
+    wx.navigateTo({
+      url: "/pages/history-chart/index",
     });
   },
 
@@ -203,8 +213,8 @@ Page({
 
   // 初始化导航栏
   initNavBar() {
-    const systemInfo = wx.getSystemInfoSync();
-    const statusBarHeight = systemInfo.statusBarHeight;
+    const windowInfo = wx.getWindowInfo();
+    const statusBarHeight = windowInfo.statusBarHeight;
     const navHeight = statusBarHeight + 44; // 状态栏高度 + 导航栏内容高度
 
     this.setData({

@@ -91,8 +91,20 @@ CREATE TABLE IF NOT EXISTS data_statistics (
     INDEX idx_stat_date (stat_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据统计表';
 
+-- 创建体温专用数据表
+CREATE TABLE IF NOT EXISTS vital_temperature (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    device_id VARCHAR(50) NOT NULL COMMENT '设备ID',
+    temperature DECIMAL(5,2) NOT NULL COMMENT '体温(°C)',
+    measurement_time TIMESTAMP NULL COMMENT '测量时间',
+    data_source VARCHAR(50) DEFAULT 'vital_channel' COMMENT '数据来源',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    INDEX idx_device_time (device_id, created_at),
+    INDEX idx_measurement_time (measurement_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='体温专用数据表';
+
 -- 插入默认设备
-INSERT INTO device_status (device_id, device_name, status) 
+INSERT INTO device_status (device_id, device_name, status)
 VALUES ('default_device', '默认监测设备', 'offline')
 ON DUPLICATE KEY UPDATE device_name = VALUES(device_name);
 

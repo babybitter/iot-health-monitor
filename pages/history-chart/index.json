@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "监测历史记录",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas"
+  }
+}

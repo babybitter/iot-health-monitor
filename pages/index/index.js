@@ -217,6 +217,11 @@ Page({
         this.updateMonitorData("bodyTemperature", data);
       });
 
+      // 注册体温专用数据回调
+      mqttClient.onMessage("vitalTemperature", (data) => {
+        this.updateMonitorData("bodyTemperature", data);
+      });
+
       // 注册设备状态回调
       mqttClient.onMessage("deviceStatus", (data) => {
         this.updateDeviceStatus(data);

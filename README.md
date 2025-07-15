@@ -115,12 +115,47 @@
 - 👤 **患者信息** - 个人资料管理
 - 👨‍⚕️ **医生信息** - 主治医生联系方式
 - 👨‍👩‍👧‍👦 **家属联系** - 紧急联系人管理
+- 📊 **监测历史记录** - 查看历史数据图表分析
 - ⚙️ **系统设置** - 个性化配置选项
 
 **安全特性：**
 - 未登录用户尝试访问敏感功能时会提示先登录
 - 登录状态持久化保存，重启应用后自动恢复
 - 支持一键退出登录，清除所有本地用户数据
+
+### 📊 监测历史记录
+
+专业的历史数据可视化功能：
+
+**数据可视化：**
+- 📈 **多数据系列折线图** - 基于ECharts的专业图表展示
+- 🕐 **时间范围查询** - 显示最近1小时内的监测数据
+- 🎨 **颜色区分显示** - 7种数据类型使用不同颜色标识：
+  - 🌡️ **温度** - 红色 (#e74c3c)
+  - 💧 **湿度** - 蓝色 (#3498db)
+  - ☀️ **光照** - 橙色 (#f39c12)
+  - 🌪️ **气压** - 紫色 (#9b59b6)
+  - 🫁 **呼吸** - 绿色 (#2ecc71)
+  - ❤️ **心率** - 深橙色 (#e67e22)
+  - 🩸 **血氧** - 青色 (#1abc9c)
+
+**交互功能：**
+- 🖱️ **悬停提示** - 鼠标悬停显示详细数值和时间
+- 🏷️ **图例控制** - 点击图例可显示/隐藏对应数据系列
+- 📱 **平滑曲线** - 优化的平滑曲线显示，提升视觉效果
+- 🔄 **实时更新** - 支持手动刷新获取最新数据
+
+**数据处理：**
+- 🕒 **时间格式化** - X轴显示HH:mm格式的时间标签
+- 🧹 **数据清洗** - 自动过滤无效数据，确保图表准确性
+- 📊 **统计信息** - 显示数据记录总数和有效数据统计
+- ⚠️ **异常处理** - 完善的错误处理和重试机制
+
+**技术特性：**
+- 📱 **小程序优化** - 基于echarts-for-weixin组件，完美适配小程序
+- 🎯 **Canvas 2d支持** - 支持新版Canvas 2d模式，渲染性能优异
+- 🔒 **登录保护** - 需要登录后才能访问，保护用户隐私
+- 📡 **API集成** - 与后端MySQL数据库无缝对接
 
 ## 🏗️ 系统架构
 
@@ -198,13 +233,20 @@ LoTProject/
 │   │   ├── index/            # 主页监测界面
 │   │   ├── ai-doctor/        # AI助手页面
 │   │   ├── profile/          # 个人中心
+│   │   ├── history-chart/    # 监测历史记录图表
 │   │   ├── patient-info/     # 患者信息
 │   │   ├── doctor-info/      # 医生信息
 │   │   └── family-contact/   # 家属联系
 │   ├── utils/                # 工具函数
 │   │   ├── ai.js            # AI助手工具
+│   │   ├── api.js           # API调用工具
 │   │   ├── mqtt.js          # MQTT通信
 │   │   └── util.js          # 通用工具
+│   ├── ec-canvas/           # ECharts小程序组件
+│   │   ├── echarts.js       # ECharts核心库
+│   │   ├── ec-canvas.js     # Canvas组件逻辑
+│   │   ├── ec-canvas.wxml   # Canvas组件模板
+│   │   └── ec-canvas.wxss   # Canvas组件样式
 │   ├── images/              # 图片资源
 │   ├── config/              # 配置文件
 │   ├── app.js              # 小程序入口
@@ -233,6 +275,17 @@ LoTProject/
 
 ### 环境变量配置
 
+**重要：.env 文件不会被提交到 Git，确保配置安全**
+
+#### 快速配置步骤
+1. 运行环境配置脚本：
+```bash
+node setup-env.js
+```
+
+2. 编辑生成的 `.env` 文件，填入实际配置值
+
+#### 手动配置
 创建 `.env` 文件：
 
 ```env
@@ -296,6 +349,67 @@ npm start
 3. 配置 Coze API 密钥
 4. 编译并预览
 
+### 6. 服务器配置验证
+
+#### 检查端口状态
+```bash
+# Linux/macOS
+netstat -tlnp | grep 3000
+lsof -i :3000
+
+# Windows
+netstat -an | findstr 3000
+```
+
+#### 防火墙配置
+```bash
+# Ubuntu/Debian
+sudo ufw allow 3000/tcp
+sudo ufw reload
+
+# CentOS/RHEL
+sudo firewall-cmd --permanent --add-port=3000/tcp
+sudo firewall-cmd --reload
+
+# 检查防火墙状态
+sudo ufw status  # Ubuntu
+sudo firewall-cmd --list-ports  # CentOS
+```
+
+#### API接口测试
+```bash
+# 健康检查
+curl http://47.122.130.135:3000/api/health
+
+# 测试历史数据接口
+curl "http://47.122.130.135:3000/api/history/default_device?limit=5"
+
+# 测试最新数据接口
+curl http://47.122.130.135:3000/api/latest/default_device
+```
+
+#### 故障排除指南
+
+**1. 端口访问问题**
+- 检查服务器是否正在运行：`ps aux | grep node`
+- 检查端口是否被占用：`netstat -tlnp | grep 3000`
+- 检查防火墙设置：确保3000端口已开放
+
+**2. API调用失败**
+- 验证服务器IP地址：`ping 47.122.130.135`
+- 检查CORS配置：确保`app.use(cors())`已启用
+- 查看服务器日志：检查API请求是否到达服务器
+
+**3. 数据库连接问题**
+- 检查MySQL服务状态：`systemctl status mysql`
+- 验证数据库连接配置：检查`.env`文件中的数据库参数
+- 测试数据库连接：`mysql -h localhost -u root -p`
+
+**4. 小程序网络问题**
+- 开发时关闭域名校验：开发者工具 → 详情 → 本地设置
+- 检查网络连接：确保设备能访问外网
+- 验证API基础地址：检查`config/config.js`中的配置
+
 ## 📊 API 接口
 
 ### 传感器数据接口
@@ -314,8 +428,8 @@ POST /api/sensor-data
 // 获取最新数据
 GET /api/latest/:deviceId
 
-// 获取历史数据
-GET /api/history/:deviceId?limit=50&page=1
+// 获取历史数据（支持时间范围查询）
+GET /api/history/:deviceId?limit=50&page=1&start_time=2024-01-15T10:00:00Z&end_time=2024-01-15T11:00:00Z
 ```
 
 ### 系统状态接口
@@ -340,6 +454,32 @@ GET /api/device-advice/:deviceId?limit=50&page=1
 // 获取体温专用数据
 GET /api/vital-temperature/:deviceId?limit=50&page=1
 ```
+
+## 📊 监测历史记录使用指南
+
+### 功能访问
+1. 打开小程序，进入"个人中心"页面
+2. 点击"监测历史记录"按钮（需要先登录）
+3. 系统自动加载最近1小时的监测数据
+4. 查看多维度数据的时间趋势图表
+
+### 图表交互
+- **悬停查看**：鼠标悬停在数据点上查看具体数值
+- **图例控制**：点击图例可显示/隐藏对应的数据系列
+- **数据刷新**：点击"重新加载"按钮获取最新数据
+- **错误恢复**：遇到问题时可使用"重置图表"功能
+
+### 数据说明
+- **时间范围**：显示最近1小时内的所有监测数据
+- **数据类型**：包含环境数据（温度、湿度、光照、气压）和人体数据（呼吸、心率、血氧）
+- **颜色编码**：每种数据类型使用不同颜色，便于区分和分析
+- **数据过滤**：系统自动过滤无效数据，确保图表准确性
+
+### 技术要求
+- **网络连接**：需要稳定的网络连接访问服务器API
+- **登录状态**：必须先登录才能访问历史记录功能
+- **设备兼容**：支持微信小程序的所有设备类型
+- **数据权限**：只能查看当前登录用户的监测数据
 
 ## 🔧 硬件端数据格式
 
@@ -392,7 +532,9 @@ GET /api/vital-temperature/:deviceId?limit=50&page=1
 ```
 
 #### 体温专用上报通道 (`patient/upload/data/temperature`)
-专用于体温数据的高优先级通道：
+**⚠️ 重要更新：体温数据主题已统一为此通道**
+
+专用于体温数据的高优先级通道，替代原有的 `patient/monitor/body-temperature`：
 ```json
 {
   "device_id": "esp32_monitor_01",
@@ -402,6 +544,24 @@ GET /api/vital-temperature/:deviceId?limit=50&page=1
   "measurement_location": "forehead"
 }
 ```
+
+**数据存储说明：**
+- 环境温度：`patient/monitor/temperature` → `sensor_data.temperature`
+- 体温数据：`patient/upload/data/temperature` → `vital_temperature` 专用表
+
+## 📝 更新日志
+
+### v1.2.1 (2024-01-15)
+**修复内容：**
+- 🔧 **MQTT消息乱码修复**：使用UTF-8解码替代String.fromCharCode()，解决中文消息显示乱码问题
+- 🌡️ **体温数据显示修复**：修复体温数据在主页不显示的问题，添加vitalTemperature回调处理
+- 📁 **环境配置优化**：添加.env.example模板和setup-env.js快速配置脚本
+- 🔒 **安全性提升**：确保.env文件不被提交到Git，保护敏感配置信息
+
+**使用说明：**
+- 新项目部署时运行 `node setup-env.js` 快速配置环境
+- 体温数据现在支持两个MQTT主题：`patient/monitor/temperature` 和 `patient/upload/data/temperature`
+- MQTT消息现在正确支持中文字符显示
 
 ## 🙏 致谢
 

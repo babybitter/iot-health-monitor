@@ -27,7 +27,7 @@ const config = {
       breathing: 'patient/monitor/breathing', // 呼吸频率数据
       heartRate: 'patient/monitor/heart_rate', // 心跳频率数据
       bloodOxygen: 'patient/monitor/blood_oxygen', // 血氧数据
-      bodyTemperature: 'patient/monitor/body-temperature', // 体温数据
+      bodyTemperature: 'patient/upload/data/temperature', // 体温数据
       weight: 'patient/monitor/weight', // 重量数据
       weightBegin: 'patient/monitor/weight-begin', // 初始重量数据
       infusionSpeed: 'patient/monitor/infusion-speed', // 输液速度数据
@@ -43,6 +43,11 @@ const config = {
     publishTopic: 'patient/control/device' // 设备控制发布主题
   },
   
+  // API配置
+  api: {
+    baseUrl: 'http://47.122.130.135:3000' // 后端服务器地址
+  },
+
   // Coze API配置
   ai: {
     baseUrl: 'https://api.coze.cn/open_api/v2/chat', // 中国版端点

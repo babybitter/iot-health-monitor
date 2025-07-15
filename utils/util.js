@@ -14,6 +14,14 @@ const formatNumber = n => {
   return n[1] ? n : `0${n}`
 }
 
+// 格式化时间为HH:mm格式，用于图表时间轴
+const formatTimeHHMM = date => {
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  return `${formatNumber(hour)}:${formatNumber(minute)}`
+}
+
 module.exports = {
-  formatTime
+  formatTime,
+  formatTimeHHMM
 }

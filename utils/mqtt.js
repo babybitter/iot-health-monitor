@@ -403,28 +403,31 @@ class MQTTClient {
       const topicLength = view.getUint16(offset);
       offset += 2;
 
-      // 读取主题
-      let topic = "";
-      for (let i = 0; i < topicLength; i++) {
-        topic += String.fromCharCode(view.getUint8(offset++));
-      }
+      // 读取主题 - 使用手动UTF-8解码
+      const topicBytes = new Uint8Array(view.buffer, view.byteOffset + offset, topicLength);
+      const topic = this.manualDecodeUTF8(topicBytes);
+      offset += topicLength;
 
       // 读取消息ID（如果QoS > 0）
       // 这里假设QoS = 0，跳过消息ID
 
-      // 读取载荷
+      // 读取载荷 - 使用UTF-8解码，强制处理中文字符
       const payloadLength = remainingLength - 2 - topicLength;
-      let payload = "";
-      for (let i = 0; i < payloadLength; i++) {
-        payload += String.fromCharCode(view.getUint8(offset++));
-      }
+      const payloadBytes = new Uint8Array(view.buffer, view.byteOffset + offset, payloadLength);
+
+      // 直接使用手动解码方法，避免依赖TextDecoder API
+      const payload = this.manualDecodeUTF8(payloadBytes);
+
+      offset += payloadLength;
 
       console.log(`收到PUBLISH消息 - 主题: ${topic}, 载荷: ${payload}`); // 调试用
 
       // 尝试解析JSON载荷
       try {
         const jsonPayload = JSON.parse(payload);
-        this.dispatchMessage(topic, jsonPayload);
+        // 递归处理JSON中的所有字符串字段，确保中文正确显示
+        const processedPayload = this.processJSONStrings(jsonPayload);
+        this.dispatchMessage(topic, processedPayload);
       } catch (error) {
         // 如果不是JSON，直接使用字符串
         this.dispatchMessage(topic, { value: payload });
@@ -432,6 +435,84 @@ class MQTTClient {
     } catch (error) {
       console.error("PUBLISH消息解析失败:", error);
     }
+  }
+
+  // 手动UTF-8解码（处理中文字符）
+  manualDecodeUTF8(bytes) {
+    try {
+      let result = '';
+      let i = 0;
+
+      while (i < bytes.length) {
+        let byte1 = bytes[i++];
+
+        if (byte1 < 0x80) {
+          // ASCII字符
+          result += String.fromCharCode(byte1);
+        } else if ((byte1 & 0xE0) === 0xC0) {
+          // 2字节UTF-8字符
+          if (i < bytes.length) {
+            let byte2 = bytes[i++];
+            let codePoint = ((byte1 & 0x1F) << 6) | (byte2 & 0x3F);
+            result += String.fromCharCode(codePoint);
+          }
+        } else if ((byte1 & 0xF0) === 0xE0) {
+          // 3字节UTF-8字符（中文字符通常在这里）
+          if (i + 1 < bytes.length) {
+            let byte2 = bytes[i++];
+            let byte3 = bytes[i++];
+            let codePoint = ((byte1 & 0x0F) << 12) | ((byte2 & 0x3F) << 6) | (byte3 & 0x3F);
+            result += String.fromCharCode(codePoint);
+          }
+        } else if ((byte1 & 0xF8) === 0xF0) {
+          // 4字节UTF-8字符
+          if (i + 2 < bytes.length) {
+            let byte2 = bytes[i++];
+            let byte3 = bytes[i++];
+            let byte4 = bytes[i++];
+            let codePoint = ((byte1 & 0x07) << 18) | ((byte2 & 0x3F) << 12) | ((byte3 & 0x3F) << 6) | (byte4 & 0x3F);
+            if (codePoint > 0xFFFF) {
+              // 使用代理对
+              codePoint -= 0x10000;
+              result += String.fromCharCode(0xD800 + (codePoint >> 10));
+              result += String.fromCharCode(0xDC00 + (codePoint & 0x3FF));
+            } else {
+              result += String.fromCharCode(codePoint);
+            }
+          }
+        } else {
+          // 无效字节，跳过
+          console.warn(`无效UTF-8字节: 0x${byte1.toString(16)}`);
+        }
+      }
+
+      return result;
+    } catch (error) {
+      console.error('手动UTF-8解码失败:', error);
+      // 回退到简单的字符串转换
+      return String.fromCharCode.apply(null, bytes);
+    }
+  }
+
+  // 递归处理JSON中的字符串，确保中文正确显示
+  processJSONStrings(obj) {
+    if (typeof obj === 'string') {
+      // 如果字符串包含乱码，直接返回原字符串
+      if (obj.includes('�') || obj.includes('\ufffd')) {
+        console.warn('检测到乱码字符，返回原字符串:', obj);
+        return obj;
+      }
+      return obj;
+    } else if (Array.isArray(obj)) {
+      return obj.map(item => this.processJSONStrings(item));
+    } else if (obj !== null && typeof obj === 'object') {
+      const processed = {};
+      for (const [key, value] of Object.entries(obj)) {
+        processed[key] = this.processJSONStrings(value);
+      }
+      return processed;
+    }
+    return obj;
   }
 
   // 根据主题分发消息
@@ -464,8 +545,8 @@ class MQTTClient {
       this.triggerCallback("light", payload);
     } else if (topic.includes("pressure")) {
       this.triggerCallback("pressure", payload);
-    } else if (topic.includes("body-temperature")) {
-      // 体温数据 - 需要在temperature之前检查，避免被匹配
+    } else if (topic.includes("upload/data/temperature")) {
+      // 体温数据 - 新的专用上报通道
       this.triggerCallback("bodyTemperature", payload);
     } else if (topic.includes("temperature")) {
       this.triggerCallback("temperature", payload);

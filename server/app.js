@@ -599,8 +599,12 @@ async function startServer() {
     // 初始化MQTT
     initMQTT();
 
-    // 启动HTTP服务器
-    app.listen(PORT, () => {});
+    // 启动HTTP服务器 - 监听所有网络接口
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 服务器已启动在端口 ${PORT}`);
+      console.log(`📡 API地址: http://0.0.0.0:${PORT}`);
+      console.log(`🌐 外网访问: http://47.122.130.135:${PORT}`);
+    });
   } catch (error) {
     process.exit(1);
   }

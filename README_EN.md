@@ -1,6 +1,6 @@
 # 🏥 IoT Patient Health Monitoring System
 
-An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mini Program, enabling real-time physiological data collection, AI health analysis, and remote monitoring capabilities.
+An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mini Program, enabling real-time physiological data collection and remote monitoring capabilities.
 
 ## 🌐 Language / 语言
 
@@ -12,28 +12,21 @@ An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mi
 <div align="center">
   <table>
     <tr>
-      <td align="center" width="25%">
+      <td align="center" width="33%">
         <img src="images/index-display-image.png" width="200" alt="Home Interface"/>
         <br/>
         <b>Home Monitoring</b>
         <br/>
         <sub>Real-time Physiological Monitoring</sub>
       </td>
-      <td align="center" width="25%">
+      <td align="center" width="33%">
         <img src="images/smart-monitor-display-image.png" width="200" alt="Smart Infusion Monitoring Interface"/>
         <br/>
         <b>Smart Infusion Monitoring</b>
         <br/>
-        <sub>Real-time Infusion Monitoring</sub>
+        <sub>Real-time Infusion Animation Monitoring</sub>
       </td>
-      <td align="center" width="25%">
-        <img src="images/ai-doctor-display-image.png" width="200" alt="AI Assistant Interface"/>
-        <br/>
-        <b>AI Assistant</b>
-        <br/>
-        <sub>Intelligent Health Analysis</sub>
-      </td>
-      <td align="center" width="25%">
+      <td align="center" width="33%">
         <img src="images/profile-display-image.png" width="200" alt="Profile Interface"/>
         <br/>
         <b>User Profile</b>
@@ -44,44 +37,67 @@ An intelligent health monitoring system based on ESP32-S3 hardware and WeChat Mi
   </table>
 </div>
 
-### Home Monitoring Interface
+### 🏠 Home Monitoring Interface
 
-Real-time display of patient's key physiological indicators:
+Real-time display of patient's key physiological indicators and environmental data:
 
-- 🌡️ **Temperature Monitoring** - Accurate to 0.1°C
-- 💧 **Humidity Monitoring** - Real-time environmental humidity tracking
+**Human Health Indicators:**
 - 🫁 **Breathing Rate** - Breaths per minute
+- ❤️ **Heart Rate Monitoring** - Real-time heart rate
 - 🩸 **Blood Oxygen Saturation** - Real-time SpO2 monitoring
+
+**Environmental Monitoring Data:**
+- 🌡️ **Environmental Temperature** - Accurate to 0.1°C
+- 💧 **Environmental Humidity** - Real-time humidity tracking
+- ☀️ **Light Intensity** - Environmental light monitoring
+- 🌪️ **Atmospheric Pressure** - Real-time atmospheric pressure tracking
+
+**Device Control:**
 - 💡 **Device Control** - LED lighting and buzzer control
 
-### Smart Infusion Monitoring
+### 💧 Smart Infusion Monitoring
 
-Intelligent infusion management system:
+Professional infusion monitoring features:
 
-- 💧 **Real-time Liquid Level** - Visual liquid bottle animation with real-time level display
-- ⚖️ **Weight Monitoring** - Initial weight, current weight, and remaining percentage tracking
-- 🚨 **Smart Alerts** - Automatic buzzer warnings when liquid level is low
-- 📊 **Infusion Rate Monitoring** - Real-time drip rate measurement (drops/minute)
-- 🎯 **Status Tracking** - Normal, warning, and danger status indicators
-- 🔧 **Threshold Settings** - Customizable warning thresholds for different scenarios
+**Real-time Animation Monitoring:**
+- 🧪 **3D Infusion Bottle Animation** - High-precision 24-frame liquid animation, real-time liquid changes
+- 🌊 **Wave Effects** - Natural liquid surface wave animation for enhanced visual realism
+- ✨ **Highlight Reflection** - Bottle glass highlights and liquid surface reflection effects
+- 🎭 **Shadow Rendering** - 3D shadow effects for enhanced visual depth
+- 💧 **Infusion Tube Animation** - Droplet animation simulating real infusion process
 
-### AI Intelligent Assistant
+**Data Monitoring:**
+- ⚖️ **Weight Monitoring** - Real-time display of initial weight, current weight, and remaining percentage
+- � **Smart Calculation** - Automatic calculation of remaining liquid percentage and warning thresholds
+- 🚨 **Low Liquid Warning** - Automatic buzzer warning when liquid is insufficient
+- � **Infusion Speed** - Real-time monitoring of infusion drip rate (drops/minute)
+- 📈 **Status Assessment** - Intelligent assessment of infusion speed status (normal/slow/fast)
 
-Smart health analysis features:
+**MQTT Data Support:**
+- � **patient/monitor/weight-begin** - Receive initial weight data
+- 📡 **patient/monitor/weight** - Receive real-time weight data
+- 📡 **patient/monitor/infusion-speed** - Receive infusion speed data
+- 🔄 **Data Format Compatibility** - Support for both string and numeric data format parsing
 
-- 🤖 **Real-time Conversation** - Intelligent Q&A based on Coze API
-- 📊 **Data Analysis** - Automatic health data trend analysis
-- 💡 **Health Recommendations** - Personalized health guidance
-- 🚨 **Abnormal Alerts** - Intelligent health risk identification
-
-### User Profile
+### 👤 User Profile
 
 User management features:
 
+- � **Login Verification** - Login required before accessing sensitive functions
 - 👤 **Patient Information** - Personal profile management
-- 👨‍⚕️ **Doctor Information** - Attending physician contact details
+- �‍⚕️ **Doctor Information** - Attending physician contact details
 - 👨‍👩‍👧‍👦 **Family Contacts** - Emergency contact management
+- 📊 **Monitoring History** - View historical data chart analysis
 - ⚙️ **System Settings** - Personalized configuration options
+
+**Security Features:**
+- Unauthorized users attempting to access sensitive functions will be prompted to login first
+- Login status is persistently saved and automatically restored after app restart
+- Support one-click logout to clear all local user data
+
+### 📊 Monitoring History
+
+Professional historical data visualization features:
 
 ## 🏗️ System Architecture
 
@@ -91,13 +107,13 @@ User management features:
 │   Hardware      │◄──►│   Node.js API   │◄──►│   Program       │
 │   Sensors       │    │   Server        │    │   Frontend      │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-    ┌────▼────┐             ┌────▼────┐             ┌────▼────┐
-    │  MQTT   │             │  MySQL  │             │  Coze   │
-    │ Message │             │Database │             │ AI API  │
-    │  Queue  │             │         │             │         │
-    └─────────┘             └─────────┘             └─────────┘
+         │                       │
+         │                       │
+    ┌────▼────┐             ┌────▼────┐
+    │  MQTT   │             │  MySQL  │
+    │ Message │             │Database │
+    │  Queue  │             │         │
+    └─────────┘             └─────────┘
 ```
 
 ## 🚀 Core Features
@@ -109,12 +125,12 @@ User management features:
 - **Historical Data Storage**: Complete monitoring history stored in MySQL database
 - **Data Visualization**: Real-time charts and trend analysis
 
-### 🤖 AI Intelligent Analysis
+### 📊 Health Data Analysis
 
-- **Health Data Analysis**: Intelligent health assessment based on Coze API
+- **Health Data Assessment**: Comprehensive health evaluation based on collected data
 - **Anomaly Detection**: Automatic identification of physiological indicator abnormalities
 - **Personalized Recommendations**: Customized health advice based on user data
-- **Real-time Q&A**: 24/7 intelligent health consultation service
+- **Real-time Consultation**: 24/7 health consultation service
 
 ### 🔧 Device Control
 
@@ -143,7 +159,6 @@ User management features:
 - **Express.js**: Web application framework
 - **MySQL**: Relational database
 - **MQTT**: IoT message transmission protocol
-- **Coze API**: AI conversation service
 
 ### Hardware Technologies
 
@@ -160,13 +175,12 @@ LoTProject/
 │   ├── pages/                 # Page files
 │   │   ├── index/            # Home monitoring interface
 │   │   ├── smart-monitor/    # Smart infusion monitoring
-│   │   ├── ai-doctor/        # AI assistant page
 │   │   ├── profile/          # User profile
 │   │   ├── patient-info/     # Patient information
 │   │   ├── doctor-info/      # Doctor information
-│   │   └── family-contact/   # Family contacts
+│   │   ├── family-contact/   # Family contacts
+│   │   └── history/          # Monitoring history
 │   ├── utils/                # Utility functions
-│   │   ├── ai.js            # AI assistant tools
 │   │   ├── mqtt.js          # MQTT communication
 │   │   └── util.js          # Common utilities
 │   ├── images/              # Image resources
@@ -213,10 +227,6 @@ MQTT_HOST=your_mqtt_broker
 MQTT_PORT=1883
 MQTT_USERNAME=your_username
 MQTT_PASSWORD=your_password
-
-# AI Configuration
-COZE_API_KEY=your_coze_api_key
-COZE_BOT_ID=your_bot_id
 ```
 
 ## 🚀 Quick Start
@@ -258,8 +268,7 @@ npm start
 
 1. Open project with WeChat Developer Tools
 2. Configure server domain (disable domain verification for development)
-3. Configure Coze API key
-4. Compile and preview
+3. Compile and preview
 
 ## 📊 API Interfaces
 

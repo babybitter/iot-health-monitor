@@ -47,19 +47,6 @@ const config = {
   api: {
     baseUrl: 'http://47.122.130.135:3000' // 后端服务器地址
   },
-
-  // Coze API配置
-  ai: {
-    baseUrl: 'https://api.coze.cn/open_api/v2/chat', // 中国版端点
-    // 备用端点: 'https://api.coze.com/open_api/v2/chat' (国际版)
-    apiKey: 'pat_MLV34Er7REuA1og5WIGfq1LKzZdNDdYLZlkISChL9e12PaVoifTBKGiTR47rmUcu', // Coze API密钥 (已更新)
-    botId: '7520634183127941160', // 机器人ID (已更新)
-    userId: '123456789', // 用户ID
-    maxTokens: 1000,
-    temperature: 0.7,
-    stream: false, // Coze暂不支持流式输出
-    debug: true // 启用调试模式
-  },
   
   // 监测数据默认值
   monitorData: {
@@ -112,15 +99,6 @@ const config = {
     showToast: true, // 是否显示Toast提醒
     vibrate: true, // 是否震动提醒
     sound: false // 是否声音提醒(小程序限制)
-  },
-
-  // 历史对话配置
-  historyConversation: {
-    maxCount: 50, // 最大保存对话数量
-    maxMessagesPerConv: 100, // 每个对话最大消息数量
-    storageKey: 'ai_doctor_conversations', // 本地存储键名
-    autoSaveEnabled: true, // 是否启用自动保存
-    titleMaxLength: 20 // 对话标题最大长度
   }
 };
 

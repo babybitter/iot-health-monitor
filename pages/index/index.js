@@ -173,13 +173,6 @@ Page({
     return titles[type] || type;
   },
 
-  // 跳转到AI助手页面
-  goToAIDoctor() {
-    wx.switchTab({
-      url: "/pages/ai-doctor/ai-doctor",
-    });
-  },
-
   // 初始化MQTT连接
   async initMQTT() {
     try {
@@ -318,7 +311,7 @@ Page({
     // 更新页面数据
     this.setData(updateData);
 
-    //同步更新全局数据，供AI助手页面使用
+    // 同步更新全局数据
     const app = getApp();
     if (app && app.globalData && app.globalData.monitorData) {
       app.globalData.monitorData[type] = {

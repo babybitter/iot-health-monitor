@@ -59,7 +59,7 @@
         </view>
         <view class="date-text">
           <view class="date-title">呼吸频率</view>
-          <view class="date-value">{{monitorData.breathing.value || lx || '0'}}次/分</view>
+          <view class="date-value">{{monitorData.breathing.value || '0'}}次/分</view>
         </view>
       </view>
       <view class="date" bindtap="onCardTap" data-type="heartRate">

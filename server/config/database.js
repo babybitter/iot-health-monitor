@@ -51,8 +51,8 @@ class Database {
     const sql = `
       INSERT INTO sensor_data (
         device_id, temperature, humidity, breathing_rate, spo2,
-        light_intensity, pressure, heart_rate
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        light_intensity, pressure, heart_rate, body_temperature
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const params = [
       data.device_id || "default_device",
@@ -63,6 +63,7 @@ class Database {
       data.light || data.light_intensity || null,
       data.pressure || null,
       data.heart_rate || null,
+      data.body_temperature || data.vitalTemperature || null,
     ];
     return await this.query(sql, params);
   }
@@ -79,6 +80,7 @@ class Database {
         CAST(light_intensity AS DECIMAL(8,2)) as light,
         CAST(pressure AS DECIMAL(8,2)) as pressure,
         CAST(heart_rate AS DECIMAL(5,2)) as heart_rate,
+        CAST(body_temperature AS DECIMAL(5,2)) as body_temperature,
         created_at, updated_at
       FROM sensor_data
       WHERE device_id = ?
@@ -107,6 +109,7 @@ class Database {
         CAST(light_intensity AS DECIMAL(8,2)) as light,
         CAST(pressure AS DECIMAL(8,2)) as pressure,
         CAST(heart_rate AS DECIMAL(5,2)) as heart_rate,
+        CAST(body_temperature AS DECIMAL(5,2)) as body_temperature,
         created_at, updated_at
       FROM sensor_data
       WHERE device_id = ?

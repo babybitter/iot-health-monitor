@@ -135,6 +135,7 @@ function initMQTT() {
             light_intensity: data.light || data.light_intensity,
             pressure: data.pressure,
             heart_rate: data.heart_rate,
+            body_temperature: data.body_temperature || data.vitalTemperature,
           };
 
           console.log("💾 存储完整数据包:", completeData);
@@ -477,19 +478,14 @@ async function handleVitalTemperature(data) {
     // 处理体温专用数据
     console.log("处理体温专用数据:", data);
 
-    // 保存体温数据到专用表
-    const query = `
-      INSERT INTO vital_temperature (device_id, temperature, measurement_time, data_source, created_at)
-      VALUES (?, ?, ?, 'vital_channel', NOW())
-    `;
+    // 保存体温数据到sensor_data表的body_temperature字段
+    const completeData = {
+      device_id: data.device_id || 'default_device',
+      body_temperature: data.temperature || data.value,
+    };
 
-    await Database.query(query, [
-      data.device_id || 'unknown_device',
-      data.temperature || data.value,
-      data.timestamp || new Date().toISOString()
-    ]);
-
-    console.log("✅ 体温专用数据已保存");
+    await Database.insertSensorData(completeData);
+    console.log("✅ 体温专用数据已保存到sensor_data表");
   } catch (error) {
     console.error("❌ 处理体温专用数据失败:", error);
   }
@@ -548,31 +544,7 @@ app.get("/api/device-advice/:deviceId", async (req, res) => {
   }
 });
 
-app.get("/api/vital-temperature/:deviceId", async (req, res) => {
-  try {
-    const { deviceId } = req.params;
-    const { limit = 50, page = 1 } = req.query;
-
-    const offset = (page - 1) * limit;
-    const query = `
-      SELECT * FROM vital_temperature
-      WHERE device_id = ?
-      ORDER BY created_at DESC
-      LIMIT ? OFFSET ?
-    `;
-
-    const results = await Database.query(query, [deviceId, parseInt(limit), offset]);
-
-    res.json({
-      success: true,
-      data: results,
-      pagination: { page: parseInt(page), limit: parseInt(limit) }
-    });
-  } catch (error) {
-    console.error("查询体温专用数据失败:", error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
+// 体温数据现在直接包含在历史数据API中，不需要单独的接口
 
 // 健康检查
 app.get("/api/health", async (_, res) => {

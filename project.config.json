@@ -4,40 +4,40 @@
   "packOptions": {
     "ignore": [
       {
-        "type": "folder",
-        "value": "node_modules"
+        "value": "node_modules",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": "server"
+        "value": "server",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": "database"
+        "value": "database",
+        "type": "folder"
       },
       {
-        "type": "folder",
-        "value": "scripts"
+        "value": "scripts",
+        "type": "folder"
       },
       {
-        "type": "file",
-        "value": "package.json"
+        "value": "package.json",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "package-lock.json"
+        "value": "package-lock.json",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "README.md"
+        "value": "README.md",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "README_EN.md"
+        "value": "README_EN.md",
+        "type": "file"
       },
       {
-        "type": "file",
-        "value": "setup-env.js"
+        "value": "setup-env.js",
+        "type": "file"
       }
     ],
     "include": []
@@ -77,7 +77,7 @@
     "tabIndent": "auto",
     "tabSize": 2
   },
-  "appid": "wxd2c0d5d6f93bfabf",
+  "appid": "wxc8dc4bac62076888",
   "simulatorPluginLibVersion": {},
   "networkTimeout": {
     "request": 60000,

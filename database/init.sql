@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS sensor_data (
     breathing_rate INT NULL COMMENT '呼吸频率(次/分)',
     heart_rate INT NULL COMMENT '心跳频率(次/分)',
     blood_oxygen INT NULL COMMENT '血氧饱和度(%)',
+    body_temperature DECIMAL(5,2) NULL COMMENT '体温(°C)',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     INDEX idx_device_time (device_id, created_at),

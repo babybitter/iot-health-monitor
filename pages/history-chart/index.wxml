@@ -46,11 +46,15 @@
       <view class="data-legend-inline">
         <view class="legend-title-inline">数据说明</view>
         <view class="legend-items-inline">
-          <!-- 第一行：环境数据 -->
+          <!-- 第一行：温度数据 -->
           <view class="legend-row-inline">
             <view class="legend-item-inline">
+              <view class="legend-color-inline" style="background-color: #ff6b6b;"></view>
+              <text class="legend-text-inline">环境温度</text>
+            </view>
+            <view class="legend-item-inline">
               <view class="legend-color-inline" style="background-color: #e74c3c;"></view>
-              <text class="legend-text-inline">温度</text>
+              <text class="legend-text-inline">体温</text>
             </view>
             <view class="legend-item-inline">
               <view class="legend-color-inline" style="background-color: #3498db;"></view>
@@ -60,13 +64,13 @@
               <view class="legend-color-inline" style="background-color: #f39c12;"></view>
               <text class="legend-text-inline">光照</text>
             </view>
+          </view>
+          <!-- 第二行：其他数据 -->
+          <view class="legend-row-inline">
             <view class="legend-item-inline">
               <view class="legend-color-inline" style="background-color: #9b59b6;"></view>
               <text class="legend-text-inline">气压</text>
             </view>
-          </view>
-          <!-- 第二行：人体数据 -->
-          <view class="legend-row-inline">
             <view class="legend-item-inline">
               <view class="legend-color-inline" style="background-color: #2ecc71;"></view>
               <text class="legend-text-inline">呼吸</text>

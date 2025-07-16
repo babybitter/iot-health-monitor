@@ -320,7 +320,7 @@ Page({
 
       console.log('准备调用API:', `${config.api.baseUrl}/api/history/default_device`);
 
-      // 调用API获取历史数据（暂时去掉时间范围限制进行测试）
+      // 获取历史数据（现在包含体温数据）
       const result = await apiClient.getHistoryData('default_device', {
         limit: 100
         // startTime: startTime.toISOString(),
@@ -401,7 +401,8 @@ Page({
 
     // 提取时间标签和各类数据
     const timeLabels = [];
-    const temperatureData = [];
+    const temperatureData = []; // 环境温度
+    const vitalTemperatureData = []; // 人体体温
     const humidityData = [];
     const lightData = [];
     const pressureData = [];
@@ -415,7 +416,8 @@ Page({
       timeLabels.push(formatTimeHHMM(time));
 
       // 处理各类数据，过滤null/undefined值
-      temperatureData.push(this.filterValue(item.temp || item.temperature));
+      temperatureData.push(this.filterValue(item.temp || item.temperature)); // 环境温度
+      vitalTemperatureData.push(this.filterValue(item.body_temperature)); // 人体体温
       humidityData.push(this.filterValue(item.humi || item.humidity));
       lightData.push(this.filterValue(item.light || item.light_intensity));
       pressureData.push(this.filterValue(item.pressure));
@@ -427,7 +429,8 @@ Page({
     const processedData = {
       timeLabels,
       series: {
-        temperature: temperatureData,
+        temperature: temperatureData, // 环境温度
+        vitalTemperature: vitalTemperatureData, // 人体体温
         humidity: humidityData,
         light: lightData,
         pressure: pressureData,
@@ -440,7 +443,8 @@ Page({
     console.log('数据处理完成:', {
       timeLabels: timeLabels.length,
       dataPoints: {
-        temperature: temperatureData.filter(v => v !== null).length,
+        temperature: temperatureData.filter(v => v !== null).length, // 环境温度
+        vitalTemperature: vitalTemperatureData.filter(v => v !== null).length, // 人体体温
         humidity: humidityData.filter(v => v !== null).length,
         light: lightData.filter(v => v !== null).length,
         pressure: pressureData.filter(v => v !== null).length,
@@ -798,8 +802,8 @@ Page({
       },
       legend: [
         {
-          // 第一行图例
-          data: ['温度(°C)', '湿度(%)', '光照(lux)', '气压(hPa)'],
+          // 第一行图例 - 温度相关
+          data: ['环境温度(°C)', '体温(°C)', '湿度(%)', '光照(lux)'],
           top: 35,
           left: 'center',
           orient: 'horizontal',
@@ -811,8 +815,8 @@ Page({
           itemHeight: 8
         },
         {
-          // 第二行图例
-          data: ['呼吸(次/分)', '心率(次/分)', '血氧(%)'],
+          // 第二行图例 - 其他数据
+          data: ['气压(hPa)', '呼吸(次/分)', '心率(次/分)', '血氧(%)'],
           top: 55,
           left: 'center',
           orient: 'horizontal',
@@ -854,17 +858,17 @@ Page({
       },
       series: [
         {
-          name: '温度(°C)',
+          name: '环境温度(°C)',
           type: 'line',
           smooth: true,
           symbol: 'circle',
           symbolSize: 4,
           lineStyle: {
-            color: '#e74c3c',
+            color: '#ff6b6b', // 浅红色，区别于体温的深红色
             width: 2
           },
           itemStyle: {
-            color: '#e74c3c'
+            color: '#ff6b6b'
           },
           areaStyle: {
             color: {
@@ -874,9 +878,9 @@ Page({
               x2: 0,
               y2: 1,
               colorStops: [{
-                offset: 0, color: 'rgba(231, 76, 60, 0.3)'
+                offset: 0, color: 'rgba(255, 107, 107, 0.3)' // 对应浅红色
               }, {
-                offset: 1, color: 'rgba(231, 76, 60, 0.1)'
+                offset: 1, color: 'rgba(255, 107, 107, 0.1)'
               }]
             }
           },
@@ -971,6 +975,21 @@ Page({
             color: '#1abc9c'
           },
           data: chartData.series.bloodOxygen
+        },
+        {
+          name: '体温(°C)',
+          type: 'line',
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 4,
+          lineStyle: {
+            color: '#e74c3c', // 红色主题，区别于环境温度
+            width: 3 // 稍微粗一点，突出重要性
+          },
+          itemStyle: {
+            color: '#e74c3c'
+          },
+          data: chartData.series.vitalTemperature
         }
       ]
     };

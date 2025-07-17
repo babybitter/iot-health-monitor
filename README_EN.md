@@ -140,8 +140,8 @@ Professional historical data visualization features:
 
 ### 👥 User Management
 
-- **Multi-role Support**: Different permissions for patients, doctors, and family members
-- **Information Management**: Complete user profiles and contact information
+- **Multi-role Support**: Different permissions for patients and doctors
+- **Information Management**: User profiles and medical information
 - **Access Control**: Role-based data access control
 
 ## 🛠️ Technology Stack
@@ -178,7 +178,6 @@ LoTProject/
 │   │   ├── profile/          # User profile
 │   │   ├── patient-info/     # Patient information
 │   │   ├── doctor-info/      # Doctor information
-│   │   ├── family-contact/   # Family contacts
 │   │   └── history/          # Monitoring history
 │   ├── utils/                # Utility functions
 │   │   ├── mqtt.js          # MQTT communication

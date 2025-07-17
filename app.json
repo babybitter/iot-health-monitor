@@ -6,8 +6,7 @@
     "pages/history-chart/index",
     "pages/patient-info/patient-info",
     "pages/patient-edit/patient-edit",
-    "pages/doctor-info/doctor-info",
-    "pages/family-contact/family-contact"
+    "pages/doctor-info/doctor-info"
   ],
   "window": {
     "navigationBarTextStyle": "black",

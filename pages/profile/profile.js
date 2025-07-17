@@ -118,22 +118,7 @@ Page({
     });
   },
 
-  // 跳转到家属联系方式页面
-  goToFamilyContact() {
-    // 检查登录状态
-    if (!this.data.login.show) {
-      wx.showToast({
-        title: "请先登录",
-        icon: "none",
-        duration: 2000,
-      });
-      return;
-    }
 
-    wx.navigateTo({
-      url: "/pages/family-contact/family-contact", // 跳转到家属联系方式页面
-    });
-  },
 
   // 退出监听
   exitClick() {

@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "家属联系方式",
-  "navigationBarBackgroundColor": "#3cc51f",
-  "navigationBarTextStyle": "white",
-  "backgroundColor": "#f1f1f1",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50
-}

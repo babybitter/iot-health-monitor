@@ -45,13 +45,7 @@
 </view>
 <!-- 第二部分列表 -->
 <view class="end">
-  <button class="row" style="width: 100%;border-bottom: none;" bindtap="goToFamilyContact">
-    <view class="left">
-      <image class="icon-image" src="/images/emergency-contact.png" mode="aspectFit"></image>
-      <text class="text">家属联系方式</text>
-    </view>
-    <view class="right">></view>
-  </button>
+
   <button open-type="share" class="row" style="width: 100%;">
     <view class="left">
       <image class="icon-image" src="/images/share.png" mode="aspectFit"></image>

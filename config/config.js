@@ -53,8 +53,8 @@ const config = {
     baseUrl: 'https://api.coze.cn/open_api/v2/chat', // 中国版端点
     // 备用端点: 'https://api.coze.com/open_api/v2/chat' (国际版)
     apiKey: 'pat_MLV34Er7REuA1og5WIGfq1LKzZdNDdYLZlkISChL9e12PaVoifTBKGiTR47rmUcu', // Coze API密钥 (已更新)
-    botId: '7520634183127941160', // 机器人ID (已更新)
-    userId: '123456789', // 用户ID
+    botId: '7527888216448401451', // 机器人ID
+    userId: 'WeChat-Mini-Program', // 用户ID
     maxTokens: 1000,
     temperature: 0.7,
     stream: false, // Coze暂不支持流式输出

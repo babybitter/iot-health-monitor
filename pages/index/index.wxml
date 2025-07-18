@@ -112,7 +112,7 @@
           <image src="/images/buzzer.png"></image>
         </view>
         <view class="date-text">
-          <view class="date-title">蜂鸣器(报警)</view>
+          <view class="date-title">警报</view>
           <switch color="#3cc51f" checked="{{buzzer}}" bindchange="onBuzzerChange"></switch>
         </view>
       </view>

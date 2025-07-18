@@ -437,19 +437,26 @@ Page({
     }
   },
 
-  // 蜂鸣器控制
+  // 警报控制
   onBuzzerChange: function (event) {
     let sw = event.detail.value;
 
     // 先更新本地状态
     this.setData({ buzzer: sw });
 
-    // 发送控制命令
-    const success = this.sendDeviceControl("buzzer", sw);
-
-    if (success) {
+    // 只在开启时发送数据到 dataUpload 主题
+    if (sw) {
+      const success = mqttClient.publish(config.mqtt.topics.dataUpload, true);
+      if (success) {
+        wx.showToast({
+          title: "警报已开启",
+          icon: "success",
+        });
+      }
+    } else {
+      // 关闭时不发送任何数据，只显示提示
       wx.showToast({
-        title: sw ? "蜂鸣器已开启" : "蜂鸣器已关闭",
+        title: "警报已关闭",
         icon: "success",
       });
     }

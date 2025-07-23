@@ -1,17 +1,24 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace 'com.lingshu.smart.monitor'
-    compileSdk 36
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.lingshu.smart.monitor"
-        minSdk 24
-        targetSdk 36
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
+
+        // 修改应用名称为"灵枢监测助手"
+        resValue "string", "app_name", "灵枢监测助手"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,21 +33,70 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 }
 
 dependencies {
+    // Kotlin
+    implementation libs.kotlin.stdlib
+    implementation libs.core.ktx
 
+    // UI
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
-    implementation libs.lifecycle.livedata.ktx
+
+    // Architecture Components
     implementation libs.lifecycle.viewmodel.ktx
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
+
+    // Room Database
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    kapt libs.room.compiler
+
+    // Hilt Dependency Injection
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+
+    // Network
+    implementation libs.retrofit
+    implementation libs.retrofit.gson
+    implementation libs.okhttp
+    implementation libs.okhttp.logging
+
+    // MQTT
+    implementation libs.paho.mqtt
+    implementation libs.paho.android
+
+    // Charts
+    implementation libs.mpandroidchart
+
+    // Firebase
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.messaging
+    implementation libs.firebase.analytics
+
+    // Work Manager
+    implementation libs.work.runtime.ktx
+
+    // Testing
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

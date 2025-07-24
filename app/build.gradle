@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.hilt)
+    // 移除KAPT插件，解决JDK兼容性问题
+    // alias(libs.plugins.kotlin.kapt)
+    // alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
 }
 
@@ -63,11 +64,12 @@ dependencies {
     // Room Database
     implementation libs.room.runtime
     implementation libs.room.ktx
-    kapt libs.room.compiler
+    // 移除KAPT编译器，使用KSP或手动实现
+    // kapt libs.room.compiler
 
-    // Hilt Dependency Injection
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
+    // 移除Hilt依赖注入，使用手动依赖注入
+    // implementation libs.hilt.android
+    // kapt libs.hilt.compiler
 
     // Network
     implementation libs.retrofit
@@ -96,7 +98,7 @@ dependencies {
     androidTestImplementation libs.espresso.core
 }
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
-}
+// 移除KAPT配置块，因为已不使用注解处理器
+// kapt {
+//     correctErrorTypes = true
+// }

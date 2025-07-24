@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "282704519001",
+    "project_id": "lingshu-smart-monitor",
+    "storage_bucket": "lingshu-smart-monitor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282704519001:android:6974eb982ef4260aa33648",
+        "android_client_info": {
+          "package_name": "com.lingshu.smart.monitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5-xARYVsq3tBf7_6bldSeEQWgDJIZyls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

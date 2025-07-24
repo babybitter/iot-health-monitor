@@ -1,16 +1,19 @@
-package com.lingshu.smart.monitor.ui.home;
+package com.lingshu.smart.monitor.ui.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+/**
+ * 个人中心页面ViewModel
+ */
+public class ProfileViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public ProfileViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("欢迎使用灵枢智能监测助手");
+        mText.setValue("个人中心 - 用户信息管理");
     }
 
     public LiveData<String> getText() {

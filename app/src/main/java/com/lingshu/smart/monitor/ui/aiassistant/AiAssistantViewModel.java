@@ -1,16 +1,19 @@
-package com.lingshu.smart.monitor.ui.home;
+package com.lingshu.smart.monitor.ui.aiassistant;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+/**
+ * AI助手页面ViewModel
+ */
+public class AiAssistantViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public AiAssistantViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("欢迎使用灵枢智能监测助手");
+        mText.setValue("AI健康助手为您服务");
     }
 
     public LiveData<String> getText() {

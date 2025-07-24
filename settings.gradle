@@ -1,5 +1,26 @@
 pluginManagement {
     repositories {
+        // 国内镜像源优先
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin'
+            name 'AliYun Gradle Plugin'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/google'
+            name 'AliYun Google'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+            name 'AliYun Central'
+        }
+
+        // 备用镜像
+        maven {
+            url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/'
+            name 'Tencent Maven'
+        }
+
+        // 官方源作为最后备用
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -14,8 +35,56 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
-        mavenCentral()
+        // 国内镜像源优先
+        maven {
+            url 'https://maven.aliyun.com/repository/google'
+            name 'AliYun Google'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+            name 'AliYun Central'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+            name 'AliYun Public'
+        }
+
+        // 腾讯云镜像作为备用
+        maven {
+            url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/'
+            name 'Tencent Maven'
+        }
+
+        // 华为云镜像
+        maven {
+            url 'https://repo.huaweicloud.com/repository/maven/'
+            name 'HuaWei Maven'
+        }
+
+        // JitPack（用于GitHub项目）
+        maven { url 'https://jitpack.io' }
+
+        // Eclipse仓库（用于Paho MQTT库）
+        maven {
+            url 'https://repo.eclipse.org/content/repositories/paho-releases/'
+            name 'Eclipse Paho'
+        }
+
+        // 官方源作为最后备用
+        google {
+            content {
+                includeGroupByRegex "com\\.android.*"
+                includeGroupByRegex "com\\.google.*"
+                includeGroupByRegex "androidx.*"
+            }
+        }
+        mavenCentral {
+            content {
+                excludeGroupByRegex "com\\.android.*"
+                excludeGroupByRegex "com\\.google.*"
+                excludeGroupByRegex "androidx.*"
+            }
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">灵枢监测助手</string>
     <string name="title_home">主页</string>
-    <string name="title_dashboard">智能监控</string>
-    <string name="title_notifications">AI助手</string>
+    <string name="title_detection">智能检测</string>
+    <string name="title_ai_assistant">AI助手</string>
     <string name="title_profile">个人中心</string>
 </resources>

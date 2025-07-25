@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 警报器主体 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2Z" />
+    
+    <!-- 警报器圆形 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4C10,2.9 10.9,2 12,2C13.1,2 14,2.9 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19Z" />
+    
+    <!-- 警报器底部 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,22C13.1,22 14,21.1 14,20H10C10,21.1 10.9,22 12,22Z" />
+    
+    <!-- 警报波纹 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FF5722"
+        android:strokeWidth="2"
+        android:pathData="M12,8C12,8 8,10 8,14M12,8C12,8 16,10 16,14" />
+    
+</vector>

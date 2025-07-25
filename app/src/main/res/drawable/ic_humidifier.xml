@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 加湿器底座 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M6,18C6,19.66 7.34,21 9,21H15C16.66,21 18,19.66 18,18V12H6V18Z" />
+    
+    <!-- 加湿器主体 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M8,12V8C8,5.79 9.79,4 12,4C14.21,4 16,5.79 16,8V12H8Z" />
+    
+    <!-- 水蒸气1 -->
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M10,6C10,5.45 10.45,5 11,5C11.55,5 12,5.45 12,6C12,6.55 11.55,7 11,7C10.45,7 10,6.55 10,6Z" />
+    
+    <!-- 水蒸气2 -->
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M12,4C12,3.45 12.45,3 13,3C13.55,3 14,3.45 14,4C14,4.55 13.55,5 13,5C12.45,5 12,4.55 12,4Z" />
+    
+    <!-- 水蒸气3 -->
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M8,5C8,4.45 8.45,4 9,4C9.55,4 10,4.45 10,5C10,5.55 9.55,6 9,6C8.45,6 8,5.55 8,5Z" />
+    
+    <!-- 水位指示 -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M8,14H16V16H8V14Z" />
+    
+</vector>

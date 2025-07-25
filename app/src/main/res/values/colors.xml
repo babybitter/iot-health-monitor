@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- 设备卡片颜色 -->
+    <color name="device_on_background">#212121</color>
+    <color name="device_off_background">#2CA4A4BD</color>
+    <color name="device_icon_off">#616161</color>
 </resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 风扇叶片1 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,2C10.9,2 10,2.9 10,4C10,5.1 10.9,6 12,6C13.1,6 14,5.1 14,4C14,2.9 13.1,2 12,2Z
+                         M12,6C12,8 10,10 8,10C6.9,10 6,9.1 6,8C6,6.9 6.9,6 8,6C10,6 12,8 12,6Z" />
+    
+    <!-- 风扇叶片2 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M22,12C22,10.9 21.1,10 20,10C18.9,10 18,10.9 18,12C18,13.1 18.9,14 20,14C21.1,14 22,13.1 22,12Z
+                         M18,12C16,12 14,14 14,16C14,17.1 14.9,18 16,18C17.1,18 18,17.1 18,16C18,14 16,12 18,12Z" />
+    
+    <!-- 风扇叶片3 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,22C13.1,22 14,21.1 14,20C14,18.9 13.1,18 12,18C10.9,18 10,18.9 10,20C10,21.1 10.9,22 12,22Z
+                         M12,18C12,16 14,14 16,14C17.1,14 18,14.9 18,16C18,17.1 17.1,18 16,18C14,18 12,16 12,18Z" />
+    
+    <!-- 风扇叶片4 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M2,12C2,13.1 2.9,14 4,14C5.1,14 6,13.1 6,12C6,10.9 5.1,10 4,10C2.9,10 2,10.9 2,12Z
+                         M6,12C8,12 10,10 10,8C10,6.9 9.1,6 8,6C6.9,6 6,6.9 6,8C6,10 8,12 6,12Z" />
+    
+    <!-- 中心圆 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,12m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0" />
+    
+</vector>

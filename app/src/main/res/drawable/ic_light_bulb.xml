@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 灯泡主体 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M12,2C8.13,2 5,5.13 5,9C5,11.38 6.19,13.47 8,14.74V17C8,17.55 8.45,18 9,18H15C15.55,18 16,17.55 16,17V14.74C17.81,13.47 19,11.38 19,9C19,5.13 15.87,2 12,2Z" />
+    
+    <!-- 灯泡底座 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M9,20V19H15V20C15,20.55 14.55,21 14,21H10C9.45,21 9,20.55 9,20Z" />
+    
+    <!-- 灯泡螺纹 -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M9,21V22C9,22.55 9.45,23 10,23H14C14.55,23 15,22.55 15,22V21H9Z" />
+    
+    <!-- 灯丝 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,8L14,8C14.55,8 15,8.45 15,9C15,9.55 14.55,10 14,10L10,10C9.45,10 9,9.55 9,9C9,8.45 9.45,8 10,8Z" />
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,11L14,11C14.55,11 15,11.45 15,12C15,12.55 14.55,13 14,13L10,13C9.45,13 9,12.55 9,12C9,11.45 9.45,11 10,11Z" />
+    
+</vector>

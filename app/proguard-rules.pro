@@ -19,3 +19,34 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Retrofit混淆规则
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# OkHttp混淆规则
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+-dontwarn okio.**
+-keep class okio.** { *; }
+
+# Gson混淆规则
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Coze API相关类不混淆
+-keep class com.lingshu.smart.monitor.network.CozeApiService { *; }
+-keep class com.lingshu.smart.monitor.network.CozeApiRequest { *; }
+-keep class com.lingshu.smart.monitor.network.CozeApiResponse { *; }
+-keep class com.lingshu.smart.monitor.network.AiAssistantManager { *; }
+
+# 保持所有网络相关类
+-keep class com.lingshu.smart.monitor.network.** { *; }
+
+# Kotlin协程
+-dontwarn kotlinx.coroutines.**
+-keep class kotlinx.coroutines.** { *; }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lingshu.smart.monitor.R
 import com.lingshu.smart.monitor.data.model.ChatMessage
 import com.lingshu.smart.monitor.data.model.MessageRole
+import com.lingshu.smart.monitor.utils.MarkdownUtils
 
 /**
  * 聊天消息适配器
@@ -105,7 +106,19 @@ class ChatMessageAdapter(
         private val streamingIndicator: View = itemView.findViewById(R.id.streamingIndicator)
 
         fun bind(message: ChatMessage) {
-            messageText.text = message.content
+            // 检查是否包含Markdown语法，如果包含则使用Markdown渲染
+            val hasMarkdown = MarkdownUtils.containsMarkdown(message.content)
+
+            // 调试日志
+            android.util.Log.d("ChatAdapter", "Message content: ${message.content}")
+            android.util.Log.d("ChatAdapter", "Has markdown: $hasMarkdown")
+
+            if (hasMarkdown) {
+                MarkdownUtils.setMarkdownText(messageText, message.content)
+            } else {
+                messageText.text = message.content
+            }
+
             messageTime.text = message.getFormattedTime()
             streamingIndicator.visibility = if (message.isStreaming) View.VISIBLE else View.GONE
         }

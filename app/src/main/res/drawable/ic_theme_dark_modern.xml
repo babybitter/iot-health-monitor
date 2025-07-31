@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- 月亮形状 - 现代圆润设计 -->
+    <path
+        android:fillColor="#7986CB"
+        android:pathData="M12,3c-4.97,0 -9,4.03 -9,9s4.03,9 9,9c0.83,0 1.5,-0.67 1.5,-1.5c0,-0.39 -0.15,-0.74 -0.39,-1.01c-0.23,-0.26 -0.38,-0.61 -0.38,-0.99c0,-0.83 0.67,-1.5 1.5,-1.5H16c2.76,0 5,-2.24 5,-5C21,6.58 17.42,3 12,3z" />
+    
+    <!-- 星星装饰 -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M19,6.5c0,0.28 -0.22,0.5 -0.5,0.5s-0.5,-0.22 -0.5,-0.5s0.22,-0.5 0.5,-0.5S19,6.22 19,6.5z" />
+    
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M17,4.5c0,0.28 -0.22,0.5 -0.5,0.5s-0.5,-0.22 -0.5,-0.5s0.22,-0.5 0.5,-0.5S17,4.22 17,4.5z" />
+    
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M20,4.5c0,0.28 -0.22,0.5 -0.5,0.5s-0.5,-0.22 -0.5,-0.5s0.22,-0.5 0.5,-0.5S20,4.22 20,4.5z" />
+    
+</vector>

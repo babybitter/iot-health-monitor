@@ -12,5 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- 底部导航栏背景色 -->
+        <item name="bottom_nav_background">@color/bottom_nav_background</item>
+
+        <!-- Material Design 3 颜色 -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSurfaceVariant">#F5F5F5</item>
+        <item name="colorOnSurfaceVariant">#424242</item>
     </style>
 </resources>

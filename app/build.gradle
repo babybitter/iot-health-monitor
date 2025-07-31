@@ -84,6 +84,17 @@ dependencies {
     // Charts
     implementation libs.mpandroidchart
 
+    // Markdown支持
+    implementation('io.noties.markwon:core:4.6.2') {
+        exclude group: 'org.jetbrains', module: 'annotations-java5'
+    }
+    implementation('io.noties.markwon:html:4.6.2') {
+        exclude group: 'org.jetbrains', module: 'annotations-java5'
+    }
+    implementation('io.noties.markwon:image:4.6.2') {
+        exclude group: 'org.jetbrains', module: 'annotations-java5'
+    }
+
     // Firebase
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.messaging

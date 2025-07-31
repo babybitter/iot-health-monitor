@@ -50,12 +50,14 @@
                     android:id="@+id/tvMessageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="280dp"
-                    android:padding="12dp"
+                    android:maxWidth="320dp"
+                    android:padding="16dp"
                     android:text="AI助手回复内容"
                     android:textColor="#333333"
                     android:textSize="16sp"
-                    android:lineSpacingExtra="2dp" />
+                    android:lineSpacingExtra="4dp"
+                    android:textIsSelectable="true"
+                    android:scrollHorizontally="false" />
 
                 <!-- 流式输出指示器 -->
                 <LinearLayout

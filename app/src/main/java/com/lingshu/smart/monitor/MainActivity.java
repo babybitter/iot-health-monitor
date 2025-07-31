@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.lingshu.smart.monitor.databinding.ActivityMainBinding;
+import com.lingshu.smart.monitor.utils.ThemeManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 在设置内容视图之前应用主题
+        ThemeManager themeManager = new ThemeManager(this);
+        themeManager.applyTheme(themeManager.getCurrentTheme());
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());

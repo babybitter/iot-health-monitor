@@ -12,4 +12,8 @@
     <color name="device_on_background">#212121</color>
     <color name="device_off_background">#2CA4A4BD</color>
     <color name="device_icon_off">#616161</color>
+
+    <!-- 底部导航栏颜色 -->
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_background_dark">#2C2C2C</color>
 </resources>

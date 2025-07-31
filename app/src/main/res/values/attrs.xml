@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 自定义主题属性 -->
+    <attr name="bottom_nav_background" format="color|reference" />
+</resources>

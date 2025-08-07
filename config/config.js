@@ -9,7 +9,7 @@ const config = {
     // 生产环境（SSL证书配置完成后使用）
     hostProd: 'wss://mqtt.healthtrack.top:8084/mqtt',
     // 当前使用的连接
-    host: 'ws://47.122.130.135:8083/mqtt', // 生产环境WS连接（稳定版本）
+    host: 'wss://mqtt.healthtrack.top:8084/mqtt', // 生产环境WSS连接（SSL加密）
     clientId: 'patient_monitor_' + Date.now(), // 动态客户端ID，避免冲突
     username: 'test', // MQTT服务器用户名
     password: 'test123', // MQTT服务器密码
@@ -45,7 +45,7 @@ const config = {
   
   // API配置
   api: {
-    baseUrl: 'http://47.122.130.135:3000' // 后端服务器地址
+    baseUrl: 'https://api.healthtrack.top' // 后端服务器地址（生产环境HTTPS）
   },
 
   // Coze API配置

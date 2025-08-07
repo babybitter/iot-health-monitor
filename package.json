@@ -5,8 +5,11 @@
   "main": "server/app.js",
   "scripts": {
     "start": "node server/app.js",
+    "start:prod": "NODE_ENV=production node server/app-https.js",
     "dev": "nodemon server/app.js",
-    "init-db": "mysql -u root -p < database/init.sql"
+    "init-db": "mysql -u root -p < database/init.sql",
+    "check:prod": "node scripts/check-production.js",
+    "deploy:check": "npm run check:prod"
   },
   "dependencies": {
     "axios": "^1.10.0",

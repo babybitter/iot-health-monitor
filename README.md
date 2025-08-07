@@ -309,20 +309,22 @@ COZE_BOT_ID=your_bot_id
 
 ## 🚀 快速开始
 
-### 1. 克隆项目
+### 开发环境
+
+#### 1. 克隆项目
 
 ```bash
 git clone https://github.com/your-username/iot-health-monitor.git
 cd iot-health-monitor
 ```
 
-### 2. 安装依赖
+#### 2. 安装依赖
 
 ```bash
 npm install
 ```
 
-### 3. 数据库初始化
+#### 3. 数据库初始化
 
 ```bash
 # 创建数据库
@@ -332,7 +334,7 @@ mysql -u root -p -e "CREATE DATABASE iot_monitor;"
 mysql -u root -p iot_monitor < database/init.sql
 ```
 
-### 4. 启动后端服务
+#### 4. 启动后端服务
 
 ```bash
 # 开发模式
@@ -342,12 +344,42 @@ npm run dev
 npm start
 ```
 
-### 5. 配置小程序
+#### 5. 配置小程序
 
 1. 使用微信开发者工具打开项目
 2. 配置服务器域名（开发时可关闭域名校验）
 3. 配置 Coze API 密钥
 4. 编译并预览
+
+### 生产环境部署
+
+#### 🔒 生产环境配置
+- **域名**: healthtrack.top (已备案)
+- **SSL证书**: 已配置
+- **API地址**: https://api.healthtrack.top
+- **MQTT WSS**: wss://mqtt.healthtrack.top:8084/mqtt
+
+#### 📋 部署检查
+```bash
+# 运行生产环境配置检查
+npm run check:prod
+```
+
+#### 🚀 启动生产服务
+```bash
+# 使用PM2进程管理器（推荐）
+npm run start:prod
+
+# 或使用脚本启动
+# Windows
+scripts\start-production.bat
+
+# Linux/macOS
+chmod +x scripts/start_production.sh
+./scripts/start_production.sh
+```
+
+详细部署指南请参考：[PRODUCTION.md](PRODUCTION.md)
 
 ### 6. 服务器配置验证
 
@@ -378,14 +410,17 @@ sudo firewall-cmd --list-ports  # CentOS
 
 #### API接口测试
 ```bash
-# 健康检查
+# 生产环境健康检查
+curl https://api.healthtrack.top/api/health
+
+# 开发环境健康检查
 curl http://47.122.130.135:3000/api/health
 
 # 测试历史数据接口
-curl "http://47.122.130.135:3000/api/history/default_device?limit=5"
+curl "https://api.healthtrack.top/api/history/default_device?limit=5"
 
 # 测试最新数据接口
-curl http://47.122.130.135:3000/api/latest/default_device
+curl https://api.healthtrack.top/api/latest/default_device
 ```
 
 #### 故障排除指南

@@ -24,7 +24,6 @@
     <view wx:elif="{{error}}" class="error-container">
       <view class="error-text">{{error}}</view>
       <view class="retry-buttons">
-        <button class="retry-btn" bindtap="testNetworkAndLoadData">测试网络</button>
         <button class="retry-btn" bindtap="retryLoad">重新加载</button>
         <button class="retry-btn secondary" bindtap="retryChart">重置图表</button>
       </view>

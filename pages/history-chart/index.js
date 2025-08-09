@@ -1,8 +1,6 @@
 // 监测历史记录页面
 const app = getApp();
-const apiClient = require('../../utils/api.js');
 const { formatTimeHHMM } = require('../../utils/util.js');
-const config = require('../../config/config.js');
 
 Page({
   data: {
@@ -278,107 +276,72 @@ Page({
     }
   },
 
-  // 测试网络连接并加载数据
-  async testNetworkAndLoadData() {
-    console.log('开始测试网络连接');
-
-    try {
-      // 先测试健康检查接口
-      const healthResult = await apiClient.healthCheck();
-      console.log('健康检查结果:', healthResult);
-
-      if (healthResult && healthResult.success) {
-        console.log('网络连接正常，开始加载数据');
-        this.loadData();
-      } else {
-        throw new Error('服务器健康检查失败');
-      }
-    } catch (error) {
-      console.error('网络连接测试失败:', error);
-      this.setData({
-        loading: false,
-        hasData: false,
-        error: `网络连接失败: ${error.message}。请检查网络设置或在微信开发者工具中关闭域名校验。`
-      });
-    }
+  // 直接加载本地数据 - 移除网络依赖
+  testNetworkAndLoadData() {
+    console.log('开始加载本地缓存数据');
+    // 直接加载本地数据，不再依赖网络
+    this.loadData();
   },
 
-  // 加载历史数据
-  async loadData() {
-    console.log('开始加载历史数据');
+  // 加载历史数据 - 改为从本地缓存读取
+  loadData() {
+    console.log('开始从本地缓存加载历史数据');
     this.setData({ loading: true, error: '', hasData: false });
 
     try {
-      // 计算时间范围（最近24小时）
-      const endTime = new Date();
-      const startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
+      // 从全局数据获取图表缓存数据
+      const app = getApp();
+      const chartData = {
+        chart_wd: app.globalData.chart_wd || [], // 温度
+        chart_sd: app.globalData.chart_sd || [], // 湿度
+        chart_gq: app.globalData.chart_gq || [], // 光强
+        chart_yw: app.globalData.chart_yw || [], // 气压
+        chart_xl: app.globalData.chart_xl || [], // 心率
+        chart_hx: app.globalData.chart_hx || [], // 呼吸
+        chart_xy: app.globalData.chart_xy || [], // 血氧
+        chart_tw: app.globalData.chart_tw || []  // 体温
+      };
 
-      console.log('时间范围:', {
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString()
-      });
+      console.log('本地缓存数据:', chartData);
 
-      console.log('准备调用API:', `${config.api.baseUrl}/api/history/default_device`);
+      // 检查是否有数据
+      const hasAnyData = Object.values(chartData).some(data => data.length > 0);
 
-      // 获取历史数据（现在包含体温数据）
-      const result = await apiClient.getHistoryData('default_device', {
-        limit: 100
-        // startTime: startTime.toISOString(),
-        // endTime: endTime.toISOString()
-      });
-
-      console.log('API返回结果:', result);
-      console.log('数据长度:', result.data ? result.data.length : 'undefined');
-      console.log('数据内容:', result.data);
-
-      // 验证API响应格式
-      if (!result || typeof result !== 'object') {
-        throw new Error('API响应格式错误');
-      }
-
-      if (result.success && result.data && result.data.length > 0) {
+      if (hasAnyData) {
         // 处理和格式化数据
-        const processedData = this.processHistoryData(result.data);
-        const statsData = this.calculateDataStats(result.data);
+        const processedData = this.processLocalChartData(chartData);
+        const statsData = this.calculateLocalDataStats(chartData);
 
         this.setData({
           loading: false,
           hasData: true,
-          historyData: result.data,
+          historyData: chartData,
           chartData: processedData,
           dataStats: statsData
         });
 
-        console.log('数据已设置到页面状态，准备初始化图表');
+        console.log('本地数据已设置到页面状态，准备初始化图表');
 
         // 使用懒加载模式初始化图表
         setTimeout(() => {
           this.initChartWithData(processedData);
         }, 100);
 
-        console.log('数据加载成功，共', result.data.length, '条记录');
-      } else if (result.success && result.data && result.data.length === 0) {
-        // 数据为空的情况
-        this.setData({
-          loading: false,
-          hasData: false,
-          error: '最近24小时内暂无监测数据'
-        });
+        console.log('本地数据加载成功');
       } else {
-        // API调用失败的情况
-        const errorMsg = result.error || '获取数据失败，请稍后重试';
+        // 没有本地数据
         this.setData({
           loading: false,
           hasData: false,
-          error: errorMsg
+          error: '暂无本地监测数据，请等待设备数据接收'
         });
       }
     } catch (error) {
-      console.error('加载历史数据失败:', error);
+      console.error('加载本地数据失败:', error);
       this.setData({
         loading: false,
         hasData: false,
-        error: error.message || '网络连接失败，请检查网络设置'
+        error: '本地数据读取失败: ' + error.message
       });
     }
   },
@@ -386,6 +349,94 @@ Page({
   // 返回上一页
   goBack() {
     wx.navigateBack();
+  },
+
+  // 处理本地图表数据 - 根据文档要求添加
+  processLocalChartData(chartData) {
+    console.log('开始处理本地图表数据');
+
+    // 合并所有数据的时间标签
+    const allTimeLabels = new Set();
+    Object.values(chartData).forEach(dataArray => {
+      dataArray.forEach(item => {
+        if (item && item[0]) {
+          allTimeLabels.add(item[0]);
+        }
+      });
+    });
+
+    // 转换为数组并排序
+    const timeLabels = Array.from(allTimeLabels).sort();
+
+    // 为每个时间点创建数据映射
+    const createDataSeries = (dataArray) => {
+      const dataMap = new Map();
+      dataArray.forEach(item => {
+        if (item && item[0] && item[1] !== undefined) {
+          dataMap.set(item[0], parseFloat(item[1]));
+        }
+      });
+
+      return timeLabels.map(time => dataMap.get(time) || null);
+    };
+
+    const processedData = {
+      timeLabels,
+      series: {
+        temperature: createDataSeries(chartData.chart_wd),      // 温度
+        humidity: createDataSeries(chartData.chart_sd),         // 湿度
+        light: createDataSeries(chartData.chart_gq),           // 光强
+        pressure: createDataSeries(chartData.chart_yw),        // 气压
+        heartRate: createDataSeries(chartData.chart_xl),       // 心率
+        breathing: createDataSeries(chartData.chart_hx),       // 呼吸
+        bloodOxygen: createDataSeries(chartData.chart_xy),     // 血氧
+        vitalTemperature: createDataSeries(chartData.chart_tw) // 体温
+      }
+    };
+
+    console.log('本地数据处理完成:', {
+      timeLabels: timeLabels.length,
+      dataPoints: Object.keys(processedData.series).reduce((acc, key) => {
+        acc[key] = processedData.series[key].filter(v => v !== null).length;
+        return acc;
+      }, {})
+    });
+
+    return processedData;
+  },
+
+  // 计算本地数据统计 - 根据文档要求添加
+  calculateLocalDataStats(chartData) {
+    const stats = {};
+
+    const dataTypeMap = {
+      chart_wd: { name: '温度', unit: '°C' },
+      chart_sd: { name: '湿度', unit: '%' },
+      chart_gq: { name: '光强', unit: 'lx' },
+      chart_yw: { name: '气压', unit: 'hPa' },
+      chart_xl: { name: '心率', unit: 'bpm' },
+      chart_hx: { name: '呼吸', unit: '/min' },
+      chart_xy: { name: '血氧', unit: '%' },
+      chart_tw: { name: '体温', unit: '°C' }
+    };
+
+    Object.keys(dataTypeMap).forEach(key => {
+      const data = chartData[key] || [];
+      const values = data.map(item => parseFloat(item[1])).filter(v => !isNaN(v));
+
+      if (values.length > 0) {
+        stats[key] = {
+          name: dataTypeMap[key].name,
+          unit: dataTypeMap[key].unit,
+          count: values.length,
+          min: Math.min(...values),
+          max: Math.max(...values),
+          avg: values.reduce((sum, val) => sum + val, 0) / values.length
+        };
+      }
+    });
+
+    return stats;
   },
 
   // 处理历史数据，为图表渲染准备数据

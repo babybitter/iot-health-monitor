@@ -149,8 +149,17 @@ Page({
         title: `${this.getCardTitle(type)}详情`,
         content: `当前值: ${data.value} ${unit}\n更新时间: ${
           data.lastUpdate || "--"
-        }`,
-        showCancel: false,
+        }\n\n点击"确定"查看历史图表`,
+        confirmText: "查看图表",
+        cancelText: "关闭",
+        success: (res) => {
+          if (res.confirm) {
+            // 导航到历史图表页面
+            wx.navigateTo({
+              url: '/pages/history-chart/index'
+            });
+          }
+        }
       });
     }
   },
@@ -327,6 +336,9 @@ Page({
         lastUpdate: timeStr,
         status: status
       };
+
+      // 同时保存到图表数据缓存
+      app.saveChartData(type, value, new Date());
     }
   },
 
